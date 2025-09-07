@@ -7,11 +7,16 @@ import com.guyko.models.PedalModel
 import com.guyko.models.CCParameter
 import com.guyko.models.MidiCommand
 import com.guyko.persistence.PedalRepository
+import com.guyko.midi.MidiExecutor
+import com.guyko.midi.HardwareMidiExecutor
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
 
-class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
+class MCPServer(
+    val pedalRepository: PedalRepository = PedalRepository(),
+    private val midiExecutor: MidiExecutor = HardwareMidiExecutor()
+) {
     private val gson = Gson()
     private val reader = BufferedReader(InputStreamReader(System.`in`))
     private val writer = PrintWriter(System.out, true)
@@ -110,28 +115,48 @@ class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
                 )
             ),
             mapOf(
-                "name" to "generate_midi_command",
-                "description" to "Generate a MIDI command for a specific parameter change",
+                "name" to "execute_midi_command",
+                "description" to "Execute a MIDI CC command on a pedal",
                 "inputSchema" to mapOf(
                     "type" to "object",
                     "properties" to mapOf(
                         "pedalId" to mapOf("type" to "string"),
-                        "parameterName" to mapOf("type" to "string"),
-                        "value" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127)
+                        "ccNumber" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127),
+                        "value" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127),
+                        "description" to mapOf("type" to "string", "description" to "Optional description of what this command does")
                     ),
-                    "required" to listOf("pedalId", "parameterName", "value")
+                    "required" to listOf("pedalId", "ccNumber", "value")
                 )
             ),
             mapOf(
-                "name" to "interpret_sound_request",
-                "description" to "Interpret a natural language sound request and suggest parameter changes",
+                "name" to "execute_midi_commands",
+                "description" to "Execute multiple MIDI CC commands in sequence",
                 "inputSchema" to mapOf(
                     "type" to "object",
                     "properties" to mapOf(
                         "pedalId" to mapOf("type" to "string"),
-                        "request" to mapOf("type" to "string", "description" to "Natural language description of desired sound change")
+                        "commands" to mapOf(
+                            "type" to "array",
+                            "items" to mapOf(
+                                "type" to "object",
+                                "properties" to mapOf(
+                                    "ccNumber" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127),
+                                    "value" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127),
+                                    "description" to mapOf("type" to "string")
+                                ),
+                                "required" to listOf("ccNumber", "value")
+                            )
+                        )
                     ),
-                    "required" to listOf("pedalId", "request")
+                    "required" to listOf("pedalId", "commands")
+                )
+            ),
+            mapOf(
+                "name" to "get_midi_status",
+                "description" to "Get the status of the MIDI connection and executor",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf<String, Any>()
                 )
             )
         )
@@ -152,8 +177,9 @@ class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
             "add_pedal" -> handleAddPedal(id, arguments)
             "get_pedal" -> handleGetPedal(id, arguments)
             "list_pedals" -> handleListPedals(id)
-            "generate_midi_command" -> handleGenerateMidiCommand(id, arguments)
-            "interpret_sound_request" -> handleInterpretSoundRequest(id, arguments)
+            "execute_midi_command" -> handleExecuteMidiCommand(id, arguments)
+            "execute_midi_commands" -> handleExecuteMidiCommands(id, arguments)
+            "get_midi_status" -> handleGetMidiStatus(id)
             else -> sendError(id, "Unknown tool: $toolName")
         }
     }
@@ -245,13 +271,14 @@ class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
         }
     }
     
-    private fun handleGenerateMidiCommand(id: Int?, arguments: JsonObject?) {
+    private fun handleExecuteMidiCommand(id: Int?, arguments: JsonObject?) {
         try {
             val pedalId = arguments?.get("pedalId")?.asString
-            val parameterName = arguments?.get("parameterName")?.asString
+            val ccNumber = arguments?.get("ccNumber")?.asInt
             val value = arguments?.get("value")?.asInt
+            val description = arguments?.get("description")?.asString
             
-            if (pedalId == null || parameterName == null || value == null) {
+            if (pedalId == null || ccNumber == null || value == null) {
                 sendError(id, "Missing required parameters")
                 return
             }
@@ -262,40 +289,49 @@ class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
                 return
             }
             
-            val parameter = pedal.getParameterByName(parameterName)
-            if (parameter == null) {
-                sendError(id, "Parameter not found: $parameterName")
-                return
-            }
+            // Find parameter info if available
+            val parameter = pedal.getParameterByCC(ccNumber)
+            val parameterName = parameter?.name ?: "CC $ccNumber"
             
             val midiCommand = MidiCommand(
                 channel = pedal.midiChannel,
-                ccNumber = parameter.ccNumber,
-                value = value.coerceIn(parameter.minValue, parameter.maxValue),
-                parameterName = parameter.name,
-                description = "Set ${parameter.name} to $value"
+                ccNumber = ccNumber,
+                value = value,
+                parameterName = parameterName,
+                description = description ?: "Set $parameterName to $value"
             )
             
-            val midiBytes = midiCommand.toMidiBytes()
-            val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
+            val result = midiExecutor.executeCommand(midiCommand)
             
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
                     "type" to "text",
-                    "text" to "MIDI Command: $hexString\nChannel: ${midiCommand.channel}, CC: ${midiCommand.ccNumber}, Value: ${midiCommand.value}\nDescription: ${midiCommand.description}"
+                    "text" to buildString {
+                        appendln("MIDI Command Execution:")
+                        appendln("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendln("Parameter: $parameterName (CC $ccNumber)")
+                        appendln("Value: $value")
+                        appendln("Channel: ${pedal.midiChannel}")
+                        appendln("Message: ${result.message}")
+                        if (result.executedCommand != null) {
+                            val hexString = result.executedCommand.toMidiBytes().joinToString(" ") { "%02X".format(it) }
+                            appendln("MIDI Bytes: $hexString")
+                        }
+                    }
                 ))
             ), id)
         } catch (e: Exception) {
-            sendError(id, "Error generating MIDI command: ${e.message}")
+            sendError(id, "Error executing MIDI command: ${e.message}")
         }
     }
     
-    private fun handleInterpretSoundRequest(id: Int?, arguments: JsonObject?) {
+    private fun handleExecuteMidiCommands(id: Int?, arguments: JsonObject?) {
         try {
             val pedalId = arguments?.get("pedalId")?.asString
-            val request = arguments?.get("request")?.asString
+            val commandsArray = arguments?.get("commands")?.asJsonArray
             
-            if (pedalId == null || request == null) {
+            if (pedalId == null || commandsArray == null) {
                 sendError(id, "Missing required parameters")
                 return
             }
@@ -306,84 +342,69 @@ class MCPServer(val pedalRepository: PedalRepository = PedalRepository()) {
                 return
             }
             
-            val suggestions = interpretSoundRequest(request, pedal)
+            val midiCommands = commandsArray.map { cmdObj ->
+                val cmd = cmdObj.asJsonObject
+                val ccNumber = cmd.get("ccNumber").asInt
+                val value = cmd.get("value").asInt
+                val description = cmd.get("description")?.asString
+                
+                val parameter = pedal.getParameterByCC(ccNumber)
+                val parameterName = parameter?.name ?: "CC $ccNumber"
+                
+                MidiCommand(
+                    channel = pedal.midiChannel,
+                    ccNumber = ccNumber,
+                    value = value,
+                    parameterName = parameterName,
+                    description = description ?: "Set $parameterName to $value"
+                )
+            }
+            
+            val results = midiExecutor.executeCommands(midiCommands)
             
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
                     "type" to "text",
-                    "text" to suggestions
+                    "text" to buildString {
+                        appendln("MIDI Commands Execution:")
+                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendln("Commands executed: ${results.size}")
+                        appendln("Successful: ${results.count { it.success }}")
+                        appendln("Failed: ${results.count { !it.success }}")
+                        appendln()
+                        results.forEachIndexed { index, result ->
+                            appendln("Command ${index + 1}:")
+                            appendln("  Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                            appendln("  Message: ${result.message}")
+                        }
+                    }
                 ))
             ), id)
         } catch (e: Exception) {
-            sendError(id, "Error interpreting sound request: ${e.message}")
+            sendError(id, "Error executing MIDI commands: ${e.message}")
         }
     }
     
-    private fun interpretSoundRequest(request: String, pedal: PedalModel): String {
-        val lowerRequest = request.toLowerCase()
-        val suggestions = mutableListOf<String>()
-        
-        // Common sound descriptors and their parameter mappings
-        when {
-            lowerRequest.contains("brighter") || lowerRequest.contains("bright") -> {
-                suggestions.add("• Increase Filter (CC ${pedal.getParameterByName("Filter")?.ccNumber}) to brighten the delay")
-                suggestions.add("• Reduce Low Cut (CC ${pedal.getParameterByName("Low Cut")?.ccNumber}) to let more highs through")
-            }
-            lowerRequest.contains("darker") || lowerRequest.contains("warm") -> {
-                suggestions.add("• Decrease Filter (CC ${pedal.getParameterByName("Filter")?.ccNumber}) to darken the delay")
-                suggestions.add("• Increase Low Cut (CC ${pedal.getParameterByName("Low Cut")?.ccNumber}) to remove harsh highs")
-            }
-            lowerRequest.contains("more delay") || lowerRequest.contains("longer") -> {
-                suggestions.add("• Increase Time (CC ${pedal.getParameterByName("Time")?.ccNumber}) for longer delay")
-                suggestions.add("• Increase Feedback (CC ${pedal.getParameterByName("Feedback")?.ccNumber}) for more repeats")
-            }
-            lowerRequest.contains("less delay") || lowerRequest.contains("shorter") -> {
-                suggestions.add("• Decrease Time (CC ${pedal.getParameterByName("Time")?.ccNumber}) for shorter delay")
-                suggestions.add("• Decrease Feedback (CC ${pedal.getParameterByName("Feedback")?.ccNumber}) for fewer repeats")
-            }
-            lowerRequest.contains("spacey") || lowerRequest.contains("ambient") -> {
-                suggestions.add("• Increase Mix (CC ${pedal.getParameterByName("Mix")?.ccNumber}) for more wet signal")
-                suggestions.add("• Increase Diffusion (CC ${pedal.getParameterByName("Diffusion")?.ccNumber}) for spaciousness")
-                suggestions.add("• Add some Mod Depth (CC ${pedal.getParameterByName("Mod Depth")?.ccNumber}) for movement")
-            }
-            lowerRequest.contains("slapback") || lowerRequest.contains("rockabilly") -> {
-                suggestions.add("• Set Time (CC ${pedal.getParameterByName("Time")?.ccNumber}) to around 25-40 (80-120ms)")
-                suggestions.add("• Set Feedback (CC ${pedal.getParameterByName("Feedback")?.ccNumber}) to low (10-30)")
-                suggestions.add("• Set Mix (CC ${pedal.getParameterByName("Mix")?.ccNumber}) to around 20-40")
-            }
-            lowerRequest.contains("tape") || lowerRequest.contains("vintage") -> {
-                suggestions.add("• Set Engine (CC ${pedal.getParameterByName("Engine")?.ccNumber}) to 1 for Tape engine")
-                suggestions.add("• Add some Drive (CC ${pedal.getParameterByName("Drive")?.ccNumber}) for tape saturation")
-                suggestions.add("• Reduce Filter (CC ${pedal.getParameterByName("Filter")?.ccNumber}) for vintage darkness")
-            }
-            lowerRequest.contains("clean") || lowerRequest.contains("digital") -> {
-                suggestions.add("• Set Engine (CC ${pedal.getParameterByName("Engine")?.ccNumber}) to 2 for Digital engine")
-                suggestions.add("• Set Drive (CC ${pedal.getParameterByName("Drive")?.ccNumber}) to minimum")
-                suggestions.add("• Set Filter (CC ${pedal.getParameterByName("Filter")?.ccNumber}) high for clarity")
-            }
-            lowerRequest.contains("modulated") || lowerRequest.contains("chorus") -> {
-                suggestions.add("• Increase Mod Rate (CC ${pedal.getParameterByName("Mod Rate")?.ccNumber}) for chorus-like movement")
-                suggestions.add("• Increase Mod Depth (CC ${pedal.getParameterByName("Mod Depth")?.ccNumber}) for stronger modulation")
-            }
-            lowerRequest.contains("wide") || lowerRequest.contains("stereo") -> {
-                suggestions.add("• Increase Stereo Width (CC ${pedal.getParameterByName("Stereo Width")?.ccNumber}) for wider image")
-                suggestions.add("• Add Ping Pong (CC ${pedal.getParameterByName("Ping Pong")?.ccNumber}) for stereo movement")
-            }
+    private fun handleGetMidiStatus(id: Int?) {
+        try {
+            val status = midiExecutor.getStatus()
+            val isAvailable = midiExecutor.isAvailable()
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendln("MIDI Executor Status:")
+                        appendln("Available: $isAvailable")
+                        appendln("Status: $status")
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error getting MIDI status: ${e.message}")
         }
-        
-        if (suggestions.isEmpty()) {
-            suggestions.add("I couldn't interpret your specific request. Try descriptions like:")
-            suggestions.add("• 'Make it brighter/darker'")
-            suggestions.add("• 'More/less delay'")
-            suggestions.add("• 'Make it spacey/ambient'")
-            suggestions.add("• 'Give me a slapback sound'")
-            suggestions.add("• 'Make it sound like tape/vintage'")
-            suggestions.add("• 'Add modulation/chorus'")
-            suggestions.add("• 'Make it wider/stereo'")
-        }
-        
-        return "Sound Request: \"$request\"\n\nSuggested parameter changes:\n${suggestions.joinToString("\n")}"
     }
+    
     
     private fun sendResponse(method: String, result: Any, id: Int? = null) {
         val response = mutableMapOf<String, Any>(

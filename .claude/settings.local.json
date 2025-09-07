@@ -8,7 +8,10 @@
       "Bash(git push -u origin master)",
       "WebFetch(domain:www.meris.us)",
       "Bash(mvn compile)",
-      "Bash(chmod +x run-server.sh)"
+      "Bash(chmod +x run-server.sh)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplement complete MIDI guitar pedal MCP server\n\n- Add comprehensive data models for pedals, CC parameters, and MIDI commands\n- Implement JSON-based persistence layer with Gson\n- Create full MCP server with 5 tools for pedal management\n- Add Meris LVX delay pedal with complete 19-parameter CC table\n- Implement natural language sound request interpretation\n- Add MIDI command generation with byte-level output\n- Include run script and updated documentation\n- Support for adding custom pedals and generating MIDI CC commands\n\nFeatures:\n- Natural language processing for guitar effects terminology\n- Persistent pedal knowledge storage\n- Real-time MIDI command generation\n- Extensible architecture for multiple pedal models\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push origin master)",
+      "Bash(mvn test)"
     ],
     "deny": [],
     "ask": []
