@@ -1,6 +1,7 @@
 package com.guyko.midi
 
 import com.guyko.models.MidiCommand
+import com.guyko.models.MidiProgramChange
 
 data class MidiExecutionResult(
     val success: Boolean,
@@ -19,6 +20,11 @@ interface MidiExecutor {
      * Execute multiple MIDI commands in sequence
      */
     fun executeCommands(commands: List<MidiCommand>): List<MidiExecutionResult>
+    
+    /**
+     * Execute a MIDI program change
+     */
+    fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult
     
     /**
      * Check if MIDI output is available
@@ -65,6 +71,28 @@ class HardwareMidiExecutor : MidiExecutor {
         return commands.map { executeCommand(it) }
     }
     
+    override fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult {
+        return try {
+            val midiBytes = programChange.toMidiBytes()
+            val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
+            
+            // Simulate sending to hardware
+            println("Sending MIDI PC: $hexString")
+            
+            MidiExecutionResult(
+                success = true,
+                message = "MIDI program change sent successfully: $hexString",
+                executedCommand = null
+            )
+        } catch (e: Exception) {
+            MidiExecutionResult(
+                success = false,
+                message = "Failed to execute MIDI program change: ${e.message}",
+                executedCommand = null
+            )
+        }
+    }
+    
     override fun isAvailable(): Boolean {
         // In real implementation, check if MIDI devices are available
         return true
@@ -80,6 +108,7 @@ class HardwareMidiExecutor : MidiExecutor {
  */
 class MockMidiExecutor : MidiExecutor {
     private val executedCommands = mutableListOf<MidiCommand>()
+    private val executedProgramChanges = mutableListOf<MidiProgramChange>()
     private var shouldFail = false
     
     fun setShouldFail(fail: Boolean) {
@@ -88,8 +117,11 @@ class MockMidiExecutor : MidiExecutor {
     
     fun getExecutedCommands(): List<MidiCommand> = executedCommands.toList()
     
+    fun getExecutedProgramChanges(): List<MidiProgramChange> = executedProgramChanges.toList()
+    
     fun clearExecutedCommands() {
         executedCommands.clear()
+        executedProgramChanges.clear()
     }
     
     override fun executeCommand(command: MidiCommand): MidiExecutionResult {
@@ -114,7 +146,25 @@ class MockMidiExecutor : MidiExecutor {
         return commands.map { executeCommand(it) }
     }
     
+    override fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult {
+        return if (shouldFail) {
+            MidiExecutionResult(
+                success = false,
+                message = "Mock PC execution failed",
+                executedCommand = null
+            )
+        } else {
+            executedProgramChanges.add(programChange)
+            val hexString = programChange.toMidiBytes().joinToString(" ") { "%02X".format(it) }
+            MidiExecutionResult(
+                success = true,
+                message = "Mock MIDI PC executed: $hexString",
+                executedCommand = null
+            )
+        }
+    }
+    
     override fun isAvailable(): Boolean = true
     
-    override fun getStatus(): String = "Mock MIDI executor (${executedCommands.size} commands executed)"
+    override fun getStatus(): String = "Mock MIDI executor (${executedCommands.size} CC commands, ${executedProgramChanges.size} PC commands executed)"
 }

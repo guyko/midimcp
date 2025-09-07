@@ -6,6 +6,7 @@ import com.google.gson.JsonParser
 import com.guyko.models.PedalModel
 import com.guyko.models.CCParameter
 import com.guyko.models.MidiCommand
+import com.guyko.models.MidiProgramChange
 import com.guyko.persistence.PedalRepository
 import com.guyko.midi.MidiExecutor
 import com.guyko.midi.HardwareMidiExecutor
@@ -158,6 +159,19 @@ class MCPServer(
                     "type" to "object",
                     "properties" to mapOf<String, Any>()
                 )
+            ),
+            mapOf(
+                "name" to "execute_program_change",
+                "description" to "Execute a MIDI program change to switch pedal preset",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "pedalId" to mapOf("type" to "string"),
+                        "program" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127),
+                        "description" to mapOf("type" to "string", "description" to "Optional description of the preset")
+                    ),
+                    "required" to listOf("pedalId", "program")
+                )
             )
         )
         
@@ -179,6 +193,7 @@ class MCPServer(
             "list_pedals" -> handleListPedals(id)
             "execute_midi_command" -> handleExecuteMidiCommand(id, arguments)
             "execute_midi_commands" -> handleExecuteMidiCommands(id, arguments)
+            "execute_program_change" -> handleExecuteProgramChange(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
             else -> sendError(id, "Unknown tool: $toolName")
         }
@@ -382,6 +397,51 @@ class MCPServer(
             ), id)
         } catch (e: Exception) {
             sendError(id, "Error executing MIDI commands: ${e.message}")
+        }
+    }
+    
+    private fun handleExecuteProgramChange(id: Int?, arguments: JsonObject?) {
+        try {
+            val pedalId = arguments?.get("pedalId")?.asString
+            val program = arguments?.get("program")?.asInt
+            val description = arguments?.get("description")?.asString
+            
+            if (pedalId == null || program == null) {
+                sendError(id, "Missing required parameters")
+                return
+            }
+            
+            val pedal = pedalRepository.load(pedalId)
+            if (pedal == null) {
+                sendError(id, "Pedal not found: $pedalId")
+                return
+            }
+            
+            val programChange = MidiProgramChange(
+                channel = pedal.midiChannel,
+                program = program,
+                description = description ?: "Switch to preset $program"
+            )
+            
+            val result = midiExecutor.executeProgramChange(programChange)
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendln("MIDI Program Change Execution:")
+                        appendln("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendln("Program: $program")
+                        appendln("Channel: ${pedal.midiChannel}")
+                        appendln("Message: ${result.message}")
+                        val hexString = programChange.toMidiBytes().joinToString(" ") { "%02X".format(it) }
+                        appendln("MIDI Bytes: $hexString")
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error executing program change: ${e.message}")
         }
     }
     

@@ -21,7 +21,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🎛️ **Persistent Pedal Knowledge** - Store MIDI CC mappings for any guitar pedal
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
-- 📦 **Pre-loaded Pedals** - Includes complete Meris LVX delay pedal (19 parameters)
+- 📦 **Pre-loaded Pedals** - Includes complete Meris LVX delay and Mercury X reverb pedals with full MIDI CC tables
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
 
@@ -116,16 +116,42 @@ AI assistant interprets *"give me a vintage slapback"* and sends:
 }
 ```
 
+### Mercury X Reverb Control
+AI assistant interprets *"create a lush cathedral reverb"* and sends:
+```json
+{
+  "tool": "execute_midi_commands", 
+  "arguments": {
+    "pedalId": "meris_mercury_x",
+    "commands": [
+      {"ccNumber": 32, "value": 25, "description": "Select Cathedra reverb structure"},
+      {"ccNumber": 33, "value": 100, "description": "Long decay time"},
+      {"ccNumber": 1, "value": 75, "description": "High wet mix"},
+      {"ccNumber": 15, "value": 40, "description": "Medium predelay time"}
+    ]
+  }
+}
+```
+
 ## 🎛️ Included Pedals
 
 ### Meris LVX Delay (Pre-loaded)
-Complete 19-parameter MIDI CC table including:
+Complete MIDI CC table including:
 - **Engine Selection** (Vintage, Tape, Digital, Sweep, Reverse, Pitch)
 - **Global Controls** (Mix, Level, Time, Feedback)  
 - **Filtering** (Filter, Low Cut)
 - **Modulation** (Rate, Depth)
 - **Stereo** (Width, Ping Pong)
 - **Advanced** (Diffusion, Smear, Drive)
+
+### Meris Mercury X Reverb (Pre-loaded)
+Complete MIDI CC table including:
+- **8 Reverb Structures** (Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity)
+- **Predelay System** (Time, Feedback, Cross Feedback, Modulation, Damping, Dry Blend)
+- **Processing Elements** (Dynamics, Preamp, Filter, Pitch, Modulation)
+- **Flexible Routing** (Pre+Dry, Pre, Feedback, Pre Tank, Post locations)
+- **Expression Control** (6 assignable expression pedal mappings)
+- **Advanced Features** (Gate controls, Hold Modifier, Tuner, MIDI Clock sync)
 
 ## 🧪 Testing
 
