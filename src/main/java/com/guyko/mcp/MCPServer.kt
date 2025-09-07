@@ -29,27 +29,13 @@ class MCPServer(
     private val writer = PrintWriter(System.out, true)
     
     fun start() {
-        logger.info { "MCP Server starting..." }
-        logger.info { "MIDI executor status: ${midiExecutor.getStatus()}" }
-        logger.info { "Available pedals: ${pedalRepository.listAll().map { "${it.manufacturer} ${it.modelName}" }}" }
+        // Start MCP server with clean JSON output for Claude Desktop compatibility
         sendInitialHandshake()
-        logger.info { "MCP Server ready and listening for connections" }
         processMessages()
     }
     
     private fun sendInitialHandshake() {
-        val serverInfo = mapOf(
-            "protocolVersion" to "2024-11-05",
-            "capabilities" to mapOf(
-                "tools" to mapOf<String, Any>()
-            ),
-            "serverInfo" to mapOf(
-                "name" to "MIDI Guitar Pedal MCP Server",
-                "version" to "1.0.0"
-            )
-        )
-        
-        sendResponse("initialize", serverInfo)
+        // Don't send anything initially - wait for initialize request from client
     }
     
     private fun processMessages() {
@@ -64,14 +50,32 @@ class MCPServer(
                 val params = message.get("params")?.asJsonObject
                 
                 when (method) {
+                    "initialize" -> handleInitialize(id)
                     "tools/list" -> handleToolsList(id)
                     "tools/call" -> handleToolCall(id, params)
                     else -> sendError(id, "Unknown method: $method")
                 }
             } catch (e: Exception) {
-                sendError(null, "Error processing message: ${e.message}")
+                // Don't send error responses for parsing failures as they may cause protocol issues
+                // Just continue processing the next message
+                continue
             }
         }
+    }
+    
+    private fun handleInitialize(id: Int?) {
+        val serverInfo = mapOf(
+            "protocolVersion" to "2024-11-05",
+            "capabilities" to mapOf(
+                "tools" to mapOf<String, Any>()
+            ),
+            "serverInfo" to mapOf(
+                "name" to "MIDI Guitar Pedal MCP Server",
+                "version" to "1.0.0"
+            )
+        )
+        
+        sendResponse("initialize", serverInfo, id)
     }
     
     private fun handleToolsList(id: Int?) {
@@ -751,21 +755,25 @@ class MCPServer(
             "jsonrpc" to "2.0",
             "result" to result
         )
-        if (id != null) {
-            response["id"] = id
-        }
+        // Always include id for protocol compliance
+        response["id"] = id ?: 0
         writer.println(gson.toJson(response))
     }
     
     private fun sendError(id: Int?, message: String) {
-        val error = mapOf(
+        val error = mutableMapOf<String, Any>(
             "jsonrpc" to "2.0",
             "error" to mapOf(
                 "code" to -1,
                 "message" to message
-            ),
-            "id" to id
+            )
         )
+        // Only include id if it's not null
+        if (id != null) {
+            error["id"] = id
+        } else {
+            error["id"] = 0  // Use 0 as default for protocol compliance
+        }
         writer.println(gson.toJson(error))
     }
 }

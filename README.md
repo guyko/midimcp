@@ -62,7 +62,44 @@ mvn exec:java
 ```
 
 ### 3. Connect Your AI Assistant
-Configure your AI assistant to connect to the MCP server. The server provides these tools:
+
+#### Claude Desktop Integration
+
+**Step 1: Build the project**
+```bash
+cd /path/to/midimcp
+mvn compile
+```
+
+**Step 2: Configure Claude Desktop**
+Add this configuration to your Claude Desktop config file:
+
+**Location**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "midi-guitar-pedals": {
+      "command": "/path/to/your/midimcp/start-mcp-wrapper.sh",
+      "args": []
+    }
+  }
+}
+```
+
+**Replace `/path/to/your/midimcp/` with your actual project directory path.**
+
+**Step 3: Restart Claude Desktop**
+Completely quit and restart Claude Desktop for the configuration to take effect.
+
+**Step 4: Test the connection**
+After restarting, you should see the "midi-guitar-pedals" server available. You can test it by asking Claude to:
+- "List available guitar pedals"
+- "Show me the parameters for the LVX delay"
+- "Execute a MIDI command to make the delay brighter"
+
+#### Other MCP-Compatible AI Assistants
+Configure your AI assistant to connect to the MCP server using the appropriate MCP client for your platform. The server provides these tools:
 - `execute_midi_command` - Send single MIDI CC command
 - `execute_midi_commands` - Send multiple commands in sequence  
 - `get_pedal` - Get pedal information and parameters

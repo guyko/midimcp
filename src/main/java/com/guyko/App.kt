@@ -15,6 +15,6 @@ fun main(args: Array<String>) {
     MerisEnzoXLoader.loadEnzoX(server)
     NeuralDSPQuadCortexLoader.loadQuadCortex(server)
     
-    println("Starting MIDI Guitar Pedal MCP Server...")
+    // Start MCP server (no console output for Claude Desktop compatibility)
     server.start()
 }
