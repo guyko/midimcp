@@ -135,7 +135,7 @@ AI assistant interprets *"create a lush cathedral reverb"* and sends:
 
 ## 🎛️ Included Pedals
 
-### Meris LVX Delay (Pre-loaded)
+### Meris LVX Delay (Pre-loaded - MIDI Channel 2)
 Complete MIDI CC table including:
 - **Engine Selection** (Vintage, Tape, Digital, Sweep, Reverse, Pitch)
 - **Global Controls** (Mix, Level, Time, Feedback)  
@@ -144,7 +144,7 @@ Complete MIDI CC table including:
 - **Stereo** (Width, Ping Pong)
 - **Advanced** (Diffusion, Smear, Drive)
 
-### Meris Mercury X Reverb (Pre-loaded)
+### Meris Mercury X Reverb (Pre-loaded - MIDI Channel 1)
 Complete MIDI CC table including:
 - **8 Reverb Structures** (Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity)
 - **Predelay System** (Time, Feedback, Cross Feedback, Modulation, Damping, Dry Blend)

@@ -479,7 +479,7 @@ object MerisLVXLoader {
             manufacturer = "Meris",
             modelName = "LVX",
             version = "1.0.2b",
-            midiChannel = 1,
+            midiChannel = 2,
             parameters = parameters,
             description = "Meris LVX Modular Delay System - Complete MIDI CC implementation with 103 parameters including preamp, delay (40 parameters), dynamics, pitch, filter, modulation, and looper sections"
         )
