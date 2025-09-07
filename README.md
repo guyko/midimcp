@@ -21,7 +21,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🎛️ **Persistent Pedal Knowledge** - Store MIDI CC mappings for any guitar pedal
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
-- 📦 **Pre-loaded Pedals** - Includes complete Meris LVX delay and Mercury X reverb pedals with full MIDI CC tables
+- 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, and Neural DSP Quad Cortex with full MIDI CC tables
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
 
@@ -133,6 +133,39 @@ AI assistant interprets *"create a lush cathedral reverb"* and sends:
 }
 ```
 
+### Enzo X Synthesizer Control
+AI assistant interprets *"create a warm polysynth pad"* and sends:
+```json
+{
+  "tool": "execute_midi_commands", 
+  "arguments": {
+    "pedalId": "meris_enzo_x",
+    "commands": [
+      {"ccNumber": 22, "value": 40, "description": "Switch to Poly Synth mode"},
+      {"ccNumber": 24, "value": 64, "description": "OSC1 triangle wave"},
+      {"ccNumber": 39, "value": 80, "description": "Filter frequency for warmth"},
+      {"ccNumber": 55, "value": 90, "description": "Slow amplitude attack"}
+    ]
+  }
+}
+```
+
+### Quad Cortex Scene Control
+AI assistant interprets *"switch to clean scene and enable reverb"* and sends:
+```json
+{
+  "tool": "execute_midi_commands", 
+  "arguments": {
+    "pedalId": "neural_dsp_quad_cortex",
+    "commands": [
+      {"ccNumber": 43, "value": 1, "description": "Switch to Scene B"},
+      {"ccNumber": 36, "value": 127, "description": "Enable footswitch B (reverb)"},
+      {"ccNumber": 47, "value": 1, "description": "Switch to Scene mode"}
+    ]
+  }
+}
+```
+
 ## 🎛️ Included Pedals
 
 ### Meris LVX Delay (Pre-loaded - MIDI Channel 2)
@@ -152,6 +185,26 @@ Complete MIDI CC table including:
 - **Flexible Routing** (Pre+Dry, Pre, Feedback, Pre Tank, Post locations)
 - **Expression Control** (6 assignable expression pedal mappings)
 - **Advanced Features** (Gate controls, Hold Modifier, Tuner, MIDI Clock sync)
+
+### Meris Enzo X Synthesizer (Pre-loaded - MIDI Channel 3)
+Complete MIDI CC table including:
+- **5 Synth Modes** (Mono Synth, Poly Synth, Arp Synth, Dry Mono, Dry Poly)
+- **Dual Oscillators** (Independent wave shapes, pitch offset, detune, cross modulation)
+- **Advanced Filters** (Ladder, State Variable, Twin with noise injection)
+- **ADSR Envelopes** (Filter and Amplitude envelopes with full ADSR control)
+- **Processing Elements** (Drive, Ambience, Modulation with flexible routing)
+- **Modulation Effects** (Chorus, Flanger, Vibrato, Phaser, Ring Mod)
+- **MIDI Note Control** (Full polyphonic MIDI keyboard support, aftertouch)
+
+### Neural DSP Quad Cortex (Pre-loaded - MIDI Channel 4)
+Complete MIDI CC table including:
+- **6 DSP Cores** (Most powerful floor modeler, 4-instrument processing)
+- **Neural Capture Technology** (Capture real amps and effects)
+- **Multiple Modes** (Preset, Scene, Stomp, Hybrid modes)
+- **8 Footswitches** (A-H with individual enable/bypass control)
+- **Advanced Looper X** (Up to 4+ minutes, punch in/out, reverse, quantize)
+- **Expression Control** (2 expression pedals with MIDI CC assignment)
+- **Program Management** (Scene selection, tempo control, tuner, gig view)
 
 ## 🧪 Testing
 
