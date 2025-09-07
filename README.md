@@ -29,14 +29,16 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 ## 🏗️ Architecture
 
 ```
-┌─────────────┐    Natural Language    ┌─────────────┐    MIDI Commands    ┌─────────────┐
+┌─────────────┐    Pedal Config Query  ┌─────────────┐    MIDI Commands    ┌─────────────┐
 │             │ ────────────────────── │             │ ─────────────────── │             │
-│ AI Assistant│  "make it brighter"    │ MCP Server  │  B0 05 64 (bytes)   │ Guitar Pedal│
+│ AI Assistant│  get_pedal("lvx")     │ MCP Server  │  B0 05 64 (bytes)   │ Guitar Pedal│
 │             │ ◄────────────────────── │             │ ◄─────────────────── │             │
-└─────────────┘    Execution Result    └─────────────┘    MIDI Response    └─────────────┘
+└─────────────┘    CC Mappings         └─────────────┘    MIDI Response    └─────────────┘
+     │                                                                              ▲
+     └─ "make it brighter" → CC5=100 ──────────────────────────────────────────────┘
 ```
 
-**AI Assistant** handles the intelligence, **MCP Server** handles the execution.
+**MCP Server** exposes pedal configurations and executes MIDI. **AI Assistant** translates natural language to MIDI using the exposed knowledge.
 
 ## 🚀 Quick Start
 
@@ -175,7 +177,7 @@ AI assistant interprets *"switch to clean scene and enable reverb"* and sends:
 Generate complete sysex preset files for Meris pedals from natural language descriptions.
 
 #### LVX Delay Presets
-AI assistant interprets *"create a warm vintage slapback delay"* and sends:
+AI assistant queries MCP for LVX CC mappings, interprets *"create a warm vintage slapback delay"*, and sends:
 ```json
 {
   "tool": "generate_lvx_preset",
@@ -198,7 +200,7 @@ AI assistant interprets *"create a warm vintage slapback delay"* and sends:
 **Result**: Complete 231-byte LVX sysex file ready for upload to pedal! 🎛️
 
 #### Mercury X Reverb Presets
-AI assistant interprets *"create a large cathedral reverb with warm predelay"* and sends:
+AI assistant queries MCP for Mercury X CC mappings, interprets *"create a large cathedral reverb with warm predelay"*, and sends:
 ```json
 {
   "tool": "generate_mercury_x_preset",
@@ -220,7 +222,7 @@ AI assistant interprets *"create a large cathedral reverb with warm predelay"* a
 ```
 
 #### Enzo X Synthesizer Presets
-AI assistant interprets *"create a classic poly synth pad with slow attack"* and sends:
+AI assistant queries MCP for Enzo X CC mappings, interprets *"create a classic poly synth pad with slow attack"*, and sends:
 ```json
 {
   "tool": "generate_enzo_x_preset",

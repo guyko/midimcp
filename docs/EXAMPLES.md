@@ -8,9 +8,9 @@ This document shows real-world examples of how to use the MIDI Guitar Pedal MCP 
 
 **User**: "Make my delay sound brighter and more present"
 
-**AI Assistant** (internal processing):
-- "brighter" → increase filter frequency (CC 5)
-- "more present" → increase mix level (CC 1)
+**AI Assistant** queries MCP for LVX CC mappings, then processes:
+- "brighter" → increase filter frequency (CC 5, from LVX CC table)
+- "more present" → increase mix level (CC 1, from LVX CC table)
 
 **AI sends to MCP**:
 ```json
@@ -117,9 +117,14 @@ Command 2:
 
 **User**: "Create a vintage slapback delay preset for rockabilly guitar"
 
-**AI Assistant** (internal processing):
+**AI Assistant** first queries MCP for LVX capabilities:
+```json
+{"tool": "get_pedal", "arguments": {"pedalId": "meris_lvx"}}
+```
+
+**AI Assistant** (internal processing using CC mappings from MCP):
 - "vintage" → tape delay engine (CC 16: 86)
-- "slapback" → short delay time (CC 15: 35)
+- "slapback" → short delay time (CC 15: 35)  
 - "rockabilly" → bright, cutting tone with medium feedback
 
 **AI sends to MCP**:

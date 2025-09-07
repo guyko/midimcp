@@ -59,16 +59,18 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 
 ### Architecture Design
 
-**AI Assistant Responsibilities:**
-- Natural language interpretation ("make it brighter" → specific CC commands)
-- Musical knowledge and sound design decisions
-- Parameter value calculations and relationships
-
 **MCP Server Responsibilities:**
-- Pedal knowledge storage and retrieval
+- Pedal knowledge storage and retrieval (CC mappings, parameter descriptions)
+- Exposes pedal configurations via MCP tools (get_pedal, list_pedals)
 - MIDI command validation and execution
-- Hardware communication
-- Command result reporting
+- Hardware communication and command result reporting
+- Sysex preset generation from CC parameter inputs
+
+**AI Assistant Responsibilities:**
+- Query MCP server for pedal configurations and capabilities
+- Natural language interpretation using exposed pedal knowledge
+- Translate user requests ("make it brighter") to specific MIDI commands using CC mappings
+- Musical knowledge and sound design decisions based on pedal parameters
 
 ### Preset Generation System
 
@@ -86,10 +88,11 @@ The server includes comprehensive sysex preset generation for Meris pedals:
 - CC-to-sysex position mapping for each pedal model
 
 **Workflow:**
-1. AI assistant interprets natural language → provides CC parameter values
-2. MCP server maps CC values to exact sysex byte positions
-3. Generates complete 231-byte sysex file ready for pedal upload
-4. Returns hex string for immediate MIDI transmission
+1. AI assistant queries MCP server for pedal CC mappings and capabilities
+2. AI translates natural language ("warm vintage delay") to specific CC parameter values
+3. AI calls MCP preset generation tool with CC parameters
+4. MCP server maps CC values to exact sysex byte positions and generates complete 231-byte sysex file
+5. Returns hex string ready for immediate MIDI transmission to pedal
 
 ## Dependencies
 
