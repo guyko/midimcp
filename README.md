@@ -22,7 +22,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
 - 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, and Neural DSP Quad Cortex with full MIDI CC tables
-- 🎛️ **Preset Generation** - Generate complete LVX sysex preset files from natural language descriptions
+- 🎛️ **Preset Generation** - Generate complete sysex preset files for LVX, Mercury X, and Enzo X from natural language descriptions
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
 
@@ -66,6 +66,9 @@ Configure your AI assistant to connect to the MCP server. The server provides th
 - `get_pedal` - Get pedal information and parameters
 - `list_pedals` - Show available pedals
 - `add_pedal` - Add new pedal configurations
+- `generate_lvx_preset` - Generate LVX delay preset sysex files
+- `generate_mercury_x_preset` - Generate Mercury X reverb preset sysex files
+- `generate_enzo_x_preset` - Generate Enzo X synthesizer preset sysex files
 
 ## 🎵 Example Usage
 
@@ -167,7 +170,11 @@ AI assistant interprets *"switch to clean scene and enable reverb"* and sends:
 }
 ```
 
-### LVX Preset Generation
+### Preset Generation
+
+Generate complete sysex preset files for Meris pedals from natural language descriptions.
+
+#### LVX Delay Presets
 AI assistant interprets *"create a warm vintage slapback delay"* and sends:
 ```json
 {
@@ -189,6 +196,53 @@ AI assistant interprets *"create a warm vintage slapback delay"* and sends:
 ```
 
 **Result**: Complete 231-byte LVX sysex file ready for upload to pedal! 🎛️
+
+#### Mercury X Reverb Presets
+AI assistant interprets *"create a large cathedral reverb with warm predelay"* and sends:
+```json
+{
+  "tool": "generate_mercury_x_preset",
+  "arguments": {
+    "presetName": "Cathedral",
+    "description": "Large cathedral reverb with warm predelay for ambient music",
+    "parameters": {
+      "1": 90,    // Mix - high wet signal
+      "5": 1,     // Reverb Structure - Cathedra
+      "11": 95,   // Decay - very long
+      "12": 45,   // Pre-delay - medium room size
+      "13": 40,   // Predelay Time - noticeable separation
+      "25": 2,    // Preamp Type - warm tube preamp
+      "31": 1,    // Filter Type - high cut for warmth
+      "33": 85    // Filter Frequency - remove harsh highs
+    }
+  }
+}
+```
+
+#### Enzo X Synthesizer Presets
+AI assistant interprets *"create a classic poly synth pad with slow attack"* and sends:
+```json
+{
+  "tool": "generate_enzo_x_preset",
+  "arguments": {
+    "presetName": "Poly Pad",
+    "description": "Classic polyphonic synthesizer pad with slow attack for ambient textures",
+    "parameters": {
+      "1": 75,    // Mix - balanced
+      "5": 1,     // Synth Mode - Poly
+      "11": 1,    // Osc 1 Waveform - Sawtooth
+      "17": 2,    // Osc 2 Waveform - Triangle
+      "24": 70,   // Filter Cutoff - medium brightness
+      "25": 20,   // Filter Resonance - subtle emphasis
+      "29": 80,   // Amp Attack - slow attack
+      "31": 85,   // Amp Sustain - high sustain
+      "32": 60    // Amp Release - medium release
+    }
+  }
+}
+```
+
+**Results**: Complete 231-byte sysex files ready for upload to pedals! 🎛️
 
 ## 🎛️ Included Pedals
 

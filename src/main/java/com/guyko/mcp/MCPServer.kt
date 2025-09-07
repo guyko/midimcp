@@ -12,6 +12,8 @@ import com.guyko.persistence.PedalRepository
 import com.guyko.midi.MidiExecutor
 import com.guyko.midi.HardwareMidiExecutor
 import com.guyko.pedals.LVXPresetGenerator
+import com.guyko.pedals.MercuryXPresetGenerator
+import com.guyko.pedals.EnzoXPresetGenerator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -198,6 +200,54 @@ class MCPServer(
                     ),
                     "required" to listOf("parameters", "presetName")
                 )
+            ),
+            mapOf(
+                "name" to "generate_mercury_x_preset",
+                "description" to "Generate Meris Mercury X reverb preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "parameters" to mapOf(
+                            "type" to "object",
+                            "description" to "Map of CC numbers to values (0-127). AI should interpret natural language and provide specific CC values.",
+                            "additionalProperties" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127)
+                        ),
+                        "presetName" to mapOf(
+                            "type" to "string", 
+                            "description" to "Name for the preset (max 16 characters)",
+                            "maxLength" to 16
+                        ),
+                        "description" to mapOf(
+                            "type" to "string", 
+                            "description" to "Optional description of the preset's intended sound"
+                        )
+                    ),
+                    "required" to listOf("parameters", "presetName")
+                )
+            ),
+            mapOf(
+                "name" to "generate_enzo_x_preset",
+                "description" to "Generate Meris Enzo X synthesizer preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "parameters" to mapOf(
+                            "type" to "object",
+                            "description" to "Map of CC numbers to values (0-127). AI should interpret natural language and provide specific CC values.",
+                            "additionalProperties" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127)
+                        ),
+                        "presetName" to mapOf(
+                            "type" to "string", 
+                            "description" to "Name for the preset (max 16 characters)",
+                            "maxLength" to 16
+                        ),
+                        "description" to mapOf(
+                            "type" to "string", 
+                            "description" to "Optional description of the preset's intended sound"
+                        )
+                    ),
+                    "required" to listOf("parameters", "presetName")
+                )
             )
         )
         
@@ -221,6 +271,8 @@ class MCPServer(
             "execute_midi_commands" -> handleExecuteMidiCommands(id, arguments)
             "execute_program_change" -> handleExecuteProgramChange(id, arguments)
             "generate_lvx_preset" -> handleGenerateLVXPreset(id, arguments)
+            "generate_mercury_x_preset" -> handleGenerateMercuryXPreset(id, arguments)
+            "generate_enzo_x_preset" -> handleGenerateEnzoXPreset(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
             else -> sendError(id, "Unknown tool: $toolName")
         }
@@ -526,6 +578,120 @@ class MCPServer(
             ), id)
         } catch (e: Exception) {
             sendError(id, "Error generating LVX preset: ${e.message}")
+        }
+    }
+    
+    private fun handleGenerateMercuryXPreset(id: Int?, arguments: JsonObject?) {
+        try {
+            val parametersJson = arguments?.get("parameters")?.asJsonObject
+            val presetName = arguments?.get("presetName")?.asString
+            val description = arguments?.get("description")?.asString
+            
+            if (parametersJson == null || presetName == null) {
+                sendError(id, "Missing required parameters: parameters and presetName")
+                return
+            }
+            
+            // Convert JSON parameters to Map<Int, Int>
+            val parameters = mutableMapOf<Int, Int>()
+            parametersJson.entrySet().forEach { (key, value) ->
+                try {
+                    val ccNumber = key.toInt()
+                    val ccValue = value.asInt
+                    if (ccNumber in 0..127 && ccValue in 0..127) {
+                        parameters[ccNumber] = ccValue
+                    }
+                } catch (e: NumberFormatException) {
+                    // Skip invalid entries
+                }
+            }
+            
+            if (parameters.isEmpty()) {
+                sendError(id, "No valid CC parameters provided")
+                return
+            }
+            
+            // Generate the Mercury X preset sysex
+            val sysex = MercuryXPresetGenerator.generatePreset(parameters, presetName)
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendln("Generated Mercury X Preset: '$presetName'")
+                        if (description != null) {
+                            appendln("Description: $description")
+                        }
+                        appendln("Parameters: ${parameters.size} CC values mapped")
+                        appendln("Sysex Size: ${sysex.data.size} bytes")
+                        appendln("")
+                        appendln("Sysex Data (ready for MIDI transmission):")
+                        appendln(sysex.toHexString())
+                        appendln("")
+                        appendln("This sysex file can be sent to a Mercury X pedal via MIDI to load the preset.")
+                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error generating Mercury X preset: ${e.message}")
+        }
+    }
+    
+    private fun handleGenerateEnzoXPreset(id: Int?, arguments: JsonObject?) {
+        try {
+            val parametersJson = arguments?.get("parameters")?.asJsonObject
+            val presetName = arguments?.get("presetName")?.asString
+            val description = arguments?.get("description")?.asString
+            
+            if (parametersJson == null || presetName == null) {
+                sendError(id, "Missing required parameters: parameters and presetName")
+                return
+            }
+            
+            // Convert JSON parameters to Map<Int, Int>
+            val parameters = mutableMapOf<Int, Int>()
+            parametersJson.entrySet().forEach { (key, value) ->
+                try {
+                    val ccNumber = key.toInt()
+                    val ccValue = value.asInt
+                    if (ccNumber in 0..127 && ccValue in 0..127) {
+                        parameters[ccNumber] = ccValue
+                    }
+                } catch (e: NumberFormatException) {
+                    // Skip invalid entries
+                }
+            }
+            
+            if (parameters.isEmpty()) {
+                sendError(id, "No valid CC parameters provided")
+                return
+            }
+            
+            // Generate the Enzo X preset sysex
+            val sysex = EnzoXPresetGenerator.generatePreset(parameters, presetName)
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendln("Generated Enzo X Preset: '$presetName'")
+                        if (description != null) {
+                            appendln("Description: $description")
+                        }
+                        appendln("Parameters: ${parameters.size} CC values mapped")
+                        appendln("Sysex Size: ${sysex.data.size} bytes")
+                        appendln("")
+                        appendln("Sysex Data (ready for MIDI transmission):")
+                        appendln(sysex.toHexString())
+                        appendln("")
+                        appendln("This sysex file can be sent to an Enzo X pedal via MIDI to load the preset.")
+                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error generating Enzo X preset: ${e.message}")
         }
     }
     
