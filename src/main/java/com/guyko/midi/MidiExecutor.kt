@@ -2,6 +2,7 @@ package com.guyko.midi
 
 import com.guyko.models.MidiCommand
 import com.guyko.models.MidiProgramChange
+import mu.KotlinLogging
 
 data class MidiExecutionResult(
     val success: Boolean,
@@ -42,8 +43,10 @@ interface MidiExecutor {
  * This would integrate with Java MIDI API in a real implementation
  */
 class HardwareMidiExecutor : MidiExecutor {
+    private val logger = KotlinLogging.logger {}
     
     override fun executeCommand(command: MidiCommand): MidiExecutionResult {
+        logger.debug { "Executing MIDI command: channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
         return try {
             // In a real implementation, this would use javax.sound.midi
             // to send the command to the actual MIDI device
@@ -52,6 +55,7 @@ class HardwareMidiExecutor : MidiExecutor {
             
             // Simulate sending to hardware
             println("Sending MIDI: $hexString")
+            logger.info { "MIDI CC command executed successfully: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
             
             MidiExecutionResult(
                 success = true,
@@ -59,6 +63,7 @@ class HardwareMidiExecutor : MidiExecutor {
                 executedCommand = command
             )
         } catch (e: Exception) {
+            logger.error(e) { "Failed to execute MIDI command: channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
             MidiExecutionResult(
                 success = false,
                 message = "Failed to execute MIDI command: ${e.message}",
@@ -68,16 +73,22 @@ class HardwareMidiExecutor : MidiExecutor {
     }
     
     override fun executeCommands(commands: List<MidiCommand>): List<MidiExecutionResult> {
-        return commands.map { executeCommand(it) }
+        logger.info { "Executing batch of ${commands.size} MIDI commands" }
+        val results = commands.map { executeCommand(it) }
+        val successCount = results.count { it.success }
+        logger.info { "Batch execution complete: $successCount/${commands.size} commands successful" }
+        return results
     }
     
     override fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult {
+        logger.debug { "Executing MIDI program change: channel=${programChange.channel}, program=${programChange.program}" }
         return try {
             val midiBytes = programChange.toMidiBytes()
             val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
             
             // Simulate sending to hardware
             println("Sending MIDI PC: $hexString")
+            logger.info { "MIDI program change executed successfully: $hexString (channel=${programChange.channel}, program=${programChange.program})" }
             
             MidiExecutionResult(
                 success = true,
@@ -85,6 +96,7 @@ class HardwareMidiExecutor : MidiExecutor {
                 executedCommand = null
             )
         } catch (e: Exception) {
+            logger.error(e) { "Failed to execute MIDI program change: channel=${programChange.channel}, program=${programChange.program}" }
             MidiExecutionResult(
                 success = false,
                 message = "Failed to execute MIDI program change: ${e.message}",
@@ -107,6 +119,7 @@ class HardwareMidiExecutor : MidiExecutor {
  * Mock MIDI executor for testing that doesn't send real MIDI commands
  */
 class MockMidiExecutor : MidiExecutor {
+    private val logger = KotlinLogging.logger {}
     private val executedCommands = mutableListOf<MidiCommand>()
     private val executedProgramChanges = mutableListOf<MidiProgramChange>()
     private var shouldFail = false
@@ -125,7 +138,9 @@ class MockMidiExecutor : MidiExecutor {
     }
     
     override fun executeCommand(command: MidiCommand): MidiExecutionResult {
+        logger.debug { "Mock executing MIDI command: channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
         return if (shouldFail) {
+            logger.warn { "Mock MIDI command execution failed (shouldFail=true): channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
             MidiExecutionResult(
                 success = false,
                 message = "Mock execution failed",
@@ -134,6 +149,7 @@ class MockMidiExecutor : MidiExecutor {
         } else {
             executedCommands.add(command)
             val hexString = command.toMidiBytes().joinToString(" ") { "%02X".format(it) }
+            logger.info { "Mock MIDI CC command executed: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
             MidiExecutionResult(
                 success = true,
                 message = "Mock MIDI executed: $hexString",
@@ -143,11 +159,17 @@ class MockMidiExecutor : MidiExecutor {
     }
     
     override fun executeCommands(commands: List<MidiCommand>): List<MidiExecutionResult> {
-        return commands.map { executeCommand(it) }
+        logger.info { "Mock executing batch of ${commands.size} MIDI commands" }
+        val results = commands.map { executeCommand(it) }
+        val successCount = results.count { it.success }
+        logger.info { "Mock batch execution complete: $successCount/${commands.size} commands successful" }
+        return results
     }
     
     override fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult {
+        logger.debug { "Mock executing MIDI program change: channel=${programChange.channel}, program=${programChange.program}" }
         return if (shouldFail) {
+            logger.warn { "Mock MIDI program change execution failed (shouldFail=true): channel=${programChange.channel}, program=${programChange.program}" }
             MidiExecutionResult(
                 success = false,
                 message = "Mock PC execution failed",
@@ -156,6 +178,7 @@ class MockMidiExecutor : MidiExecutor {
         } else {
             executedProgramChanges.add(programChange)
             val hexString = programChange.toMidiBytes().joinToString(" ") { "%02X".format(it) }
+            logger.info { "Mock MIDI program change executed: $hexString (channel=${programChange.channel}, program=${programChange.program})" }
             MidiExecutionResult(
                 success = true,
                 message = "Mock MIDI PC executed: $hexString",

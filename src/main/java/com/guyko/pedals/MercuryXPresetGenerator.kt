@@ -1,12 +1,14 @@
 package com.guyko.pedals
 
 import com.guyko.models.MidiSysex
+import mu.KotlinLogging
 
 /**
  * Generates Meris Mercury X reverb preset sysex files from CC parameter values
  * AI assistants provide the parameter values, MCP generates the sysex
  */
 object MercuryXPresetGenerator {
+    private val logger = KotlinLogging.logger {}
     
     /**
      * Mercury X Sysex header - common to all Mercury X presets
@@ -138,28 +140,46 @@ object MercuryXPresetGenerator {
      * @return MidiSysex object ready for transmission
      */
     fun generatePreset(parameters: Map<Int, Int>, presetName: String): MidiSysex {
+        logger.info { "Generating Mercury X preset '$presetName' with ${parameters.size} CC parameters" }
+        logger.debug { "Mercury X CC parameters: ${parameters.map { (cc, value) -> "CC$cc=$value" }.joinToString(", ")}" }
+        
         val sysexData = ByteArray(MERCURY_X_SYSEX_SIZE)
         
         // Set Mercury X header
         MERCURY_X_SYSEX_HEADER.copyInto(sysexData, 0)
+        logger.debug { "Mercury X header set: ${MERCURY_X_SYSEX_HEADER.joinToString(" ") { "%02X".format(it) }}" }
         
         // Initialize with default values (based on analysis of existing presets)
         initializeDefaults(sysexData)
+        logger.debug { "Mercury X defaults initialized" }
         
         // Map CC parameters to their sysex positions
+        var mappedParams = 0
+        var skippedParams = 0
         parameters.forEach { (ccNumber, value) ->
             val position = ccToSysexPosition[ccNumber]
             if (position != null && position < MERCURY_X_SYSEX_SIZE - 1) {
                 require(value in 0..127) { "CC value must be 0-127, got $value for CC$ccNumber" }
                 sysexData[position] = (value and 0x7F).toByte() // Ensure 7-bit
+                logger.debug { "Mercury X mapped CC$ccNumber=$value to sysex position $position" }
+                mappedParams++
+            } else {
+                logger.warn { "Mercury X CC$ccNumber not mapped to sysex position (unknown parameter)" }
+                skippedParams++
             }
         }
+        logger.info { "Mercury X parameter mapping complete: $mappedParams mapped, $skippedParams skipped" }
         
         // Add preset name
         addPresetName(sysexData, presetName)
+        logger.debug { "Mercury X preset name '$presetName' added at position $PRESET_NAME_POSITION" }
         
         // Set sysex terminator
         sysexData[MERCURY_X_SYSEX_SIZE - 1] = 0xF7.toByte()
+        
+        val hexString = sysexData.joinToString(" ") { "%02X".format(it) }
+        logger.info { "Mercury X preset sysex generated successfully: ${MERCURY_X_SYSEX_SIZE} bytes, name='$presetName'" }
+        logger.debug { "Mercury X sysex data: $hexString" }
         
         return MidiSysex(
             data = sysexData,

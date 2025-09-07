@@ -1,12 +1,14 @@
 package com.guyko.pedals
 
 import com.guyko.models.MidiSysex
+import mu.KotlinLogging
 
 /**
  * Generates Meris LVX preset sysex files from CC parameter values
  * AI assistants provide the parameter values, MCP generates the sysex
  */
 object LVXPresetGenerator {
+    private val logger = KotlinLogging.logger {}
     
     /**
      * LVX Sysex header - common to all LVX presets
@@ -105,28 +107,46 @@ object LVXPresetGenerator {
      * @return MidiSysex object ready for transmission
      */
     fun generatePreset(parameters: Map<Int, Int>, presetName: String): MidiSysex {
+        logger.info { "Generating LVX preset '$presetName' with ${parameters.size} CC parameters" }
+        logger.debug { "LVX CC parameters: ${parameters.map { (cc, value) -> "CC$cc=$value" }.joinToString(", ")}" }
+        
         val sysexData = ByteArray(LVX_SYSEX_SIZE)
         
         // Set LVX header
         LVX_SYSEX_HEADER.copyInto(sysexData, 0)
+        logger.debug { "LVX header set: ${LVX_SYSEX_HEADER.joinToString(" ") { "%02X".format(it) }}" }
         
         // Initialize with default values (based on analysis of existing presets)
         initializeDefaults(sysexData)
+        logger.debug { "LVX defaults initialized" }
         
         // Map CC parameters to their sysex positions
+        var mappedParams = 0
+        var skippedParams = 0
         parameters.forEach { (ccNumber, value) ->
             val position = ccToSysexPosition[ccNumber]
             if (position != null && position < LVX_SYSEX_SIZE - 1) {
                 require(value in 0..127) { "CC value must be 0-127, got $value for CC$ccNumber" }
                 sysexData[position] = (value and 0x7F).toByte() // Ensure 7-bit
+                logger.debug { "LVX mapped CC$ccNumber=$value to sysex position $position" }
+                mappedParams++
+            } else {
+                logger.warn { "LVX CC$ccNumber not mapped to sysex position (unknown parameter)" }
+                skippedParams++
             }
         }
+        logger.info { "LVX parameter mapping complete: $mappedParams mapped, $skippedParams skipped" }
         
         // Add preset name
         addPresetName(sysexData, presetName)
+        logger.debug { "LVX preset name '$presetName' added at position $PRESET_NAME_POSITION" }
         
         // Set sysex terminator
         sysexData[LVX_SYSEX_SIZE - 1] = 0xF7.toByte()
+        
+        val hexString = sysexData.joinToString(" ") { "%02X".format(it) }
+        logger.info { "LVX preset sysex generated successfully: ${LVX_SYSEX_SIZE} bytes, name='$presetName'" }
+        logger.debug { "LVX sysex data: $hexString" }
         
         return MidiSysex(
             data = sysexData,

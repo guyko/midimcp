@@ -17,17 +17,23 @@ import com.guyko.pedals.EnzoXPresetGenerator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import mu.KotlinLogging
 
 class MCPServer(
     val pedalRepository: PedalRepository = PedalRepository(),
     private val midiExecutor: MidiExecutor = HardwareMidiExecutor()
 ) {
+    private val logger = KotlinLogging.logger {}
     private val gson = Gson()
     private val reader = BufferedReader(InputStreamReader(System.`in`))
     private val writer = PrintWriter(System.out, true)
     
     fun start() {
+        logger.info { "MCP Server starting..." }
+        logger.info { "MIDI executor status: ${midiExecutor.getStatus()}" }
+        logger.info { "Available pedals: ${pedalRepository.listAll().map { "${it.manufacturer} ${it.modelName}" }}" }
         sendInitialHandshake()
+        logger.info { "MCP Server ready and listening for connections" }
         processMessages()
     }
     
@@ -256,6 +262,7 @@ class MCPServer(
     
     private fun handleToolCall(id: Int?, params: JsonObject?) {
         if (params == null) {
+            logger.error { "MCP tool call failed: Missing parameters (id=$id)" }
             sendError(id, "Missing parameters")
             return
         }
@@ -263,6 +270,10 @@ class MCPServer(
         val toolName = params.get("name")?.asString
         val arguments = params.get("arguments")?.asJsonObject
         
+        logger.info { "MCP tool call: '$toolName' (id=$id)" }
+        logger.debug { "MCP tool arguments: ${arguments?.toString()}" }
+        
+        val startTime = System.currentTimeMillis()
         when (toolName) {
             "add_pedal" -> handleAddPedal(id, arguments)
             "get_pedal" -> handleGetPedal(id, arguments)
@@ -274,8 +285,13 @@ class MCPServer(
             "generate_mercury_x_preset" -> handleGenerateMercuryXPreset(id, arguments)
             "generate_enzo_x_preset" -> handleGenerateEnzoXPreset(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
-            else -> sendError(id, "Unknown tool: $toolName")
+            else -> {
+                logger.error { "MCP tool call failed: Unknown tool '$toolName' (id=$id)" }
+                sendError(id, "Unknown tool: $toolName")
+            }
         }
+        val executionTime = System.currentTimeMillis() - startTime
+        logger.info { "MCP tool call '$toolName' completed in ${executionTime}ms (id=$id)" }
     }
     
     private fun handleAddPedal(id: Int?, arguments: JsonObject?) {
@@ -373,15 +389,19 @@ class MCPServer(
             val description = arguments?.get("description")?.asString
             
             if (pedalId == null || ccNumber == null || value == null) {
+                logger.error { "MCP execute_midi_command failed: Missing required parameters (pedalId=$pedalId, ccNumber=$ccNumber, value=$value)" }
                 sendError(id, "Missing required parameters")
                 return
             }
             
             val pedal = pedalRepository.load(pedalId)
             if (pedal == null) {
+                logger.error { "MCP execute_midi_command failed: Pedal not found '$pedalId'" }
                 sendError(id, "Pedal not found: $pedalId")
                 return
             }
+            
+            logger.debug { "MCP execute_midi_command: Executing CC$ccNumber=$value on pedal '$pedalId' (${pedal.manufacturer} ${pedal.modelName})" }
             
             // Find parameter info if available
             val parameter = pedal.getParameterByCC(ccNumber)
@@ -396,6 +416,12 @@ class MCPServer(
             )
             
             val result = midiExecutor.executeCommand(midiCommand)
+            
+            if (result.success) {
+                logger.info { "MCP execute_midi_command success: ${result.message}" }
+            } else {
+                logger.error { "MCP execute_midi_command failed: ${result.message}" }
+            }
             
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
@@ -531,9 +557,12 @@ class MCPServer(
             val description = arguments?.get("description")?.asString
             
             if (parametersJson == null || presetName == null) {
+                logger.error { "MCP generate_lvx_preset failed: Missing required parameters (parametersJson=${parametersJson != null}, presetName=$presetName)" }
                 sendError(id, "Missing required parameters: parameters and presetName")
                 return
             }
+            
+            logger.debug { "MCP generate_lvx_preset: Creating preset '$presetName' with ${parametersJson.size()} parameters" }
             
             // Convert JSON parameters to Map<Int, Int>
             val parameters = mutableMapOf<Int, Int>()
@@ -556,6 +585,7 @@ class MCPServer(
             
             // Generate the LVX preset sysex
             val sysex = LVXPresetGenerator.generatePreset(parameters, presetName)
+            logger.info { "MCP generate_lvx_preset success: Generated ${sysex.data.size} byte sysex file for preset '$presetName'" }
             
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
