@@ -75,12 +75,12 @@ class MidiExecutorTest {
         
         val status = mockExecutor.getStatus()
         assertTrue("Status should mention mock", status.contains("Mock"))
-        assertTrue("Status should show count", status.contains("0 commands executed"))
+        assertTrue("Status should show count", status.contains("0 CC commands"))
         
         // Execute a command and check status again
         mockExecutor.executeCommand(MidiCommand(1, 5, 100))
         val newStatus = mockExecutor.getStatus()
-        assertTrue("Status should show updated count", newStatus.contains("1 commands executed"))
+        assertTrue("Status should show updated count", newStatus.contains("1 CC commands"))
     }
     
     @Test
