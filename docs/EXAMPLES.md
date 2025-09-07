@@ -111,6 +111,106 @@ Command 2:
 
 **Result**: Lush, expansive ambient textures perfect for soundscapes! 🌌
 
+## 🎛️ Preset Generation Examples
+
+### Example 1: LVX Delay Preset
+
+**User**: "Create a vintage slapback delay preset for rockabilly guitar"
+
+**AI Assistant** (internal processing):
+- "vintage" → tape delay engine (CC 16: 86)
+- "slapback" → short delay time (CC 15: 35)
+- "rockabilly" → bright, cutting tone with medium feedback
+
+**AI sends to MCP**:
+```json
+{
+  "tool": "generate_lvx_preset",
+  "arguments": {
+    "presetName": "Rockabilly Slap",
+    "description": "Vintage slapback delay for rockabilly guitar",
+    "parameters": {
+      "1": 85,    // Mix - high wet signal
+      "15": 35,   // Time - short slapback timing
+      "16": 86,   // Type - tape delay engine
+      "19": 25,   // Feedback - low repeats
+      "21": 15,   // Modulation - subtle tape warble
+      "80": 75,   // Filter - warm tone
+      "62": 16    // Dynamics - light compression
+    }
+  }
+}
+```
+
+**MCP Response**:
+```
+Generated LVX Preset: 'Rockabilly Slap'
+Description: Vintage slapback delay for rockabilly guitar
+Parameters: 7 CC values mapped
+Sysex Size: 231 bytes
+
+Sysex Data (ready for MIDI transmission):
+F000021000260026...F7
+
+This sysex file can be sent to an LVX pedal via MIDI to load the preset.
+The preset will be stored in the pedal and can be recalled later.
+```
+
+### Example 2: Mercury X Reverb Preset
+
+**User**: "Create a large cathedral reverb with warm predelay for ambient music"
+
+**AI sends to MCP**:
+```json
+{
+  "tool": "generate_mercury_x_preset",
+  "arguments": {
+    "presetName": "Cathedral",
+    "description": "Large cathedral reverb with warm predelay",
+    "parameters": {
+      "1": 90,    // Mix - high wet signal
+      "5": 1,     // Reverb Structure - Cathedra
+      "11": 95,   // Decay - very long
+      "12": 45,   // Pre-delay - medium room size
+      "13": 40,   // Predelay Time - noticeable separation
+      "25": 2,    // Preamp Type - warm tube preamp
+      "31": 1,    // Filter Type - high cut for warmth
+      "33": 85    // Filter Frequency - remove harsh highs
+    }
+  }
+}
+```
+
+**Result**: Complete 231-byte Mercury X sysex file ready for upload! 🏛️
+
+### Example 3: Enzo X Synthesizer Preset
+
+**User**: "Create a classic poly synth pad with slow attack for ambient textures"
+
+**AI sends to MCP**:
+```json
+{
+  "tool": "generate_enzo_x_preset",
+  "arguments": {
+    "presetName": "Ambient Pad",
+    "description": "Polyphonic synthesizer pad with slow attack",
+    "parameters": {
+      "1": 75,    // Mix - balanced
+      "5": 1,     // Synth Mode - Poly
+      "11": 1,    // Osc 1 Waveform - Sawtooth
+      "17": 2,    // Osc 2 Waveform - Triangle
+      "24": 70,   // Filter Cutoff - medium brightness
+      "25": 20,   // Filter Resonance - subtle emphasis
+      "29": 80,   // Amp Attack - slow attack
+      "31": 85,   // Amp Sustain - high sustain
+      "32": 60    // Amp Release - medium release
+    }
+  }
+}
+```
+
+**Result**: Complete 231-byte Enzo X sysex file ready for upload! 🎹
+
 ## 🎛️ Working with Different Pedals
 
 ### Adding Your Own Pedal

@@ -38,6 +38,11 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 
 5. **Pedal Configurations** (`src/main/java/com/guyko/pedals/`)
    - `MerisLVXLoader`: Pre-configured Meris LVX delay pedal with full CC table
+   - `MerisMercuryXLoader`: Pre-configured Meris Mercury X reverb pedal with full CC table
+   - `MerisEnzoXLoader`: Pre-configured Meris Enzo X synthesizer pedal with full CC table
+   - `LVXPresetGenerator`: Generates LVX sysex preset files from CC parameters
+   - `MercuryXPresetGenerator`: Generates Mercury X sysex preset files from CC parameters
+   - `EnzoXPresetGenerator`: Generates Enzo X sysex preset files from CC parameters
 
 ### Available MCP Tools
 
@@ -46,6 +51,10 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 - `list_pedals`: List all available pedals
 - `execute_midi_command`: Execute a single MIDI CC command on a pedal
 - `execute_midi_commands`: Execute multiple MIDI CC commands in sequence
+- `execute_program_change`: Switch pedal presets via MIDI program change
+- `generate_lvx_preset`: Generate LVX delay preset sysex files from CC parameters
+- `generate_mercury_x_preset`: Generate Mercury X reverb preset sysex files from CC parameters
+- `generate_enzo_x_preset`: Generate Enzo X synthesizer preset sysex files from CC parameters
 - `get_midi_status`: Get MIDI executor connection status
 
 ### Architecture Design
@@ -60,6 +69,27 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 - MIDI command validation and execution
 - Hardware communication
 - Command result reporting
+
+### Preset Generation System
+
+The server includes comprehensive sysex preset generation for Meris pedals:
+
+**Supported Pedals:**
+- **LVX Delay**: Complete delay preset generation with all processing elements
+- **Mercury X Reverb**: Full reverb preset generation with all 8 reverb structures
+- **Enzo X Synthesizer**: Complete synthesizer preset generation with all synth modes
+
+**Architecture:**
+- All pedals use identical 231-byte sysex format
+- Preset names stored at position 212 (max 16 characters)
+- Header patterns and terminator (F7) consistent across pedals
+- CC-to-sysex position mapping for each pedal model
+
+**Workflow:**
+1. AI assistant interprets natural language → provides CC parameter values
+2. MCP server maps CC values to exact sysex byte positions
+3. Generates complete 231-byte sysex file ready for pedal upload
+4. Returns hex string for immediate MIDI transmission
 
 ## Dependencies
 
@@ -94,7 +124,11 @@ Tests include both successful execution and failure scenarios with mock hardware
 1. Build the project: `mvn compile`
 2. Run tests: `mvn test`
 3. Run the MCP server: `mvn exec:java`
-4. The server will start with pre-loaded Meris LVX pedal configuration
+4. The server will start with pre-loaded Meris pedal configurations:
+   - LVX Delay (Channel 2)
+   - Mercury X Reverb (Channel 1) 
+   - Enzo X Synthesizer (Channel 3)
+   - Quad Cortex (Channel 4)
 5. Connect your AI assistant to interact via MCP protocol
 
 ## Development Environment
