@@ -40,22 +40,68 @@ interface MidiExecutor {
 
 /**
  * Real MIDI executor that sends commands to actual hardware
- * This would integrate with Java MIDI API in a real implementation
+ * Uses Java MIDI API to communicate with MIDI devices
  */
 class HardwareMidiExecutor : MidiExecutor {
     private val logger = KotlinLogging.logger {}
+    private var midiDevice: javax.sound.midi.MidiDevice? = null
+    private var receiver: javax.sound.midi.Receiver? = null
+    
+    init {
+        initializeMidiDevice()
+    }
+    
+    private fun initializeMidiDevice() {
+        try {
+            val midiDeviceInfo = javax.sound.midi.MidiSystem.getMidiDeviceInfo()
+            logger.debug { "Available MIDI devices: ${midiDeviceInfo.map { "${it.name} (${it.description})" }}" }
+            
+            // Try to find a MIDI output device
+            for (deviceInfo in midiDeviceInfo) {
+                val device = javax.sound.midi.MidiSystem.getMidiDevice(deviceInfo)
+                if (device.maxReceivers != 0) { // Device can receive MIDI
+                    logger.info { "Found MIDI output device: ${deviceInfo.name} (${deviceInfo.description})" }
+                    midiDevice = device
+                    break
+                }
+            }
+            
+            midiDevice?.let { device ->
+                if (!device.isOpen) {
+                    device.open()
+                    logger.info { "Opened MIDI device: ${device.deviceInfo.name}" }
+                }
+                receiver = device.receiver
+                logger.info { "MIDI receiver ready for hardware communication" }
+            } ?: run {
+                logger.warn { "No MIDI output devices found. Commands will be logged only." }
+            }
+        } catch (e: Exception) {
+            logger.error(e) { "Failed to initialize MIDI device. Commands will be logged only." }
+        }
+    }
     
     override fun executeCommand(command: MidiCommand): MidiExecutionResult {
         logger.debug { "Executing MIDI command: channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
         return try {
-            // In a real implementation, this would use javax.sound.midi
-            // to send the command to the actual MIDI device
             val midiBytes = command.toMidiBytes()
             val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
             
-            // Simulate sending to hardware
-            println("Sending MIDI: $hexString")
-            logger.info { "MIDI CC command executed successfully: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+            // Send to actual hardware if available
+            receiver?.let { recv ->
+                val midiMessage = javax.sound.midi.ShortMessage(
+                    javax.sound.midi.ShortMessage.CONTROL_CHANGE,
+                    command.channel - 1, // MIDI channels are 0-indexed in Java MIDI API
+                    command.ccNumber,
+                    command.value
+                )
+                recv.send(midiMessage, -1) // -1 means send immediately
+                logger.info { "MIDI CC command sent to hardware: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+            } ?: run {
+                // Log only if no hardware available
+                println("MIDI (no device): $hexString")
+                logger.info { "MIDI CC command logged (no device): $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+            }
             
             MidiExecutionResult(
                 success = true,
@@ -86,9 +132,21 @@ class HardwareMidiExecutor : MidiExecutor {
             val midiBytes = programChange.toMidiBytes()
             val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
             
-            // Simulate sending to hardware
-            println("Sending MIDI PC: $hexString")
-            logger.info { "MIDI program change executed successfully: $hexString (channel=${programChange.channel}, program=${programChange.program})" }
+            // Send to actual hardware if available
+            receiver?.let { recv ->
+                val midiMessage = javax.sound.midi.ShortMessage(
+                    javax.sound.midi.ShortMessage.PROGRAM_CHANGE,
+                    programChange.channel - 1, // MIDI channels are 0-indexed in Java MIDI API
+                    programChange.program,
+                    0 // Program change doesn't use the third byte
+                )
+                recv.send(midiMessage, -1) // -1 means send immediately
+                logger.info { "MIDI program change sent to hardware: $hexString (channel=${programChange.channel}, program=${programChange.program})" }
+            } ?: run {
+                // Log only if no hardware available
+                println("MIDI PC (no device): $hexString")
+                logger.info { "MIDI program change logged (no device): $hexString (channel=${programChange.channel}, program=${programChange.program})" }
+            }
             
             MidiExecutionResult(
                 success = true,
@@ -106,88 +164,25 @@ class HardwareMidiExecutor : MidiExecutor {
     }
     
     override fun isAvailable(): Boolean {
-        // In real implementation, check if MIDI devices are available
-        return true
+        return receiver != null
     }
     
     override fun getStatus(): String {
-        return "Hardware MIDI executor ready"
+        return if (receiver != null) {
+            "Hardware MIDI executor connected to: ${midiDevice?.deviceInfo?.name}"
+        } else {
+            "Hardware MIDI executor (no device connected)"
+        }
+    }
+    
+    fun close() {
+        try {
+            receiver?.close()
+            midiDevice?.close()
+            logger.info { "MIDI device closed" }
+        } catch (e: Exception) {
+            logger.error(e) { "Error closing MIDI device" }
+        }
     }
 }
 
-/**
- * Mock MIDI executor for testing that doesn't send real MIDI commands
- */
-class MockMidiExecutor : MidiExecutor {
-    private val logger = KotlinLogging.logger {}
-    private val executedCommands = mutableListOf<MidiCommand>()
-    private val executedProgramChanges = mutableListOf<MidiProgramChange>()
-    private var shouldFail = false
-    
-    fun setShouldFail(fail: Boolean) {
-        shouldFail = fail
-    }
-    
-    fun getExecutedCommands(): List<MidiCommand> = executedCommands.toList()
-    
-    fun getExecutedProgramChanges(): List<MidiProgramChange> = executedProgramChanges.toList()
-    
-    fun clearExecutedCommands() {
-        executedCommands.clear()
-        executedProgramChanges.clear()
-    }
-    
-    override fun executeCommand(command: MidiCommand): MidiExecutionResult {
-        logger.debug { "Mock executing MIDI command: channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
-        return if (shouldFail) {
-            logger.warn { "Mock MIDI command execution failed (shouldFail=true): channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}" }
-            MidiExecutionResult(
-                success = false,
-                message = "Mock execution failed",
-                executedCommand = command
-            )
-        } else {
-            executedCommands.add(command)
-            val hexString = command.toMidiBytes().joinToString(" ") { "%02X".format(it) }
-            logger.info { "Mock MIDI CC command executed: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
-            MidiExecutionResult(
-                success = true,
-                message = "Mock MIDI executed: $hexString",
-                executedCommand = command
-            )
-        }
-    }
-    
-    override fun executeCommands(commands: List<MidiCommand>): List<MidiExecutionResult> {
-        logger.info { "Mock executing batch of ${commands.size} MIDI commands" }
-        val results = commands.map { executeCommand(it) }
-        val successCount = results.count { it.success }
-        logger.info { "Mock batch execution complete: $successCount/${commands.size} commands successful" }
-        return results
-    }
-    
-    override fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult {
-        logger.debug { "Mock executing MIDI program change: channel=${programChange.channel}, program=${programChange.program}" }
-        return if (shouldFail) {
-            logger.warn { "Mock MIDI program change execution failed (shouldFail=true): channel=${programChange.channel}, program=${programChange.program}" }
-            MidiExecutionResult(
-                success = false,
-                message = "Mock PC execution failed",
-                executedCommand = null
-            )
-        } else {
-            executedProgramChanges.add(programChange)
-            val hexString = programChange.toMidiBytes().joinToString(" ") { "%02X".format(it) }
-            logger.info { "Mock MIDI program change executed: $hexString (channel=${programChange.channel}, program=${programChange.program})" }
-            MidiExecutionResult(
-                success = true,
-                message = "Mock MIDI PC executed: $hexString",
-                executedCommand = null
-            )
-        }
-    }
-    
-    override fun isAvailable(): Boolean = true
-    
-    override fun getStatus(): String = "Mock MIDI executor (${executedCommands.size} CC commands, ${executedProgramChanges.size} PC commands executed)"
-}
