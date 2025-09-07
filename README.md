@@ -22,6 +22,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
 - 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, and Neural DSP Quad Cortex with full MIDI CC tables
+- 🎛️ **Preset Generation** - Generate complete LVX sysex preset files from natural language descriptions
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
 
@@ -165,6 +166,29 @@ AI assistant interprets *"switch to clean scene and enable reverb"* and sends:
   }
 }
 ```
+
+### LVX Preset Generation
+AI assistant interprets *"create a warm vintage slapback delay"* and sends:
+```json
+{
+  "tool": "generate_lvx_preset",
+  "arguments": {
+    "presetName": "Vintage Slapback",
+    "description": "Warm vintage slapback delay for rockabilly tones",
+    "parameters": {
+      "1": 85,    // Mix - high wet signal
+      "15": 35,   // Time - short slapback timing
+      "16": 86,   // Type - tape delay engine
+      "19": 25,   // Feedback - low repeats
+      "21": 15,   // Modulation - subtle tape warble
+      "80": 75,   // Filter - warm/dark tone
+      "62": 16    // Dynamics - light compression
+    }
+  }
+}
+```
+
+**Result**: Complete 231-byte LVX sysex file ready for upload to pedal! 🎛️
 
 ## 🎛️ Included Pedals
 

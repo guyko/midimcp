@@ -7,9 +7,11 @@ import com.guyko.models.PedalModel
 import com.guyko.models.CCParameter
 import com.guyko.models.MidiCommand
 import com.guyko.models.MidiProgramChange
+import com.guyko.models.MidiSysex
 import com.guyko.persistence.PedalRepository
 import com.guyko.midi.MidiExecutor
 import com.guyko.midi.HardwareMidiExecutor
+import com.guyko.pedals.LVXPresetGenerator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -172,6 +174,30 @@ class MCPServer(
                     ),
                     "required" to listOf("pedalId", "program")
                 )
+            ),
+            mapOf(
+                "name" to "generate_lvx_preset",
+                "description" to "Generate Meris LVX preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "parameters" to mapOf(
+                            "type" to "object",
+                            "description" to "Map of CC numbers to values (0-127). AI should interpret natural language and provide specific CC values.",
+                            "additionalProperties" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 127)
+                        ),
+                        "presetName" to mapOf(
+                            "type" to "string", 
+                            "description" to "Name for the preset (max 16 characters)",
+                            "maxLength" to 16
+                        ),
+                        "description" to mapOf(
+                            "type" to "string", 
+                            "description" to "Optional description of the preset's intended sound"
+                        )
+                    ),
+                    "required" to listOf("parameters", "presetName")
+                )
             )
         )
         
@@ -194,6 +220,7 @@ class MCPServer(
             "execute_midi_command" -> handleExecuteMidiCommand(id, arguments)
             "execute_midi_commands" -> handleExecuteMidiCommands(id, arguments)
             "execute_program_change" -> handleExecuteProgramChange(id, arguments)
+            "generate_lvx_preset" -> handleGenerateLVXPreset(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
             else -> sendError(id, "Unknown tool: $toolName")
         }
@@ -442,6 +469,63 @@ class MCPServer(
             ), id)
         } catch (e: Exception) {
             sendError(id, "Error executing program change: ${e.message}")
+        }
+    }
+    
+    private fun handleGenerateLVXPreset(id: Int?, arguments: JsonObject?) {
+        try {
+            val parametersJson = arguments?.get("parameters")?.asJsonObject
+            val presetName = arguments?.get("presetName")?.asString
+            val description = arguments?.get("description")?.asString
+            
+            if (parametersJson == null || presetName == null) {
+                sendError(id, "Missing required parameters: parameters and presetName")
+                return
+            }
+            
+            // Convert JSON parameters to Map<Int, Int>
+            val parameters = mutableMapOf<Int, Int>()
+            parametersJson.entrySet().forEach { (key, value) ->
+                try {
+                    val ccNumber = key.toInt()
+                    val ccValue = value.asInt
+                    if (ccNumber in 0..127 && ccValue in 0..127) {
+                        parameters[ccNumber] = ccValue
+                    }
+                } catch (e: NumberFormatException) {
+                    // Skip invalid entries
+                }
+            }
+            
+            if (parameters.isEmpty()) {
+                sendError(id, "No valid CC parameters provided")
+                return
+            }
+            
+            // Generate the LVX preset sysex
+            val sysex = LVXPresetGenerator.generatePreset(parameters, presetName)
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendln("Generated LVX Preset: '$presetName'")
+                        if (description != null) {
+                            appendln("Description: $description")
+                        }
+                        appendln("Parameters: ${parameters.size} CC values mapped")
+                        appendln("Sysex Size: ${sysex.data.size} bytes")
+                        appendln("")
+                        appendln("Sysex Data (ready for MIDI transmission):")
+                        appendln(sysex.toHexString())
+                        appendln("")
+                        appendln("This sysex file can be sent to an LVX pedal via MIDI to load the preset.")
+                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error generating LVX preset: ${e.message}")
         }
     }
     

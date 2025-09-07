@@ -36,7 +36,19 @@
       "Read(/Users/gkobrinsky/Downloads/**)",
       "Read(/Users/gkobrinsky/Downloads/**)",
       "Read(/Users/gkobrinsky/Downloads/**)",
-      "Read(/Users/gkobrinsky/Downloads/**)"
+      "Read(/Users/gkobrinsky/Downloads/**)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Enzo X synthesizer and Quad Cortex support with comprehensive MIDI CC tables\n\n- Add MerisEnzoXLoader with complete 60+ parameter MIDI CC mappings\n- Implement 5 synth modes (Mono, Poly, Arp, Dry Mono, Dry Poly)\n- Include dual oscillators, advanced filters, ADSR envelopes\n- Add processing elements: Drive, Ambience, Modulation with flexible routing\n- Support modulation effects: Chorus, Flanger, Vibrato, Phaser, Ring Mod\n- Add full MIDI keyboard control with polyphonic support and aftertouch\n\n- Add NeuralDSPQuadCortexLoader with complete MIDI CC mappings\n- Implement 6 DSP cores floor modeler with Neural Capture technology\n- Include multiple modes (Preset, Scene, Stomp, Hybrid)\n- Add 8 footswitches (A-H) with individual enable/bypass control\n- Support advanced Looper X with punch in/out, reverse, quantize\n- Include expression control and program management features\n\n- Update App.kt to load all four pedals on separate MIDI channels\n- Update README with comprehensive documentation and usage examples\n- All 25 tests pass successfully\n\nMIDI Channel Assignment:\n- Mercury X Reverb: Channel 1\n- LVX Delay: Channel 2\n- Enzo X Synthesizer: Channel 3\n- Quad Cortex: Channel 4\n\nFeatures:\n- Four professional-grade pedals with complete MIDI control\n- Natural language AI integration for complex multi-pedal setups\n- Comprehensive parameter coverage for all major features\n- Real-time MIDI command execution and validation\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git add .github/workflows/ci.yml)",
+      "Bash(git commit -m \"Fix GitHub Actions workflow permissions\n\n- Add required permissions for test reporter action\n- contents: read - allows workflow to read repository contents\n- checks: write - allows test reporter to write check results\n\nThis resolves the GitHub Actions job failure related to workflow permissions.\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git commit -m \"Update GitHub Actions to latest versions\n\n- Update actions/checkout from v3 to v4\n- Update actions/setup-java from v3 to v4\n- Update actions/cache from v3 to v4\n- Update actions/upload-artifact from v3 to v4\n- Update codecov/codecov-action from v3 to v4\n\nThis resolves deprecation warnings for v3 actions and ensures compatibility\nwith the latest GitHub Actions infrastructure.\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)",
+      "Read(/Users/gkobrinsky/pedals/**)"
     ],
     "deny": [],
     "ask": []
