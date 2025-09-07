@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(tree src)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Kotlin Maven project setup with CLAUDE.md\n\n- Set up basic Kotlin Maven project structure\n- Added pom.xml with Kotlin 1.3.0 configuration  \n- Created simple Hello World application in App.kt\n- Added CLAUDE.md for Claude Code guidance\n- Configured gitignore for Maven/IntelliJ project\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add origin https://github.com/guyko/midimcp.git)",
+      "Bash(git push -u origin master)",
+      "WebFetch(domain:www.meris.us)",
+      "Bash(mvn compile)",
+      "Bash(chmod +x run-server.sh)"
     ],
     "deny": [],
     "ask": []
