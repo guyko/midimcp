@@ -195,6 +195,9 @@ object MercuryXPresetGenerator {
     private fun initializeDefaults(sysexData: ByteArray) {
         // Set common default patterns found in existing presets
         
+        // Critical: Position 8 must be 0x01 for valid presets (based on working sysex analysis)
+        sysexData[8] = 0x01   // Preset enable/active flag
+        
         // Default mix and levels
         sysexData[9] = 0x70   // Mix - 90%
         sysexData[10] = 0x40  // Dry Trim - center
