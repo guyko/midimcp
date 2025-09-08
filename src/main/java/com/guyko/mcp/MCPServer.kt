@@ -17,7 +17,7 @@ import com.guyko.pedals.EnzoXPresetGenerator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 class MCPServer(
     val pedalRepository: PedalRepository = PedalRepository(),
@@ -353,7 +353,7 @@ class MCPServer(
                 )
             } ?: emptyList()
             
-            val pedalId = "${manufacturer.toLowerCase()}_${modelName.toLowerCase().replace(" ", "_")}"
+            val pedalId = "${manufacturer.lowercase()}_${modelName.lowercase().replace(" ", "_")}"
             val pedal = PedalModel(
                 id = pedalId,
                 manufacturer = manufacturer,
@@ -465,16 +465,16 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("MIDI Command Execution:")
-                        appendln("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
-                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
-                        appendln("Parameter: $parameterName (CC $ccNumber)")
-                        appendln("Value: $value")
-                        appendln("Channel: ${pedal.midiChannel}")
-                        appendln("Message: ${result.message}")
+                        appendLine("MIDI Command Execution:")
+                        appendLine("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                        appendLine("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendLine("Parameter: $parameterName (CC $ccNumber)")
+                        appendLine("Value: $value")
+                        appendLine("Channel: ${pedal.midiChannel}")
+                        appendLine("Message: ${result.message}")
                         if (result.executedCommand != null) {
                             val hexString = result.executedCommand.toMidiBytes().joinToString(" ") { "%02X".format(it) }
-                            appendln("MIDI Bytes: $hexString")
+                            appendLine("MIDI Bytes: $hexString")
                         }
                     }
                 ))
@@ -524,16 +524,16 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("MIDI Commands Execution:")
-                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
-                        appendln("Commands executed: ${results.size}")
-                        appendln("Successful: ${results.count { it.success }}")
-                        appendln("Failed: ${results.count { !it.success }}")
-                        appendln()
+                        appendLine("MIDI Commands Execution:")
+                        appendLine("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendLine("Commands executed: ${results.size}")
+                        appendLine("Successful: ${results.count { it.success }}")
+                        appendLine("Failed: ${results.count { !it.success }}")
+                        appendLine()
                         results.forEachIndexed { index, result ->
-                            appendln("Command ${index + 1}:")
-                            appendln("  Status: ${if (result.success) "SUCCESS" else "FAILED"}")
-                            appendln("  Message: ${result.message}")
+                            appendLine("Command ${index + 1}:")
+                            appendLine("  Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                            appendLine("  Message: ${result.message}")
                         }
                     }
                 ))
@@ -572,14 +572,14 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("MIDI Program Change Execution:")
-                        appendln("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
-                        appendln("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
-                        appendln("Program: $program")
-                        appendln("Channel: ${pedal.midiChannel}")
-                        appendln("Message: ${result.message}")
+                        appendLine("MIDI Program Change Execution:")
+                        appendLine("Status: ${if (result.success) "SUCCESS" else "FAILED"}")
+                        appendLine("Pedal: ${pedal.manufacturer} ${pedal.modelName}")
+                        appendLine("Program: $program")
+                        appendLine("Channel: ${pedal.midiChannel}")
+                        appendLine("Message: ${result.message}")
                         val hexString = programChange.toMidiBytes().joinToString(" ") { "%02X".format(it) }
-                        appendln("MIDI Bytes: $hexString")
+                        appendLine("MIDI Bytes: $hexString")
                     }
                 ))
             ), id)
@@ -635,32 +635,32 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("Generated LVX Preset: '$presetName'")
+                        appendLine("Generated LVX Preset: '$presetName'")
                         if (description != null) {
-                            appendln("Description: $description")
+                            appendLine("Description: $description")
                         }
-                        appendln("Parameters: ${parameters.size} CC values mapped")
-                        appendln("Sysex Size: ${sysex.data.size} bytes")
-                        appendln("")
+                        appendLine("Parameters: ${parameters.size} CC values mapped")
+                        appendLine("Sysex Size: ${sysex.data.size} bytes")
+                        appendLine("")
                         
                         if (transmissionResult != null) {
                             if (transmissionResult.success) {
-                                appendln("✅ Preset successfully uploaded to pedal!")
-                                appendln("Status: ${transmissionResult.message}")
-                                appendln("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
+                                appendLine("✅ Preset successfully uploaded to pedal!")
+                                appendLine("Status: ${transmissionResult.message}")
+                                appendLine("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
                             } else {
-                                appendln("❌ Failed to upload preset to pedal")
-                                appendln("Error: ${transmissionResult.message}")
+                                appendLine("❌ Failed to upload preset to pedal")
+                                appendLine("Error: ${transmissionResult.message}")
                             }
-                            appendln("")
+                            appendLine("")
                         }
                         
-                        appendln("Sysex Data (ready for MIDI transmission):")
-                        appendln(sysex.toHexString())
-                        appendln("")
+                        appendLine("Sysex Data (ready for MIDI transmission):")
+                        appendLine(sysex.toHexString())
+                        appendLine("")
                         if (transmissionResult == null) {
-                            appendln("This sysex file can be sent to an LVX pedal via MIDI to load the preset.")
-                            appendln("Use the 'send_sysex' tool to upload it to your pedal.")
+                            appendLine("This sysex file can be sent to an LVX pedal via MIDI to load the preset.")
+                            appendLine("Use the 'send_sysex' tool to upload it to your pedal.")
                         }
                     }
                 ))
@@ -713,32 +713,32 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("Generated Mercury X Preset: '$presetName'")
+                        appendLine("Generated Mercury X Preset: '$presetName'")
                         if (description != null) {
-                            appendln("Description: $description")
+                            appendLine("Description: $description")
                         }
-                        appendln("Parameters: ${parameters.size} CC values mapped")
-                        appendln("Sysex Size: ${sysex.data.size} bytes")
-                        appendln("")
+                        appendLine("Parameters: ${parameters.size} CC values mapped")
+                        appendLine("Sysex Size: ${sysex.data.size} bytes")
+                        appendLine("")
                         
                         if (transmissionResult != null) {
                             if (transmissionResult.success) {
-                                appendln("✅ Preset successfully uploaded to pedal!")
-                                appendln("Status: ${transmissionResult.message}")
-                                appendln("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
+                                appendLine("✅ Preset successfully uploaded to pedal!")
+                                appendLine("Status: ${transmissionResult.message}")
+                                appendLine("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
                             } else {
-                                appendln("❌ Failed to upload preset to pedal")
-                                appendln("Error: ${transmissionResult.message}")
+                                appendLine("❌ Failed to upload preset to pedal")
+                                appendLine("Error: ${transmissionResult.message}")
                             }
-                            appendln("")
+                            appendLine("")
                         }
                         
-                        appendln("Sysex Data (ready for MIDI transmission):")
-                        appendln(sysex.toHexString())
-                        appendln("")
+                        appendLine("Sysex Data (ready for MIDI transmission):")
+                        appendLine(sysex.toHexString())
+                        appendLine("")
                         if (transmissionResult == null) {
-                            appendln("This sysex file can be sent to a Mercury X pedal via MIDI to load the preset.")
-                            appendln("Use the 'send_sysex' tool to upload it to your pedal.")
+                            appendLine("This sysex file can be sent to a Mercury X pedal via MIDI to load the preset.")
+                            appendLine("Use the 'send_sysex' tool to upload it to your pedal.")
                         }
                     }
                 ))
@@ -785,18 +785,18 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("Generated Enzo X Preset: '$presetName'")
+                        appendLine("Generated Enzo X Preset: '$presetName'")
                         if (description != null) {
-                            appendln("Description: $description")
+                            appendLine("Description: $description")
                         }
-                        appendln("Parameters: ${parameters.size} CC values mapped")
-                        appendln("Sysex Size: ${sysex.data.size} bytes")
-                        appendln("")
-                        appendln("Sysex Data (ready for MIDI transmission):")
-                        appendln(sysex.toHexString())
-                        appendln("")
-                        appendln("This sysex file can be sent to an Enzo X pedal via MIDI to load the preset.")
-                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                        appendLine("Parameters: ${parameters.size} CC values mapped")
+                        appendLine("Sysex Size: ${sysex.data.size} bytes")
+                        appendLine("")
+                        appendLine("Sysex Data (ready for MIDI transmission):")
+                        appendLine(sysex.toHexString())
+                        appendLine("")
+                        appendLine("This sysex file can be sent to an Enzo X pedal via MIDI to load the preset.")
+                        appendLine("The preset will be stored in the pedal and can be recalled later.")
                     }
                 ))
             ), id)
@@ -814,9 +814,9 @@ class MCPServer(
                 "content" to listOf(mapOf(
                     "type" to "text",
                     "text" to buildString {
-                        appendln("MIDI Executor Status:")
-                        appendln("Available: $isAvailable")
-                        appendln("Status: $status")
+                        appendLine("MIDI Executor Status:")
+                        appendLine("Available: $isAvailable")
+                        appendLine("Status: $status")
                     }
                 ))
             ), id)
@@ -867,13 +867,13 @@ class MCPServer(
                     "content" to listOf(mapOf(
                         "type" to "text",
                         "text" to buildString {
-                            appendln("✅ Sysex transmission successful!")
+                            appendLine("✅ Sysex transmission successful!")
                             if (description != null) {
-                                appendln("Description: $description")
+                                appendLine("Description: $description")
                             }
-                            appendln("Bytes transmitted: ${result.bytesTransmitted}")
-                            appendln("Data sent: ${sysex.toHexString()}")
-                            appendln("Status: ${result.message}")
+                            appendLine("Bytes transmitted: ${result.bytesTransmitted}")
+                            appendLine("Data sent: ${sysex.toHexString()}")
+                            appendLine("Status: ${result.message}")
                         }
                     ))
                 ), id)
@@ -882,12 +882,12 @@ class MCPServer(
                     "content" to listOf(mapOf(
                         "type" to "text",
                         "text" to buildString {
-                            appendln("❌ Sysex transmission failed")
+                            appendLine("❌ Sysex transmission failed")
                             if (description != null) {
-                                appendln("Description: $description")
+                                appendLine("Description: $description")
                             }
-                            appendln("Error: ${result.message}")
-                            appendln("Data attempted: ${sysex.toHexString()}")
+                            appendLine("Error: ${result.message}")
+                            appendLine("Data attempted: ${sysex.toHexString()}")
                         }
                     ))
                 ), id)

@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
     loop@ while (true) {
         showMenu()
         print("Choose a test (1-8, or 'q' to quit): ")
-        val choice = scanner.nextLine().trim().toLowerCase()
+        val choice = scanner.nextLine().trim().lowercase()
         
         when (choice) {
             "q", "quit", "exit" -> {
@@ -225,7 +225,7 @@ fun testMercuryXPresetUpload(executor: HardwareMidiExecutor, scanner: Scanner) {
             println()
             
             print("Can you see '$presetName' in your Mercury X preset list? (y/n): ")
-            val response = scanner.nextLine().trim().toLowerCase()
+            val response = scanner.nextLine().trim().lowercase()
             
             if (response == "y" || response == "yes") {
                 println("🎉 SUCCESS: Preset upload confirmed!")
@@ -277,7 +277,7 @@ fun testLVXPresetUpload(executor: HardwareMidiExecutor, scanner: Scanner) {
             println()
             
             print("Can you see '$presetName' in your LVX preset list? (y/n): ")
-            val response = scanner.nextLine().trim().toLowerCase()
+            val response = scanner.nextLine().trim().lowercase()
             
             if (response == "y" || response == "yes") {
                 println("🎉 SUCCESS: Preset upload confirmed!")
@@ -351,7 +351,7 @@ fun testAllPedalsSequence(executor: HardwareMidiExecutor, scanner: Scanner) {
     
     println()
     print("Did you see/hear changes on all your connected pedals? (y/n): ")
-    val response = scanner.nextLine().trim().toLowerCase()
+    val response = scanner.nextLine().trim().lowercase()
     
     if (response == "y" || response == "yes") {
         println("🎉 SUCCESS: All pedals responded!")
@@ -413,7 +413,7 @@ fun executeCommandAndVerify(
         
         if (verificationQuestion != null) {
             print("$verificationQuestion ")
-            val response = scanner.nextLine().trim().toLowerCase()
+            val response = scanner.nextLine().trim().lowercase()
             
             if (response == "y" || response == "yes") {
                 println("🎉 SUCCESS: Change confirmed on pedal!")

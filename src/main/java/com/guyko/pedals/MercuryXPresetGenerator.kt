@@ -1,7 +1,7 @@
 package com.guyko.pedals
 
 import com.guyko.models.MidiSysex
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Generates Meris Mercury X reverb preset sysex files from CC parameter values
@@ -189,48 +189,87 @@ object MercuryXPresetGenerator {
     }
     
     /**
-     * Initialize sysex with sensible default values
-     * Based on common patterns observed in existing Mercury X presets
+     * Initialize sysex with exact patterns from working Mercury X sysex
+     * Based on analysis of MercuryX-out-sea.syx that works with the pedal
      */
     private fun initializeDefaults(sysexData: ByteArray) {
-        // Set common default patterns found in existing presets
+        // Copy exact working pattern from MercuryX-out-sea.syx
         
-        // Critical: Position 8 must be 0x01 for valid presets (based on working sysex analysis)
-        sysexData[8] = 0x01   // Preset enable/active flag
+        // Position 8: Critical preset enable flag
+        sysexData[8] = 0x01
         
-        // Default mix and levels
-        sysexData[9] = 0x70   // Mix - 90%
-        sysexData[10] = 0x40  // Dry Trim - center
-        sysexData[11] = 0x40  // Wet Trim - center
+        // Positions 9-11: Mix and trim settings from working file
+        sysexData[9] = 0x70   // Mix
+        sysexData[10] = 0x67  // Dry Trim (from working file, not 0x40)
+        sysexData[11] = 0x00  // Wet Trim (from working file)
         
-        // Default reverb settings
-        sysexData[13] = 0x00  // Ultraplate reverb structure
-        sysexData[14] = 0x7F  // FX enabled
-        sysexData[15] = 0x40  // Medium input level
-        sysexData[16] = 0x40  // Medium output level
-        sysexData[17] = 0x60  // High reverb level
-        sysexData[18] = 0x40  // Neutral tone
-        sysexData[19] = 0x50  // Medium decay
-        sysexData[20] = 0x20  // Short pre-delay
+        // Positions 12-14: Critical control bytes
+        sysexData[12] = 0x00
+        sysexData[13] = 0x00
+        sysexData[14] = 0x08  // Critical byte from working file (not 0x7F)
         
-        // Common pattern found in multiple presets
-        val commonPattern = byteArrayOf(
-            0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x7f,
-            0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f
+        // Positions 15-20: Level and reverb settings from working file
+        sysexData[15] = 0x40  // Input level
+        sysexData[16] = 0x46  // Output level (from working file)
+        sysexData[17] = 0x00  // Reverb level (from working file)
+        sysexData[18] = 0x7F  // Tone (from working file)
+        sysexData[19] = 0x00  // Decay (from working file)
+        sysexData[20] = 0x00  // Pre-delay (from working file)
+        
+        // Continue with exact pattern from working file
+        sysexData[21] = 0x40
+        sysexData[22] = 0x00
+        sysexData[23] = 0x00
+        sysexData[24] = 0x00
+        sysexData[25] = 0x00
+        sysexData[26] = 0x25
+        sysexData[27] = 0x7F
+        sysexData[28] = 0x40
+        
+        // Fill in more critical pattern bytes from working file
+        val workingPattern1 = byteArrayOf(
+            0x7F, 0x42, 0x2A, 0x00, 0x00, 0x00, 0x00, 0x16,
+            0x10, 0x1E, 0x46, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x1D, 0x59, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x64, 0x00, 0x20, 0x00, 0x00
         )
-        commonPattern.copyInto(sysexData, 50)
+        workingPattern1.copyInto(sysexData, 32)
         
-        // Default processing disabled
-        sysexData[67] = 0x00  // Dynamics off
-        sysexData[68] = 0x00  // Preamp off
-        sysexData[69] = 0x00  // Filter off
-        sysexData[70] = 0x00  // Pitch off
-        sysexData[71] = 0x00  // Modulation off
+        // Pattern at position 50-65 from working file
+        val workingPattern2 = byteArrayOf(
+            0x24, 0x36, 0x49, 0x5B, 0x6D, 0x7F, 0x55, 0x55,
+            0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x00, 0x00
+        )
+        workingPattern2.copyInto(sysexData, 80)
         
-        // Default step values (expression mapping)
+        // Critical bytes at position 107
+        sysexData[107] = 0x4E
+        sysexData[108] = 0x40
+        sysexData[109] = 0x40
+        
+        // Pattern at position 115
+        sysexData[115] = 0x20
+        sysexData[116] = 0x7F
+        sysexData[117] = 0x7B
+        
+        // Critical byte at position 123
+        sysexData[123] = 0x40
+        
+        // Pattern at position 131-135
+        sysexData[131] = 0x3F
+        sysexData[132] = 0x7F
+        sysexData[133] = 0x00
+        sysexData[134] = 0x7F
+        
+        // Working step pattern at position 160 (this was correct)
         val stepPattern = byteArrayOf(
-            0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x7f,
-            0x70, 0x60, 0x50, 0x40, 0x30, 0x20, 0x10, 0x00
+            0x01, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70,
+            0x7F, 0x70, 0x60, 0x50, 0x40, 0x30, 0x20, 0x10,
+            0x00, 0x00, 0x7F, 0x00, 0x00, 0x7F, 0x00, 0x00,
+            0x7F, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x7F, 0x00,
+            0x00, 0x7F, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00,
+            0x01, 0x4D, 0x01, 0x03, 0x00, 0x14, 0x00, 0x44,
+            0x00, 0x39, 0x00, 0x3B
         )
         stepPattern.copyInto(sysexData, 160)
     }

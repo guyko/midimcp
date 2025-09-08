@@ -20,7 +20,7 @@ fun main(args: Array<String>) {
     println("Available: ${executor.isAvailable()}")
     println()
     
-    when (args[0].toLowerCase()) {
+    when (args[0].lowercase()) {
         "mercury-mix" -> testMercuryXMix(executor, args.getOrNull(1)?.toIntOrNull() ?: 64)
         "mercury-reverb" -> testMercuryXReverb(executor, args.getOrNull(1)?.toIntOrNull() ?: 3)
         "lvx-mix" -> testLVXMix(executor, args.getOrNull(1)?.toIntOrNull() ?: 64)

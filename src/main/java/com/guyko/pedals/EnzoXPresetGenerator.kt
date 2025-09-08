@@ -1,7 +1,7 @@
 package com.guyko.pedals
 
 import com.guyko.models.MidiSysex
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Generates Meris Enzo X synthesizer preset sysex files from CC parameter values

@@ -3,7 +3,7 @@ package com.guyko.midi
 import com.guyko.models.MidiCommand
 import com.guyko.models.MidiProgramChange
 import com.guyko.models.MidiSysex
-import mu.KotlinLogging
+import io.github.oshai.kotlinlogging.KotlinLogging
 
 /**
  * Mock MIDI executor for testing that doesn't send real MIDI commands
