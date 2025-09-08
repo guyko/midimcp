@@ -40,9 +40,6 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
    - `MerisLVXLoader`: Pre-configured Meris LVX delay pedal with full CC table
    - `MerisMercuryXLoader`: Pre-configured Meris Mercury X reverb pedal with full CC table
    - `MerisEnzoXLoader`: Pre-configured Meris Enzo X synthesizer pedal with full CC table
-   - `LVXPresetGenerator`: Generates LVX sysex preset files from CC parameters
-   - `MercuryXPresetGenerator`: Generates Mercury X sysex preset files from CC parameters
-   - `EnzoXPresetGenerator`: Generates Enzo X sysex preset files from CC parameters
 
 ### Available MCP Tools
 
@@ -50,11 +47,9 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 - `get_pedal`: Retrieve specific pedal information
 - `list_pedals`: List all available pedals
 - `execute_midi_command`: Execute a single MIDI CC command on a pedal
-- `execute_midi_commands`: Execute multiple MIDI CC commands in sequence
+- `execute_midi_commands`: Execute multiple MIDI CC commands in sequence to create presets
 - `execute_program_change`: Switch pedal presets via MIDI program change
-- `generate_lvx_preset`: Generate LVX delay preset sysex files from CC parameters
-- `generate_mercury_x_preset`: Generate Mercury X reverb preset sysex files from CC parameters
-- `generate_enzo_x_preset`: Generate Enzo X synthesizer preset sysex files from CC parameters
+- `send_sysex`: Send sysex data directly to a MIDI device for preset uploads or custom messages
 - `get_midi_status`: Get MIDI executor connection status
 
 ### Architecture Design
@@ -64,35 +59,36 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 - Exposes pedal configurations via MCP tools (get_pedal, list_pedals)
 - MIDI command validation and execution
 - Hardware communication and command result reporting
-- Sysex preset generation from CC parameter inputs
+- Real-time preset creation via multiple CC commands
 
 **AI Assistant Responsibilities:**
 - Query MCP server for pedal configurations and capabilities
 - Natural language interpretation using exposed pedal knowledge
 - Translate user requests ("make it brighter") to specific MIDI commands using CC mappings
 - Musical knowledge and sound design decisions based on pedal parameters
+- Create presets by sending multiple CC commands that user can then save on pedal
 
-### Preset Generation System
+### Preset Creation System
 
-The server includes comprehensive sysex preset generation for Meris pedals:
+The server creates presets by sending multiple MIDI CC commands in real-time:
 
 **Supported Pedals:**
-- **LVX Delay**: Complete delay preset generation with all processing elements
-- **Mercury X Reverb**: Full reverb preset generation with all 8 reverb structures
-- **Enzo X Synthesizer**: Complete synthesizer preset generation with all synth modes
+- **LVX Delay**: Complete delay preset creation with all processing elements
+- **Mercury X Reverb**: Full reverb preset creation with all 8 reverb structures  
+- **Enzo X Synthesizer**: Complete synthesizer preset creation with all synth modes
 
 **Architecture:**
-- All pedals use identical 231-byte sysex format
-- Preset names stored at position 212 (max 16 characters)
-- Header patterns and terminator (F7) consistent across pedals
-- CC-to-sysex position mapping for each pedal model
+- Uses standard MIDI CC commands (no complex sysex)
+- Real-time parameter changes that user hears immediately
+- User saves the preset manually on the pedal when satisfied
+- All CC mappings are documented and validated
 
 **Workflow:**
 1. AI assistant queries MCP server for pedal CC mappings and capabilities
 2. AI translates natural language ("warm vintage delay") to specific CC parameter values
-3. AI calls MCP preset generation tool with CC parameters
-4. MCP server maps CC values to exact sysex byte positions and generates complete 231-byte sysex file
-5. Returns hex string ready for immediate MIDI transmission to pedal
+3. AI calls `execute_midi_commands` tool with multiple CC commands
+4. MCP server sends all CC commands in sequence to the pedal
+5. User hears the preset in real-time and saves it manually on the pedal
 
 ## Dependencies
 
@@ -136,6 +132,6 @@ Tests include both successful execution and failure scenarios with mock hardware
 
 ## Development Environment
 
-- IntelliJ IDEA project configuration included
+- IntelliJ IDEA project configuration includedq
 - Maven build system with Kotlin compilation
 - Git configuration with appropriate ignores for Maven/IntelliJ artifacts

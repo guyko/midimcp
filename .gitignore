@@ -37,3 +37,6 @@ hs_err_pid*
 .settings
 
 **/dependency-reduced-pom.xml
+
+# Local Claude settings
+.claude/settings.local.json
