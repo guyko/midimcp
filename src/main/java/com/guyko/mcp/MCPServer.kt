@@ -206,6 +206,11 @@ class MCPServer(
                         "description" to mapOf(
                             "type" to "string", 
                             "description" to "Optional description of the preset's intended sound"
+                        ),
+                        "sendToPedal" to mapOf(
+                            "type" to "boolean",
+                            "description" to "If true, automatically send the generated sysex to the connected MIDI device",
+                            "default" to true
                         )
                     ),
                     "required" to listOf("parameters", "presetName")
@@ -234,7 +239,7 @@ class MCPServer(
                         "sendToPedal" to mapOf(
                             "type" to "boolean",
                             "description" to "If true, automatically send the generated sysex to the connected MIDI device",
-                            "default" to false
+                            "default" to true
                         )
                     ),
                     "required" to listOf("parameters", "presetName")
@@ -259,6 +264,11 @@ class MCPServer(
                         "description" to mapOf(
                             "type" to "string", 
                             "description" to "Optional description of the preset's intended sound"
+                        ),
+                        "sendToPedal" to mapOf(
+                            "type" to "boolean",
+                            "description" to "If true, automatically send the generated sysex to the connected MIDI device",
+                            "default" to true
                         )
                     ),
                     "required" to listOf("parameters", "presetName")
@@ -583,6 +593,7 @@ class MCPServer(
             val parametersJson = arguments?.get("parameters")?.asJsonObject
             val presetName = arguments?.get("presetName")?.asString
             val description = arguments?.get("description")?.asString
+            val sendToPedal = arguments?.get("sendToPedal")?.asBoolean ?: true
             
             if (parametersJson == null || presetName == null) {
                 logger.error { "MCP generate_lvx_preset failed: Missing required parameters (parametersJson=${parametersJson != null}, presetName=$presetName)" }
@@ -615,6 +626,11 @@ class MCPServer(
             val sysex = LVXPresetGenerator.generatePreset(parameters, presetName)
             logger.info { "MCP generate_lvx_preset success: Generated ${sysex.data.size} byte sysex file for preset '$presetName'" }
             
+            // Optionally send to pedal
+            val transmissionResult = if (sendToPedal) {
+                midiExecutor.executeSysex(sysex)
+            } else null
+            
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
                     "type" to "text",
@@ -626,11 +642,26 @@ class MCPServer(
                         appendln("Parameters: ${parameters.size} CC values mapped")
                         appendln("Sysex Size: ${sysex.data.size} bytes")
                         appendln("")
+                        
+                        if (transmissionResult != null) {
+                            if (transmissionResult.success) {
+                                appendln("✅ Preset successfully uploaded to pedal!")
+                                appendln("Status: ${transmissionResult.message}")
+                                appendln("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
+                            } else {
+                                appendln("❌ Failed to upload preset to pedal")
+                                appendln("Error: ${transmissionResult.message}")
+                            }
+                            appendln("")
+                        }
+                        
                         appendln("Sysex Data (ready for MIDI transmission):")
                         appendln(sysex.toHexString())
                         appendln("")
-                        appendln("This sysex file can be sent to an LVX pedal via MIDI to load the preset.")
-                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                        if (transmissionResult == null) {
+                            appendln("This sysex file can be sent to an LVX pedal via MIDI to load the preset.")
+                            appendln("Use the 'send_sysex' tool to upload it to your pedal.")
+                        }
                     }
                 ))
             ), id)
@@ -644,7 +675,7 @@ class MCPServer(
             val parametersJson = arguments?.get("parameters")?.asJsonObject
             val presetName = arguments?.get("presetName")?.asString
             val description = arguments?.get("description")?.asString
-            val sendToPedal = arguments?.get("sendToPedal")?.asBoolean ?: false
+            val sendToPedal = arguments?.get("sendToPedal")?.asBoolean ?: true
             
             if (parametersJson == null || presetName == null) {
                 sendError(id, "Missing required parameters: parameters and presetName")
