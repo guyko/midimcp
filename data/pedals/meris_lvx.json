@@ -1,0 +1,836 @@
+{
+  "id": "meris_lvx",
+  "manufacturer": "Meris",
+  "modelName": "LVX",
+  "version": "1.0.2b",
+  "midiChannel": 2,
+  "parameters": [
+    {
+      "name": "Mix",
+      "ccNumber": 1,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Wet/dry mix balance",
+      "unit": "%",
+      "category": "Global"
+    },
+    {
+      "name": "Dry Trim",
+      "ccNumber": 2,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dry signal level trim",
+      "unit": "dB",
+      "category": "Global"
+    },
+    {
+      "name": "Wet Trim",
+      "ccNumber": 3,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Wet signal level trim",
+      "unit": "dB",
+      "category": "Global"
+    },
+    {
+      "name": "Expression Pedal",
+      "ccNumber": 4,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Expression pedal input",
+      "unit": "%",
+      "category": "Expression"
+    },
+    {
+      "name": "Preamp Type",
+      "ccNumber": 5,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-18\u003dOFF, 19-36\u003dVolume Pedal, 37-54\u003dTube, 55-73\u003dTransistor, 74-91\u003dOp-Amp, 92-109\u003dDrive, 110-127\u003dBitcrusher",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Location",
+      "ccNumber": 6,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPRE+DRY, 32-63\u003dPRE, 64-95\u003dFDBK, 96-127\u003dPOST",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 1",
+      "ccNumber": 7,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 1",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 2",
+      "ccNumber": 8,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 2",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 3",
+      "ccNumber": 9,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 3",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 4",
+      "ccNumber": 10,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 4",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 5",
+      "ccNumber": 11,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 5",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Parameter 6",
+      "ccNumber": 12,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp parameter 6",
+      "category": "Preamp"
+    },
+    {
+      "name": "Delay Structure",
+      "ccNumber": 13,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-21\u003dStandard, 22-42\u003dMultitap, 43-63\u003dMultifilter, 64-85\u003dPoly, 86-106\u003dReverse, 107-127\u003dSeries",
+      "category": "Delay"
+    },
+    {
+      "name": "Bypass",
+      "ccNumber": 14,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dFX Bypass, 64-127\u003dFX Enable",
+      "category": "Control"
+    },
+    {
+      "name": "Time",
+      "ccNumber": 15,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay time",
+      "unit": "ms",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Type",
+      "ccNumber": 16,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dDigital, 43-85\u003dBBD, 86-127\u003dTape",
+      "category": "Delay"
+    },
+    {
+      "name": "Left Note Division",
+      "ccNumber": 17,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Note division for left channel",
+      "category": "Timing"
+    },
+    {
+      "name": "Right Note Division",
+      "ccNumber": 18,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Note division for right channel",
+      "category": "Timing"
+    },
+    {
+      "name": "Feedback",
+      "ccNumber": 19,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay feedback amount",
+      "unit": "%",
+      "category": "Delay"
+    },
+    {
+      "name": "Cross Feedback",
+      "ccNumber": 20,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Cross feedback between L/R channels",
+      "unit": "%",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Mod",
+      "ccNumber": 21,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay modulation amount",
+      "unit": "%",
+      "category": "Modulation"
+    },
+    {
+      "name": "Delay Parameter 1",
+      "ccNumber": 22,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 1",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 2",
+      "ccNumber": 23,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 2",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 3",
+      "ccNumber": 24,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 3",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 4",
+      "ccNumber": 25,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 4",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 5",
+      "ccNumber": 26,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 5",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 6",
+      "ccNumber": 27,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 6",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 7",
+      "ccNumber": 28,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 7",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 8",
+      "ccNumber": 29,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 8",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 9",
+      "ccNumber": 30,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 9",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 10",
+      "ccNumber": 31,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 10",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 11",
+      "ccNumber": 32,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 11",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 12",
+      "ccNumber": 33,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 12",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 13",
+      "ccNumber": 34,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 13",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 14",
+      "ccNumber": 35,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 14",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 15",
+      "ccNumber": 36,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 15",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 16",
+      "ccNumber": 37,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 16",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 17",
+      "ccNumber": 38,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 17",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 18",
+      "ccNumber": 39,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 18",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 19",
+      "ccNumber": 40,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 19",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 20",
+      "ccNumber": 41,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 20",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 21",
+      "ccNumber": 42,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 21",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 22",
+      "ccNumber": 43,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 22",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 23",
+      "ccNumber": 44,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 23",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 24",
+      "ccNumber": 45,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 24",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 25",
+      "ccNumber": 46,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 25",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 26",
+      "ccNumber": 47,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 26",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 27",
+      "ccNumber": 48,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 27",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 28",
+      "ccNumber": 49,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 28",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 29",
+      "ccNumber": 50,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 29",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 30",
+      "ccNumber": 51,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 30",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 31",
+      "ccNumber": 52,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 31",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 32",
+      "ccNumber": 53,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 32",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 33",
+      "ccNumber": 54,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 33",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 34",
+      "ccNumber": 55,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 34",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 35",
+      "ccNumber": 56,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 35",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 36",
+      "ccNumber": 57,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 36",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 37",
+      "ccNumber": 58,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 37",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 38",
+      "ccNumber": 59,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 38",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 39",
+      "ccNumber": 60,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 39",
+      "category": "Delay"
+    },
+    {
+      "name": "Delay Parameter 40",
+      "ccNumber": 61,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Delay parameter 40",
+      "category": "Delay"
+    },
+    {
+      "name": "Dynamic Type",
+      "ccNumber": 62,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dOFF, 26-51\u003dCompressor, 52-76\u003dSwell, 77-102\u003dDiffusion, 103-127\u003dLimiter",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Location",
+      "ccNumber": 63,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPRE+DRY, 32-63\u003dPRE, 64-95\u003dFDBK, 96-127\u003dPOST",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 1",
+      "ccNumber": 64,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 1",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 2",
+      "ccNumber": 65,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 2",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 3",
+      "ccNumber": 66,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 3",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 4",
+      "ccNumber": 67,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 4",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 5",
+      "ccNumber": 68,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 5",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamic Parameter 6",
+      "ccNumber": 69,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamic parameter 6",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Pitch Type",
+      "ccNumber": 70,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-21\u003dOFF, 22-42\u003dPoly Chroma, 43-63\u003dHarmony, 64-85\u003dMicro Tune, 86-106\u003dMono Chroma, 107-127\u003dLo-Fi",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Location",
+      "ccNumber": 71,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPRE+DRY, 32-63\u003dPRE, 64-95\u003dFDBK, 96-127\u003dPOST",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 1",
+      "ccNumber": 72,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 1",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 2",
+      "ccNumber": 73,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 2",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 3",
+      "ccNumber": 74,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 3",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 4",
+      "ccNumber": 75,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 4",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 5",
+      "ccNumber": 76,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 5",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 6",
+      "ccNumber": 77,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch parameter 6",
+      "category": "Pitch"
+    },
+    {
+      "name": "Filter Type",
+      "ccNumber": 78,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dOFF, 26-51\u003dLadder, 52-76\u003dState Var, 77-102\u003dComb, 103-127\u003dParametric",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Location",
+      "ccNumber": 79,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPRE+DRY, 32-63\u003dPRE, 64-95\u003dFDBK, 96-127\u003dPOST",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 1",
+      "ccNumber": 80,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 1",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 2",
+      "ccNumber": 81,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 2",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 3",
+      "ccNumber": 82,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 3",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 4",
+      "ccNumber": 83,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 4",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 5",
+      "ccNumber": 84,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 5",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 6",
+      "ccNumber": 85,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter parameter 6",
+      "category": "Filter"
+    },
+    {
+      "name": "Mod Type",
+      "ccNumber": 86,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-15\u003dOFF, 16-31\u003dChorus, 32-47\u003dFlanger, 48-63\u003dDyn Flanger, 64-79\u003dCassette, 80-95\u003dBarberpole, 96-111\u003dGranulize, 112-127\u003dRing Mod",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Location",
+      "ccNumber": 87,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPRE+DRY, 32-63\u003dPRE, 64-95\u003dFDBK, 96-127\u003dPOST",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 1",
+      "ccNumber": 88,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 1",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 2",
+      "ccNumber": 89,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 2",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 3",
+      "ccNumber": 90,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 3",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 4",
+      "ccNumber": 91,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 4",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 5",
+      "ccNumber": 92,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 5",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Parameter 6",
+      "ccNumber": 93,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation parameter 6",
+      "category": "Modulation"
+    },
+    {
+      "name": "Looper Location",
+      "ccNumber": 94,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPRE+DRY, 26-51\u003dPRE, 52-76\u003dFeedback, 77-102\u003dPOST, 103-127\u003dPOST MIX",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper Level",
+      "ccNumber": 95,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Looper level",
+      "unit": "%",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper Feedback",
+      "ccNumber": 96,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Looper feedback amount",
+      "unit": "%",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper FX1 Select",
+      "ccNumber": 97,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Looper FX1 selection",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper FX2 Select",
+      "ccNumber": 98,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Looper FX2 selection",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper Record/Overdub Press",
+      "ccNumber": 100,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "PRESS \u003d 127",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper Play/Stop Press",
+      "ccNumber": 101,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "PRESS \u003d 127",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper FX1 Press",
+      "ccNumber": 102,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "PRESS \u003d 127",
+      "category": "Looper"
+    },
+    {
+      "name": "Looper FX2 Press",
+      "ccNumber": 103,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "PRESS \u003d 127",
+      "category": "Looper"
+    }
+  ],
+  "description": "Meris LVX Modular Delay System - Complete MIDI CC implementation with 103 parameters including preamp, delay (40 parameters), dynamics, pitch, filter, modulation, and looper sections"
+}

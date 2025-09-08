@@ -1,0 +1,586 @@
+{
+  "id": "meris_mercury_x",
+  "manufacturer": "Meris",
+  "modelName": "Mercury X",
+  "midiChannel": 1,
+  "parameters": [
+    {
+      "name": "Mix",
+      "ccNumber": 1,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Wet/dry mix control",
+      "unit": "%",
+      "category": "Global"
+    },
+    {
+      "name": "Dry Trim",
+      "ccNumber": 2,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dry signal level trim",
+      "unit": "dB",
+      "category": "Global"
+    },
+    {
+      "name": "Wet Trim",
+      "ccNumber": 3,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Wet signal level trim",
+      "unit": "dB",
+      "category": "Global"
+    },
+    {
+      "name": "Expression Pedal",
+      "ccNumber": 4,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Expression pedal input",
+      "unit": "%",
+      "category": "Expression"
+    },
+    {
+      "name": "Preamp Type",
+      "ccNumber": 5,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dOff, 26-51\u003dVolume Pedal, 52-76\u003dTube, 77-102\u003dTransistor, 103-127\u003dOp-Amp",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Location",
+      "ccNumber": 6,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPre+Dry, 26-51\u003dPre, 52-76\u003dFeedback, 77-102\u003dPre Tank, 103-127\u003dPost",
+      "category": "Preamp"
+    },
+    {
+      "name": "Gain/Volume Pedal Level",
+      "ccNumber": 7,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Preamp gain or volume pedal level",
+      "unit": "dB",
+      "category": "Preamp"
+    },
+    {
+      "name": "Balance",
+      "ccNumber": 8,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Left/right channel balance for volume pedal",
+      "unit": "%",
+      "category": "Preamp"
+    },
+    {
+      "name": "Preamp Level",
+      "ccNumber": 11,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Output level after preamp processing",
+      "unit": "dB",
+      "category": "Preamp"
+    },
+    {
+      "name": "Delay Structure",
+      "ccNumber": 13,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dStandard, 64-127\u003dReverse",
+      "category": "Delay"
+    },
+    {
+      "name": "Bypass",
+      "ccNumber": 14,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dFX Bypass, 64-127\u003dFX Enable",
+      "category": "Control"
+    },
+    {
+      "name": "Time",
+      "ccNumber": 15,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Predelay time",
+      "unit": "ms",
+      "category": "Delay"
+    },
+    {
+      "name": "Type",
+      "ccNumber": 16,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dDigital, 43-85\u003dBBD, 86-127\u003dMagnetic",
+      "category": "Delay"
+    },
+    {
+      "name": "Left Note Division",
+      "ccNumber": 17,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Note division for left predelay channel",
+      "category": "Timing"
+    },
+    {
+      "name": "Right Note Division",
+      "ccNumber": 18,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Note division for right predelay channel",
+      "category": "Timing"
+    },
+    {
+      "name": "Feedback",
+      "ccNumber": 19,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Predelay feedback amount",
+      "unit": "%",
+      "category": "Delay"
+    },
+    {
+      "name": "Cross Feedback",
+      "ccNumber": 20,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Cross feedback between L/R predelay channels",
+      "unit": "%",
+      "category": "Delay"
+    },
+    {
+      "name": "Modulation",
+      "ccNumber": 21,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Predelay modulation amount",
+      "unit": "%",
+      "category": "Modulation"
+    },
+    {
+      "name": "Damping",
+      "ccNumber": 22,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "High frequency damping in predelay",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Dry Blend",
+      "ccNumber": 23,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amount of dry signal added to predelay output",
+      "unit": "%",
+      "category": "Mix"
+    },
+    {
+      "name": "Half Speed",
+      "ccNumber": 24,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Predelay half speed mode",
+      "category": "Delay"
+    },
+    {
+      "name": "MIDI Clock",
+      "ccNumber": 28,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dUse Global, 43-85\u003dForce Listen, 86-127\u003dForce Ignore",
+      "category": "MIDI"
+    },
+    {
+      "name": "Reverb Structure",
+      "ccNumber": 32,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-15\u003dUltraplate, 16-31\u003dCathedra, 32-47\u003dSpring, 48-63\u003d78 Room, 64-79\u003d78 Plate, 80-95\u003d78 Hall, 96-111\u003dPrism, 112-127\u003dGravity",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 1",
+      "ccNumber": 33,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 1",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 2",
+      "ccNumber": 34,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 2",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 3",
+      "ccNumber": 35,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 3",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 4",
+      "ccNumber": 36,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 4",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 5",
+      "ccNumber": 37,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 5",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 6",
+      "ccNumber": 38,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 6",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 7",
+      "ccNumber": 39,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 7",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 8",
+      "ccNumber": 40,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 8",
+      "category": "Reverb"
+    },
+    {
+      "name": "Reverb Parameter 9",
+      "ccNumber": 41,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb structure parameter 9",
+      "category": "Reverb"
+    },
+    {
+      "name": "Predelay Blend",
+      "ccNumber": 42,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amount of predelay reflections in parallel with reverb tank",
+      "unit": "%",
+      "category": "Reverb"
+    },
+    {
+      "name": "Gate Attack",
+      "ccNumber": 43,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb gate attack time",
+      "unit": "ms",
+      "category": "Gate"
+    },
+    {
+      "name": "Gate Hold",
+      "ccNumber": 44,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb gate hold time",
+      "unit": "ms",
+      "category": "Gate"
+    },
+    {
+      "name": "Gate Decay",
+      "ccNumber": 45,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Reverb gate decay time",
+      "unit": "ms",
+      "category": "Gate"
+    },
+    {
+      "name": "Dynamics Type",
+      "ccNumber": 62,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-15\u003dOff, 16-31\u003dCompressor, 32-47\u003dCompressor Link, 48-63\u003dSwell, 64-79\u003dDiffusion, 80-95\u003dLimiter, 96-111\u003dLimiter Link, 112-127\u003dFreeze",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Location",
+      "ccNumber": 63,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPre+Dry, 26-51\u003dPre, 52-76\u003dFeedback, 77-102\u003dPre Tank, 103-127\u003dPost",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 1",
+      "ccNumber": 64,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 1",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 2",
+      "ccNumber": 65,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 2",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 3",
+      "ccNumber": 66,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 3",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 4",
+      "ccNumber": 67,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 4",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 5",
+      "ccNumber": 68,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 5",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Dynamics Parameter 6",
+      "ccNumber": 69,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dynamics processing parameter 6",
+      "category": "Dynamics"
+    },
+    {
+      "name": "Pitch Type",
+      "ccNumber": 70,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dOff, 32-63\u003dPoly Chroma, 64-95\u003dMicro Shift, 96-127\u003dLo-Fi",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Location",
+      "ccNumber": 71,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPre+Dry, 26-51\u003dPre, 52-76\u003dFeedback, 77-102\u003dPre Tank, 103-127\u003dPost",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 1",
+      "ccNumber": 72,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 1",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 2",
+      "ccNumber": 73,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 2",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 3",
+      "ccNumber": 74,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 3",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 4",
+      "ccNumber": 75,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 4",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 5",
+      "ccNumber": 76,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 5",
+      "category": "Pitch"
+    },
+    {
+      "name": "Pitch Parameter 6",
+      "ccNumber": 77,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Pitch processing parameter 6",
+      "category": "Pitch"
+    },
+    {
+      "name": "Filter Type",
+      "ccNumber": 78,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dOff, 32-63\u003dLadder, 64-95\u003dState Variable, 96-127\u003dParametric",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Location",
+      "ccNumber": 79,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPre+Dry, 26-51\u003dPre, 52-76\u003dFeedback, 77-102\u003dPre Tank, 103-127\u003dPost",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 1",
+      "ccNumber": 80,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 1",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 2",
+      "ccNumber": 81,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 2",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 3",
+      "ccNumber": 82,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 3",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 4",
+      "ccNumber": 83,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 4",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 5",
+      "ccNumber": 84,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 5",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Parameter 6",
+      "ccNumber": 85,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter processing parameter 6",
+      "category": "Filter"
+    },
+    {
+      "name": "Modulation Type",
+      "ccNumber": 86,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-21\u003dOff, 22-42\u003d79 Chorus, 43-63\u003dVibrato, 64-85\u003dVowel Mod, 86-106\u003dTremolo, 107-127\u003dHazy",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Location",
+      "ccNumber": 87,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dPre+Dry, 26-51\u003dPre, 52-76\u003dFeedback, 77-102\u003dPre Tank, 103-127\u003dPost",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 1",
+      "ccNumber": 88,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 1",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 2",
+      "ccNumber": 89,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 2",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 3",
+      "ccNumber": 90,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 3",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 4",
+      "ccNumber": 91,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 4",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 5",
+      "ccNumber": 92,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 5",
+      "category": "Modulation"
+    },
+    {
+      "name": "Modulation Parameter 6",
+      "ccNumber": 93,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation processing parameter 6",
+      "category": "Modulation"
+    },
+    {
+      "name": "Toggle Tuner Mode",
+      "ccNumber": 117,
+      "minValue": 127,
+      "maxValue": 127,
+      "description": "Press \u003d 127 to toggle tuner mode",
+      "category": "Control"
+    },
+    {
+      "name": "Trigger Hold Modifier",
+      "ccNumber": 118,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Press \u003d 127, Release \u003d 0 (send release after every press)",
+      "category": "Control"
+    }
+  ],
+  "description": "Modular reverb system with 8 reverb structures (Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity) and comprehensive processing elements"
+}

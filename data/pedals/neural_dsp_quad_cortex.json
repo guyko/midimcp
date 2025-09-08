@@ -1,0 +1,268 @@
+{
+  "id": "neural_dsp_quad_cortex",
+  "manufacturer": "Neural DSP",
+  "modelName": "Quad Cortex",
+  "midiChannel": 4,
+  "parameters": [
+    {
+      "name": "Bank Select (MSB)",
+      "ccNumber": 0,
+      "minValue": 0,
+      "maxValue": 1,
+      "description": "0\u003dPreset group 0-127, 1\u003dPreset group 128-256",
+      "category": "Program"
+    },
+    {
+      "name": "Expression Pedal 1",
+      "ccNumber": 1,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Expression pedal 1 input",
+      "unit": "%",
+      "category": "Expression"
+    },
+    {
+      "name": "Expression Pedal 2",
+      "ccNumber": 2,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Expression pedal 2 input",
+      "unit": "%",
+      "category": "Expression"
+    },
+    {
+      "name": "Bank Select (LSB) - Setlist",
+      "ccNumber": 32,
+      "minValue": 0,
+      "maxValue": 12,
+      "description": "Setlist change (used with Program Change)",
+      "category": "Program"
+    },
+    {
+      "name": "Footswitch A Enable/Bypass",
+      "ccNumber": 35,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch A (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch B Enable/Bypass",
+      "ccNumber": 36,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch B (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch C Enable/Bypass",
+      "ccNumber": 37,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch C (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch D Enable/Bypass",
+      "ccNumber": 38,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch D (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch E Enable/Bypass",
+      "ccNumber": 39,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch E (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch F Enable/Bypass",
+      "ccNumber": 40,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch F (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch G Enable/Bypass",
+      "ccNumber": 41,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch G (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Footswitch H Enable/Bypass",
+      "ccNumber": 42,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Enable/bypass footswitch H (all modes)",
+      "category": "Footswitch"
+    },
+    {
+      "name": "Scene Select",
+      "ccNumber": 43,
+      "minValue": 0,
+      "maxValue": 7,
+      "description": "Scene select A-H",
+      "category": "Scene"
+    },
+    {
+      "name": "Tempo BPM",
+      "ccNumber": 44,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Tempo in BPM",
+      "unit": "BPM",
+      "category": "Tempo"
+    },
+    {
+      "name": "Tuner Screen",
+      "ccNumber": 45,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dTuner Off, 64-127\u003dTuner On",
+      "category": "Control"
+    },
+    {
+      "name": "Gig View Screen",
+      "ccNumber": 46,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dGig View Off, 64-127\u003dGig View On",
+      "category": "Control"
+    },
+    {
+      "name": "Change Modes",
+      "ccNumber": 47,
+      "minValue": 0,
+      "maxValue": 2,
+      "description": "0\u003dPreset Mode, 1\u003dScene Mode, 2\u003dStomp Mode",
+      "category": "Mode"
+    },
+    {
+      "name": "Looper X Parameter Editor Menu",
+      "ccNumber": 48,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dOpens Looper X (Perform mode), 64-127\u003dCloses Looper X",
+      "category": "Looper"
+    },
+    {
+      "name": "Duplicate/Stop Duplicate",
+      "ccNumber": 49,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Trigger duplicate/stop duplicate",
+      "category": "Looper"
+    },
+    {
+      "name": "Enable/Disable One Shot",
+      "ccNumber": 50,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Enable/disable one shot mode",
+      "category": "Looper"
+    },
+    {
+      "name": "Enable/Disable Half Speed",
+      "ccNumber": 51,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Enable/disable half speed playback",
+      "category": "Looper"
+    },
+    {
+      "name": "Punch Feature",
+      "ccNumber": 52,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dPunch Out, 64-127\u003dPunch In/Punch Out",
+      "category": "Looper"
+    },
+    {
+      "name": "Record/Stop",
+      "ccNumber": 53,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dStop recording, 64-127\u003dRecord/Overdub/Stop",
+      "category": "Looper"
+    },
+    {
+      "name": "Play/Stop",
+      "ccNumber": 54,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Play/stop looper playback",
+      "category": "Looper"
+    },
+    {
+      "name": "Enable/Disable Reverse",
+      "ccNumber": 55,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Enable/disable reverse playback",
+      "category": "Looper"
+    },
+    {
+      "name": "Undo/Redo",
+      "ccNumber": 56,
+      "minValue": 64,
+      "maxValue": 127,
+      "description": "Undo/redo last action",
+      "category": "Looper"
+    },
+    {
+      "name": "Duplicate Mode Parameter",
+      "ccNumber": 57,
+      "minValue": 0,
+      "maxValue": 1,
+      "description": "0\u003dFree, 1\u003dSync",
+      "category": "Looper"
+    },
+    {
+      "name": "Quantize Parameter",
+      "ccNumber": 58,
+      "minValue": 0,
+      "maxValue": 9,
+      "description": "0\u003dOff, 1-8\u003d1-8 Beats, 9\u003d16 Beats",
+      "category": "Looper"
+    },
+    {
+      "name": "MIDI Clock Start",
+      "ccNumber": 59,
+      "minValue": 0,
+      "maxValue": 1,
+      "description": "0\u003dOff, 1\u003dOn",
+      "category": "Looper"
+    },
+    {
+      "name": "Perform/Params Mode",
+      "ccNumber": 60,
+      "minValue": 0,
+      "maxValue": 1,
+      "description": "0\u003dPerform Mode, 1\u003dParams Mode",
+      "category": "Looper"
+    },
+    {
+      "name": "Routing Mode Parameter",
+      "ccNumber": 61,
+      "minValue": 0,
+      "maxValue": 13,
+      "description": "Routing mode 0-13: Grid \u003e I/Os \u003e Multi Out",
+      "category": "Looper"
+    },
+    {
+      "name": "Ignore Duplicate PC",
+      "ccNumber": 62,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dOff, 64-127\u003dOn - ignore duplicate program changes",
+      "category": "MIDI"
+    }
+  ],
+  "description": "Most powerful floor modeler with 6 DSP cores, 4-instrument processing, Neural Capture technology, and comprehensive scene/stomp/preset modes"
+}

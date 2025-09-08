@@ -1,0 +1,622 @@
+{
+  "id": "meris_enzo_x",
+  "manufacturer": "Meris",
+  "modelName": "Enzo X",
+  "midiChannel": 3,
+  "parameters": [
+    {
+      "name": "Mix",
+      "ccNumber": 1,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Overall wet/dry mix control",
+      "unit": "%",
+      "category": "Mix"
+    },
+    {
+      "name": "Dry Trim",
+      "ccNumber": 2,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Dry signal level trim",
+      "unit": "dB",
+      "category": "Mix"
+    },
+    {
+      "name": "Wet Trim",
+      "ccNumber": 3,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Wet signal level trim",
+      "unit": "dB",
+      "category": "Mix"
+    },
+    {
+      "name": "Expression Pedal",
+      "ccNumber": 4,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Expression pedal input",
+      "unit": "%",
+      "category": "Expression"
+    },
+    {
+      "name": "Drive Type",
+      "ccNumber": 5,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-21\u003dOff, 22-42\u003dVolume Pedal, 43-63\u003dTube, 64-85\u003dTransistor, 86-106\u003dOp-Amp, 107-127\u003dBitcrusher",
+      "category": "Drive"
+    },
+    {
+      "name": "Drive Location",
+      "ccNumber": 6,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPre+Dry, 32-63\u003dDry, 64-95\u003dPre Ambience, 96-127\u003dPost Ambience",
+      "category": "Drive"
+    },
+    {
+      "name": "Gain/Volume/Sample Rate",
+      "ccNumber": 7,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Drive gain, volume pedal level, or bitcrusher sample rate",
+      "unit": "dB",
+      "category": "Drive"
+    },
+    {
+      "name": "Balance/Bits",
+      "ccNumber": 8,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Volume pedal balance or bitcrusher bit depth",
+      "category": "Drive"
+    },
+    {
+      "name": "Drive Level",
+      "ccNumber": 9,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Output level after drive processing",
+      "unit": "dB",
+      "category": "Drive"
+    },
+    {
+      "name": "Ambience Type",
+      "ccNumber": 10,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dOff, 26-51\u003dEcho, 52-76\u003dSmall Prism, 77-102\u003dMedium Prism, 103-127\u003dLarge Prism",
+      "category": "Ambience"
+    },
+    {
+      "name": "Feedback/Decay",
+      "ccNumber": 11,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Echo feedback or reverb decay amount",
+      "unit": "%",
+      "category": "Ambience"
+    },
+    {
+      "name": "Half Speed",
+      "ccNumber": 12,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dHalf Speed Off, 64-127\u003dHalf Speed On",
+      "category": "Ambience"
+    },
+    {
+      "name": "Ambience Mod",
+      "ccNumber": 13,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Ambience modulation amount",
+      "unit": "%",
+      "category": "Ambience"
+    },
+    {
+      "name": "Bypass",
+      "ccNumber": 14,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dFX Bypass, 64-127\u003dFX Enable",
+      "category": "Control"
+    },
+    {
+      "name": "Time",
+      "ccNumber": 15,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Clock tempo setting",
+      "unit": "BPM",
+      "category": "Clock"
+    },
+    {
+      "name": "Ambience Highs",
+      "ccNumber": 16,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "High frequency content in ambience",
+      "unit": "%",
+      "category": "Ambience"
+    },
+    {
+      "name": "Echo Left Division",
+      "ccNumber": 17,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Left channel echo note division",
+      "category": "Ambience"
+    },
+    {
+      "name": "Echo Right Division",
+      "ccNumber": 18,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Right channel echo note division",
+      "category": "Ambience"
+    },
+    {
+      "name": "Ambience + Echo Mix",
+      "ccNumber": 19,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Ambience and echo mix level",
+      "unit": "%",
+      "category": "Ambience"
+    },
+    {
+      "name": "Ambience Lows",
+      "ccNumber": 20,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Low frequency content in ambience",
+      "unit": "%",
+      "category": "Ambience"
+    },
+    {
+      "name": "MIDI Clock",
+      "ccNumber": 21,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dUse Global, 43-85\u003dForce Listen, 86-127\u003dForce Ignore",
+      "category": "MIDI"
+    },
+    {
+      "name": "Synth Mode",
+      "ccNumber": 22,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-25\u003dMono Synth, 26-51\u003dPoly Synth, 52-76\u003dArp Synth, 77-102\u003dDry Mono, 103-127\u003dDry Poly",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Synth Pitch",
+      "ccNumber": 23,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Base pitch in semitones relative to input signal",
+      "unit": "semitones",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 1 Wave Shape",
+      "ccNumber": 24,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 1 waveform (Saw, Triangle, Square)",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 2 Wave Shape",
+      "ccNumber": 25,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 2 waveform (Saw, Triangle, Square)",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 2 Pitch Offset",
+      "ccNumber": 26,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 2 pitch offset",
+      "unit": "semitones",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 2 Detune",
+      "ccNumber": 27,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 2 detune amount",
+      "unit": "cents",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Synth Glide",
+      "ccNumber": 28,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Portamento/glide between notes",
+      "unit": "seconds",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 1 Gain",
+      "ccNumber": 29,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 1 volume level",
+      "unit": "%",
+      "category": "Oscillator"
+    },
+    {
+      "name": "OSC 2 Gain",
+      "ccNumber": 30,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator 2 volume level",
+      "unit": "%",
+      "category": "Oscillator"
+    },
+    {
+      "name": "XMOD",
+      "ccNumber": 31,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Cross modulation amount (OSC1 modulates OSC2)",
+      "unit": "%",
+      "category": "Oscillator"
+    },
+    {
+      "name": "ARP Mode",
+      "ccNumber": 32,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Arpeggiator mode selection",
+      "category": "Arpeggiator"
+    },
+    {
+      "name": "ARP Steps",
+      "ccNumber": 33,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Number of arpeggiator steps (1-16)",
+      "category": "Arpeggiator"
+    },
+    {
+      "name": "ARP Octaves",
+      "ccNumber": 34,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Arpeggiator octave span (1-3)",
+      "category": "Arpeggiator"
+    },
+    {
+      "name": "Level",
+      "ccNumber": 35,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Overall oscillator output level",
+      "unit": "dB",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Dry Blend",
+      "ccNumber": 36,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amount of dry signal in dry modes",
+      "unit": "%",
+      "category": "Mix"
+    },
+    {
+      "name": "ARP Cycle Latch",
+      "ccNumber": 37,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dOff, 64-127\u003dOn - cycle latch mode",
+      "category": "Arpeggiator"
+    },
+    {
+      "name": "Filter Type",
+      "ccNumber": 38,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dLadder, 43-85\u003dState Variable, 86-127\u003dTwin",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Frequency",
+      "ccNumber": 39,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter cutoff frequency",
+      "unit": "Hz",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Topology",
+      "ccNumber": 40,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-42\u003dLowpass, 43-85\u003dBandpass, 86-127\u003dHighpass",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Resonance",
+      "ccNumber": 41,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter resonance/bandwidth amount",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Noise",
+      "ccNumber": 42,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "White noise mixed with oscillators",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Twin Filter Spread",
+      "ccNumber": 43,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Distance between twin filter peaks",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Envelope Amount",
+      "ccNumber": 44,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope modulation amount",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Envelope Type",
+      "ccNumber": 46,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dADSR, 64-127\u003dEnvelope Follower",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Attack Time",
+      "ccNumber": 47,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope attack time",
+      "unit": "seconds",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Decay Time",
+      "ccNumber": 48,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope decay time",
+      "unit": "seconds",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Sustain Time",
+      "ccNumber": 49,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope sustain time",
+      "unit": "seconds",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Sustain Level",
+      "ccNumber": 50,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope sustain level",
+      "unit": "%",
+      "category": "Filter"
+    },
+    {
+      "name": "Filter Release Time",
+      "ccNumber": 51,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Filter envelope release time",
+      "unit": "seconds",
+      "category": "Filter"
+    },
+    {
+      "name": "Direction",
+      "ccNumber": 52,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-63\u003dUp, 64-127\u003dDown - envelope direction",
+      "category": "Envelope"
+    },
+    {
+      "name": "Depth",
+      "ccNumber": 53,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Envelope modulation depth",
+      "unit": "%",
+      "category": "Envelope"
+    },
+    {
+      "name": "Note Persist",
+      "ccNumber": 54,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "How long synthesized notes sustain",
+      "unit": "%",
+      "category": "Envelope"
+    },
+    {
+      "name": "Amplitude Attack Time",
+      "ccNumber": 55,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amplitude envelope attack time",
+      "unit": "seconds",
+      "category": "Envelope"
+    },
+    {
+      "name": "Amplitude Decay Time",
+      "ccNumber": 56,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amplitude envelope decay time",
+      "unit": "seconds",
+      "category": "Envelope"
+    },
+    {
+      "name": "Amplitude Sustain Level",
+      "ccNumber": 57,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amplitude envelope sustain level",
+      "unit": "%",
+      "category": "Envelope"
+    },
+    {
+      "name": "Amplitude Sustain Time",
+      "ccNumber": 58,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amplitude envelope sustain time",
+      "unit": "seconds",
+      "category": "Envelope"
+    },
+    {
+      "name": "Amplitude Release Time",
+      "ccNumber": 59,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Amplitude envelope release time",
+      "unit": "seconds",
+      "category": "Envelope"
+    },
+    {
+      "name": "Oscillator Mod Speed",
+      "ccNumber": 60,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator modulation speed (vibrato)",
+      "unit": "Hz",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Oscillator Mod Depth",
+      "ccNumber": 61,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Oscillator modulation depth (vibrato)",
+      "unit": "%",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Oscillator Mod Ramp Time",
+      "ccNumber": 62,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Time for modulation to reach full depth",
+      "unit": "seconds",
+      "category": "Oscillator"
+    },
+    {
+      "name": "Mod Type",
+      "ccNumber": 86,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-21\u003dOff, 22-42\u003dChorus, 43-63\u003dFlanger, 64-85\u003dVibrato, 86-106\u003dPhaser, 107-127\u003dRing Mod",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Location",
+      "ccNumber": 87,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "0-31\u003dPre+Dry, 32-63\u003dDry, 64-95\u003dPre Ambience, 96-127\u003dPost Ambience",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Speed/Frequency",
+      "ccNumber": 88,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation speed or ring mod frequency",
+      "unit": "Hz",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Depth",
+      "ccNumber": 89,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation effect depth",
+      "unit": "%",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Mode/Waveshape/Stages",
+      "ccNumber": 90,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation mode, ring mod waveshape, or phaser stages",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Feedback",
+      "ccNumber": 91,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation feedback amount",
+      "unit": "%",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Mix",
+      "ccNumber": 92,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation wet/dry mix",
+      "unit": "%",
+      "category": "Modulation"
+    },
+    {
+      "name": "Mod Note Div",
+      "ccNumber": 93,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Modulation note division for tempo sync",
+      "category": "Modulation"
+    },
+    {
+      "name": "Toggle Tuner Mode",
+      "ccNumber": 117,
+      "minValue": 127,
+      "maxValue": 127,
+      "description": "Press \u003d 127 to toggle tuner mode",
+      "category": "Control"
+    },
+    {
+      "name": "Trigger Hold Modifier",
+      "ccNumber": 118,
+      "minValue": 0,
+      "maxValue": 127,
+      "description": "Press \u003d 127, Release \u003d 0 (send release after every press)",
+      "category": "Control"
+    }
+  ],
+  "description": "Modular instrument synthesizer with 5 synth modes (Mono, Poly, Arp, Dry Mono, Dry Poly), dual oscillators, filters, envelopes, and comprehensive processing elements"
+}
