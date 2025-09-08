@@ -56,13 +56,32 @@ class HardwareMidiExecutor : MidiExecutor {
             val midiDeviceInfo = javax.sound.midi.MidiSystem.getMidiDeviceInfo()
             logger.debug { "Available MIDI devices: ${midiDeviceInfo.map { "${it.name} (${it.description})" }}" }
             
-            // Try to find a MIDI output device
-            for (deviceInfo in midiDeviceInfo) {
+            // Prefer hardware MIDI devices over software synthesizers
+            val hardwareDevices = midiDeviceInfo.filter { deviceInfo ->
                 val device = javax.sound.midi.MidiSystem.getMidiDevice(deviceInfo)
-                if (device.maxReceivers != 0) { // Device can receive MIDI
-                    logger.info { "Found MIDI output device: ${deviceInfo.name} (${deviceInfo.description})" }
-                    midiDevice = device
-                    break
+                device.maxReceivers != 0 && // Device can receive MIDI
+                !deviceInfo.description.contains("Software", ignoreCase = true) &&
+                !deviceInfo.name.contains("Gervill", ignoreCase = true) &&
+                !deviceInfo.name.contains("Sequencer", ignoreCase = true)
+            }
+            
+            // Try hardware devices first
+            for (deviceInfo in hardwareDevices) {
+                val device = javax.sound.midi.MidiSystem.getMidiDevice(deviceInfo)
+                logger.info { "Found hardware MIDI device: ${deviceInfo.name} (${deviceInfo.description})" }
+                midiDevice = device
+                break
+            }
+            
+            // Fall back to any MIDI output device if no hardware found
+            if (midiDevice == null) {
+                for (deviceInfo in midiDeviceInfo) {
+                    val device = javax.sound.midi.MidiSystem.getMidiDevice(deviceInfo)
+                    if (device.maxReceivers != 0) { // Device can receive MIDI
+                        logger.info { "Found MIDI output device: ${deviceInfo.name} (${deviceInfo.description})" }
+                        midiDevice = device
+                        break
+                    }
                 }
             }
             
