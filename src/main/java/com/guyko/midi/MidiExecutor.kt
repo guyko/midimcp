@@ -2,12 +2,20 @@ package com.guyko.midi
 
 import com.guyko.models.MidiCommand
 import com.guyko.models.MidiProgramChange
+import com.guyko.models.MidiSysex
 import mu.KotlinLogging
 
 data class MidiExecutionResult(
     val success: Boolean,
     val message: String,
     val executedCommand: MidiCommand? = null,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+data class SysexExecutionResult(
+    val success: Boolean,
+    val message: String,
+    val bytesTransmitted: Int = 0,
     val timestamp: Long = System.currentTimeMillis()
 )
 
@@ -26,6 +34,11 @@ interface MidiExecutor {
      * Execute a MIDI program change
      */
     fun executeProgramChange(programChange: MidiProgramChange): MidiExecutionResult
+    
+    /**
+     * Execute a MIDI sysex transmission
+     */
+    fun executeSysex(sysex: MidiSysex): SysexExecutionResult
     
     /**
      * Check if MIDI output is available
@@ -178,6 +191,46 @@ class HardwareMidiExecutor : MidiExecutor {
                 success = false,
                 message = "Failed to execute MIDI program change: ${e.message}",
                 executedCommand = null
+            )
+        }
+    }
+    
+    override fun executeSysex(sysex: MidiSysex): SysexExecutionResult {
+        logger.debug { "Executing MIDI sysex: ${sysex.data.size} bytes" }
+        
+        return try {
+            if (receiver != null) {
+                // Create MIDI sysex message
+                val sysexMessage = javax.sound.midi.SysexMessage()
+                sysexMessage.setMessage(sysex.data, sysex.data.size)
+                
+                // Send the sysex message
+                receiver!!.send(sysexMessage, -1)
+                
+                val hexString = sysex.toHexString()
+                logger.info { "MIDI sysex sent to hardware: $hexString (${sysex.data.size} bytes)" }
+                
+                SysexExecutionResult(
+                    success = true,
+                    message = "Sysex transmitted successfully to ${midiDevice?.deviceInfo?.name}",
+                    bytesTransmitted = sysex.data.size
+                )
+            } else {
+                val hexString = sysex.toHexString()
+                logger.info { "MIDI sysex logged (no device): $hexString (${sysex.data.size} bytes)" }
+                
+                SysexExecutionResult(
+                    success = false,
+                    message = "No MIDI device available - sysex data logged only",
+                    bytesTransmitted = 0
+                )
+            }
+        } catch (e: Exception) {
+            logger.error(e) { "Failed to execute MIDI sysex: ${sysex.data.size} bytes" }
+            SysexExecutionResult(
+                success = false,
+                message = "Failed to transmit sysex: ${e.message}",
+                bytesTransmitted = 0
             )
         }
     }

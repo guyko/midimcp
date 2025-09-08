@@ -230,6 +230,11 @@ class MCPServer(
                         "description" to mapOf(
                             "type" to "string", 
                             "description" to "Optional description of the preset's intended sound"
+                        ),
+                        "sendToPedal" to mapOf(
+                            "type" to "boolean",
+                            "description" to "If true, automatically send the generated sysex to the connected MIDI device",
+                            "default" to false
                         )
                     ),
                     "required" to listOf("parameters", "presetName")
@@ -257,6 +262,24 @@ class MCPServer(
                         )
                     ),
                     "required" to listOf("parameters", "presetName")
+                )
+            ),
+            mapOf(
+                "name" to "send_sysex",
+                "description" to "Send sysex data directly to a MIDI device. Used to upload presets or send custom sysex messages to guitar pedals.",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "sysexData" to mapOf(
+                            "type" to "string",
+                            "description" to "Hexadecimal sysex data to send (e.g., 'F0 00 7F 00 01 F7')"
+                        ),
+                        "description" to mapOf(
+                            "type" to "string",
+                            "description" to "Optional description of what this sysex does"
+                        )
+                    ),
+                    "required" to listOf("sysexData")
                 )
             )
         )
@@ -288,6 +311,7 @@ class MCPServer(
             "generate_lvx_preset" -> handleGenerateLVXPreset(id, arguments)
             "generate_mercury_x_preset" -> handleGenerateMercuryXPreset(id, arguments)
             "generate_enzo_x_preset" -> handleGenerateEnzoXPreset(id, arguments)
+            "send_sysex" -> handleSendSysex(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
             else -> {
                 logger.error { "MCP tool call failed: Unknown tool '$toolName' (id=$id)" }
@@ -620,6 +644,7 @@ class MCPServer(
             val parametersJson = arguments?.get("parameters")?.asJsonObject
             val presetName = arguments?.get("presetName")?.asString
             val description = arguments?.get("description")?.asString
+            val sendToPedal = arguments?.get("sendToPedal")?.asBoolean ?: false
             
             if (parametersJson == null || presetName == null) {
                 sendError(id, "Missing required parameters: parameters and presetName")
@@ -648,6 +673,11 @@ class MCPServer(
             // Generate the Mercury X preset sysex
             val sysex = MercuryXPresetGenerator.generatePreset(parameters, presetName)
             
+            // Optionally send to pedal
+            val transmissionResult = if (sendToPedal) {
+                midiExecutor.executeSysex(sysex)
+            } else null
+            
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(
                     "type" to "text",
@@ -659,11 +689,26 @@ class MCPServer(
                         appendln("Parameters: ${parameters.size} CC values mapped")
                         appendln("Sysex Size: ${sysex.data.size} bytes")
                         appendln("")
+                        
+                        if (transmissionResult != null) {
+                            if (transmissionResult.success) {
+                                appendln("✅ Preset successfully uploaded to pedal!")
+                                appendln("Status: ${transmissionResult.message}")
+                                appendln("Bytes transmitted: ${transmissionResult.bytesTransmitted}")
+                            } else {
+                                appendln("❌ Failed to upload preset to pedal")
+                                appendln("Error: ${transmissionResult.message}")
+                            }
+                            appendln("")
+                        }
+                        
                         appendln("Sysex Data (ready for MIDI transmission):")
                         appendln(sysex.toHexString())
                         appendln("")
-                        appendln("This sysex file can be sent to a Mercury X pedal via MIDI to load the preset.")
-                        appendln("The preset will be stored in the pedal and can be recalled later.")
+                        if (transmissionResult == null) {
+                            appendln("This sysex file can be sent to a Mercury X pedal via MIDI to load the preset.")
+                            appendln("Use the 'send_sysex' tool to upload it to your pedal.")
+                        }
                     }
                 ))
             ), id)
@@ -758,6 +803,67 @@ class MCPServer(
         // Always include id for protocol compliance
         response["id"] = id ?: 0
         writer.println(gson.toJson(response))
+    }
+    
+    private fun handleSendSysex(id: Int?, arguments: JsonObject?) {
+        try {
+            val sysexData = arguments?.get("sysexData")?.asString
+            val description = arguments?.get("description")?.asString
+            
+            if (sysexData.isNullOrBlank()) {
+                sendError(id, "Missing required parameter: sysexData")
+                return
+            }
+            
+            // Parse hex string to byte array
+            val hexBytes = try {
+                sysexData.replace(" ", "").replace("-", "").chunked(2).map { 
+                    it.toInt(16).toByte() 
+                }.toByteArray()
+            } catch (e: Exception) {
+                sendError(id, "Invalid sysex data format: ${e.message}")
+                return
+            }
+            
+            // Create MidiSysex object
+            val sysex = MidiSysex(hexBytes)
+            
+            // Execute sysex transmission
+            val result = midiExecutor.executeSysex(sysex)
+            
+            if (result.success) {
+                sendResponse("tools/call", mapOf(
+                    "content" to listOf(mapOf(
+                        "type" to "text",
+                        "text" to buildString {
+                            appendln("✅ Sysex transmission successful!")
+                            if (description != null) {
+                                appendln("Description: $description")
+                            }
+                            appendln("Bytes transmitted: ${result.bytesTransmitted}")
+                            appendln("Data sent: ${sysex.toHexString()}")
+                            appendln("Status: ${result.message}")
+                        }
+                    ))
+                ), id)
+            } else {
+                sendResponse("tools/call", mapOf(
+                    "content" to listOf(mapOf(
+                        "type" to "text",
+                        "text" to buildString {
+                            appendln("❌ Sysex transmission failed")
+                            if (description != null) {
+                                appendln("Description: $description")
+                            }
+                            appendln("Error: ${result.message}")
+                            appendln("Data attempted: ${sysex.toHexString()}")
+                        }
+                    ))
+                ), id)
+            }
+        } catch (e: Exception) {
+            sendError(id, "Failed to send sysex: ${e.message}")
+        }
     }
     
     private fun sendError(id: Int?, message: String) {

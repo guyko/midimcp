@@ -2,6 +2,7 @@ package com.guyko.midi
 
 import com.guyko.models.MidiCommand
 import com.guyko.models.MidiProgramChange
+import com.guyko.models.MidiSysex
 import mu.KotlinLogging
 
 /**
@@ -12,6 +13,7 @@ class MockMidiExecutor : MidiExecutor {
     private val logger = KotlinLogging.logger {}
     private val executedCommands = mutableListOf<MidiCommand>()
     private val executedProgramChanges = mutableListOf<MidiProgramChange>()
+    private val executedSysex = mutableListOf<MidiSysex>()
     private var shouldFail = false
     
     fun setShouldFail(fail: Boolean) {
@@ -22,9 +24,12 @@ class MockMidiExecutor : MidiExecutor {
     
     fun getExecutedProgramChanges(): List<MidiProgramChange> = executedProgramChanges.toList()
     
+    fun getExecutedSysex(): List<MidiSysex> = executedSysex.toList()
+    
     fun clearExecutedCommands() {
         executedCommands.clear()
         executedProgramChanges.clear()
+        executedSysex.clear()
     }
     
     override fun executeCommand(command: MidiCommand): MidiExecutionResult {
@@ -77,7 +82,28 @@ class MockMidiExecutor : MidiExecutor {
         }
     }
     
+    override fun executeSysex(sysex: MidiSysex): SysexExecutionResult {
+        logger.debug { "Mock executing MIDI sysex: ${sysex.data.size} bytes" }
+        return if (shouldFail) {
+            logger.warn { "Mock MIDI sysex execution failed (shouldFail=true): ${sysex.data.size} bytes" }
+            SysexExecutionResult(
+                success = false,
+                message = "Mock sysex execution failed",
+                bytesTransmitted = 0
+            )
+        } else {
+            executedSysex.add(sysex)
+            val hexString = sysex.toHexString()
+            logger.info { "Mock MIDI sysex executed: $hexString (${sysex.data.size} bytes)" }
+            SysexExecutionResult(
+                success = true,
+                message = "Mock sysex executed: $hexString",
+                bytesTransmitted = sysex.data.size
+            )
+        }
+    }
+    
     override fun isAvailable(): Boolean = true
     
-    override fun getStatus(): String = "Mock MIDI executor (${executedCommands.size} CC commands, ${executedProgramChanges.size} PC commands executed)"
+    override fun getStatus(): String = "Mock MIDI executor (${executedCommands.size} CC commands, ${executedProgramChanges.size} PC commands, ${executedSysex.size} sysex messages executed)"
 }
