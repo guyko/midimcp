@@ -67,7 +67,7 @@ object MerisMercuryXLoader {
                 ccNumber = 5,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-25=Off, 26-51=Volume Pedal, 52-76=Tube, 77-102=Transistor, 103-127=Op-Amp",
+                description = "Preamp coloration: 0-25=Off (bypassed), 26-51=Volume Pedal, 52-76=Tube (warm saturation), 77-102=Transistor (bright/punchy), 103-127=Op-Amp (clean/modern)",
                 category = "Preamp"
             ),
             
@@ -134,25 +134,25 @@ object MerisMercuryXLoader {
                 category = "Control"
             ),
             
-            // CC 15 - Time
+            // CC 15 - Predelay Time
             CCParameter(
-                name = "Time",
+                name = "Predelay Time",
                 ccNumber = 15,
                 minValue = 0,
                 maxValue = 127,
-                description = "Predelay time",
+                description = "Predelay time in milliseconds (0=0ms, 64≈400ms, 127≈800ms). This is early reflection timing before reverb tank, not traditional delay repeats.",
                 unit = "ms",
-                category = "Delay"
+                category = "Predelay"
             ),
             
-            // CC 16 - Type
+            // CC 16 - Predelay Type
             CCParameter(
-                name = "Type",
+                name = "Predelay Type",
                 ccNumber = 16,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-42=Digital, 43-85=BBD, 86-127=Magnetic",
-                category = "Delay"
+                description = "Predelay character: 0-42=Digital (clean), 43-85=BBD (analog warmth), 86-127=Magnetic (tape saturation). Affects predelay tone, not reverb.",
+                category = "Predelay"
             ),
             
             // CC 17 - Left Note Division
@@ -175,15 +175,15 @@ object MerisMercuryXLoader {
                 category = "Timing"
             ),
             
-            // CC 19 - Feedback
+            // CC 19 - Predelay Feedback
             CCParameter(
-                name = "Feedback",
+                name = "Predelay Feedback",
                 ccNumber = 19,
                 minValue = 0,
                 maxValue = 127,
-                description = "Predelay feedback amount",
+                description = "Predelay feedback amount (0=single reflection, 64=moderate repeats, 127=infinite). Creates predelay repeats before entering reverb tank.",
                 unit = "%",
-                category = "Delay"
+                category = "Predelay"
             ),
             
             // CC 20 - Cross Feedback
@@ -197,26 +197,26 @@ object MerisMercuryXLoader {
                 category = "Delay"
             ),
             
-            // CC 21 - Modulation
+            // CC 21 - Predelay Modulation
             CCParameter(
-                name = "Modulation",
+                name = "Predelay Modulation",
                 ccNumber = 21,
                 minValue = 0,
                 maxValue = 127,
-                description = "Predelay modulation amount",
+                description = "Predelay time modulation amount (0=off, 32=subtle, 64=moderate, 127=extreme warble). Adds movement to predelay reflections.",
                 unit = "%",
-                category = "Modulation"
+                category = "Predelay"
             ),
             
-            // CC 22 - Damping
+            // CC 22 - Predelay Damping
             CCParameter(
-                name = "Damping",
+                name = "Predelay Damping",
                 ccNumber = 22,
                 minValue = 0,
                 maxValue = 127,
-                description = "High frequency damping in predelay",
+                description = "High frequency damping in predelay (0=bright, 64=natural, 127=very dark). Affects predelay tone rolloff with each repeat.",
                 unit = "%",
-                category = "Filter"
+                category = "Predelay"
             ),
             
             // CC 23 - Dry Blend
@@ -256,7 +256,7 @@ object MerisMercuryXLoader {
                 ccNumber = 32,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-15=Ultraplate, 16-31=Cathedra, 32-47=Spring, 48-63=78 Room, 64-79=78 Plate, 80-95=78 Hall, 96-111=Prism, 112-127=Gravity",
+                description = "Reverb algorithm: 0-15=Ultraplate (bright plate), 16-31=Cathedra (cathedral), 32-47=Spring (mechanical), 48-63=78 Room (vintage room), 64-79=78 Plate (vintage plate), 80-95=78 Hall (vintage hall), 96-111=Prism (shimmer), 112-127=Gravity (nonlinear)",
                 category = "Reverb"
             ),
             
@@ -450,7 +450,7 @@ object MerisMercuryXLoader {
             id = "meris_mercury_x",
             manufacturer = "Meris",
             modelName = "Mercury X",
-            description = "Modular reverb system with 8 reverb structures (Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity) and comprehensive processing elements",
+            description = "Modular reverb system with PREDELAY + REVERB TANK architecture. Features 8 reverb structures and comprehensive processing elements. IMPORTANT: This is NOT a traditional delay pedal - it uses predelay (early reflections) that feeds into reverb algorithms. Predelay creates initial echoes before the reverb tank, not standalone delay repeats.",
             midiChannel = 1,
             parameters = parameters
         )

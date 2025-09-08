@@ -90,6 +90,52 @@ The server creates presets by sending multiple MIDI CC commands in real-time:
 4. MCP server sends all CC commands in sequence to the pedal
 5. User hears the preset in real-time and saves it manually on the pedal
 
+### Understanding Pedal Architectures
+
+Each Meris pedal has a unique architecture that AI assistants must understand to create appropriate presets:
+
+#### Mercury X Reverb - PREDELAY + REVERB TANK Architecture
+- **NOT a traditional delay pedal** - uses predelay system feeding into reverb algorithms
+- **Predelay**: Early reflections (CC15=time, CC16=type, CC19=feedback, CC21=modulation)
+- **Reverb Tank**: 8 different algorithms (CC32=structure: Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity)
+- **Key Insight**: "Delay" settings affect predelay reflections, not standalone delay repeats
+- **Common Mistake**: Treating CC15 as traditional delay time - it's predelay timing for early reflections
+
+#### LVX Delay - TRUE DELAY Architecture  
+- **Traditional delay pedal** with multiple engines and extensive modulation
+- **Delay Engines**: Digital, BBD (analog), Tape (CC16=engine type)
+- **Core Controls**: Time (CC15), Feedback (CC19), Mix (CC1), Modulation (CC21)
+- **Key Insight**: Creates actual delay repeats with configurable feedback trails
+- **Timing**: CC15 directly controls delay repeat timing (0≈1ms, 64≈400ms, 127≈2sec)
+
+#### Enzo X Synthesizer - GUITAR TRACKING SYNTHESIZER
+- **Guitar-to-MIDI synthesizer** that tracks playing and generates synth sounds
+- **Synth Modes**: CC22 determines tracking (Mono/Poly/Arp/Dry combinations)
+- **Dual Oscillators**: CC24/25 control wave shapes (Sawtooth/Triangle/Square)
+- **Filter System**: CC39=frequency (tone), CC41=resonance (character)
+- **Envelopes**: CC55=amp attack (critical for pad vs lead sounds)
+- **Key Insight**: NOT an effects pedal - creates synthesizer sounds from guitar input
+- **Common Mistake**: Treating as delay/reverb - it's a synth engine with guitar tracking
+
+#### Neural DSP Quad Cortex - MULTI-EFFECTS PROCESSOR
+- **Complete amp/effect modeling system** with 4 independent signal paths
+- **Scene/Preset Management**: Multiple operation modes with comprehensive MIDI control
+- **Footswitch Control**: 8 assignable footswitches with individual bypass states
+- **Expression Control**: Advanced expression pedal routing and assignment
+
+### AI Assistant Guidelines
+
+When creating presets, AI assistants should:
+
+1. **Identify Pedal Type**: Understand whether you're working with delay, reverb, synthesizer, or multi-effects
+2. **Use Correct Terminology**: 
+   - Mercury X: "predelay time" not "delay time"
+   - LVX: "delay time" for actual repeats
+   - Enzo X: "synth mode" and "tracking" not "effects"
+3. **Set Core Parameters First**: Each pedal has essential parameters that define its character
+4. **Understand Value Ranges**: Many parameters have specific value ranges for different modes
+5. **Consider Musical Context**: Match parameter choices to musical style and intended use
+
 ## Dependencies
 
 - Kotlin 1.3.0 standard library (JDK8)

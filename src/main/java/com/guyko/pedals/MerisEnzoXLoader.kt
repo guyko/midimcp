@@ -67,7 +67,7 @@ object MerisEnzoXLoader {
                 ccNumber = 5,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-21=Off, 22-42=Volume Pedal, 43-63=Tube, 64-85=Transistor, 86-106=Op-Amp, 107-127=Bitcrusher",
+                description = "Input drive/saturation: 0-21=Off (clean), 22-42=Volume Pedal, 43-63=Tube (warm), 64-85=Transistor (bright), 86-106=Op-Amp (clean), 107-127=Bitcrusher (lo-fi digital)",
                 category = "Drive"
             ),
             
@@ -245,8 +245,8 @@ object MerisEnzoXLoader {
                 ccNumber = 22,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-25=Mono Synth, 26-51=Poly Synth, 52-76=Arp Synth, 77-102=Dry Mono, 103-127=Dry Poly",
-                category = "Oscillator"
+                description = "Synthesizer tracking mode: 0-25=Mono Synth (monophonic tracking), 26-51=Poly Synth (polyphonic tracking), 52-76=Arp Synth (arpeggiator mode), 77-102=Dry Mono (dry+mono synth), 103-127=Dry Poly (dry+poly synth). This is the CORE parameter that determines how Enzo tracks your guitar.",
+                category = "Synth Engine"
             ),
             
             // CC 23 - Synth Pitch
@@ -266,7 +266,7 @@ object MerisEnzoXLoader {
                 ccNumber = 24,
                 minValue = 0,
                 maxValue = 127,
-                description = "Oscillator 1 waveform (Saw, Triangle, Square)",
+                description = "Oscillator 1 waveform: 0-42=Sawtooth (bright/classic), 43-85=Triangle (warm/smooth), 86-127=Square (hollow/woody). Sawtooth is most common for leads and basses.",
                 category = "Oscillator"
             ),
             
@@ -276,7 +276,7 @@ object MerisEnzoXLoader {
                 ccNumber = 25,
                 minValue = 0,
                 maxValue = 127,
-                description = "Oscillator 2 waveform (Saw, Triangle, Square)",
+                description = "Oscillator 2 waveform: 0-42=Sawtooth, 43-85=Triangle, 86-127=Square. Often set different from OSC1 for harmonic richness.",
                 category = "Oscillator"
             ),
             
@@ -424,7 +424,7 @@ object MerisEnzoXLoader {
                 ccNumber = 39,
                 minValue = 0,
                 maxValue = 127,
-                description = "Filter cutoff frequency",
+                description = "Filter cutoff frequency (0=very dark/muffled, 64=balanced brightness, 127=very bright/open). This is the primary tone control for the synthesizer.",
                 unit = "Hz",
                 category = "Filter"
             ),
@@ -445,7 +445,7 @@ object MerisEnzoXLoader {
                 ccNumber = 41,
                 minValue = 0,
                 maxValue = 127,
-                description = "Filter resonance/bandwidth amount",
+                description = "Filter resonance amount (0=smooth, 32=slight emphasis, 64=noticeable peak, 95=aggressive resonance, 127=self-oscillation). Adds character to filter sweep.",
                 unit = "%",
                 category = "Filter"
             ),
@@ -586,7 +586,7 @@ object MerisEnzoXLoader {
                 ccNumber = 55,
                 minValue = 0,
                 maxValue = 127,
-                description = "Amplitude envelope attack time",
+                description = "Amplitude envelope attack time (0=instant/percussive, 32=quick swell, 64=medium pad attack, 95=slow string swell, 127=very slow fade-in). Critical for pad vs lead sounds.",
                 unit = "seconds",
                 category = "Envelope"
             ),
@@ -777,7 +777,7 @@ object MerisEnzoXLoader {
             id = "meris_enzo_x",
             manufacturer = "Meris",
             modelName = "Enzo X",
-            description = "Modular instrument synthesizer with 5 synth modes (Mono, Poly, Arp, Dry Mono, Dry Poly), dual oscillators, filters, envelopes, and comprehensive processing elements",
+            description = "Modular guitar SYNTHESIZER that tracks your playing and generates synthesizer sounds. Key controls: Synth Mode (CC22) determines tracking type, OSC Wave Shapes (CC24/25), Filter Frequency (CC39), Filter Resonance (CC41), Amp Attack (CC55). Creates synth pads, leads, and basses from guitar input. NOT a delay or reverb pedal.",
             midiChannel = 3,
             parameters = parameters
         )

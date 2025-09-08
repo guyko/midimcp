@@ -64,7 +64,7 @@ object MerisLVXLoader {
                 ccNumber = 5,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-18=OFF, 19-36=Volume Pedal, 37-54=Tube, 55-73=Transistor, 74-91=Op-Amp, 92-109=Drive, 110-127=Bitcrusher",
+                description = "Preamp/processing: 0-18=OFF (clean), 19-36=Volume Pedal, 37-54=Tube (warm), 55-73=Transistor (bright), 74-91=Op-Amp, 92-109=Drive (overdrive), 110-127=Bitcrusher (lo-fi)",
                 category = "Preamp"
             ),
             
@@ -153,24 +153,24 @@ object MerisLVXLoader {
                 category = "Control"
             ),
             
-            // CC 15 - Time
+            // CC 15 - Delay Time
             CCParameter(
-                name = "Time",
+                name = "Delay Time",
                 ccNumber = 15,
                 minValue = 0,
                 maxValue = 127,
-                description = "Delay time",
+                description = "Primary delay time (0=shortest ~1ms, 64≈400ms, 127≈2sec). This controls the main delay repeat timing.",
                 unit = "ms",
                 category = "Delay"
             ),
             
-            // CC 16 - Delay Type
+            // CC 16 - Delay Engine
             CCParameter(
-                name = "Delay Type",
+                name = "Delay Engine",
                 ccNumber = 16,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-42=Digital, 43-85=BBD, 86-127=Tape",
+                description = "Delay engine type: 0-42=Digital (pristine, modern), 43-85=BBD (analog bucket brigade, darker), 86-127=Tape (vintage tape echo, warm saturation)",
                 category = "Delay"
             ),
             
@@ -200,7 +200,7 @@ object MerisLVXLoader {
                 ccNumber = 19,
                 minValue = 0,
                 maxValue = 127,
-                description = "Delay feedback amount",
+                description = "Delay feedback amount (0=single repeat, 32=few repeats, 64=moderate trails, 95=long decay, 127=infinite/self-oscillation)",
                 unit = "%",
                 category = "Delay"
             ),
@@ -216,13 +216,13 @@ object MerisLVXLoader {
                 category = "Delay"
             ),
             
-            // CC 21 - Delay Mod
+            // CC 21 - Delay Modulation
             CCParameter(
-                name = "Delay Mod",
+                name = "Delay Modulation",
                 ccNumber = 21,
                 minValue = 0,
                 maxValue = 127,
-                description = "Delay modulation amount",
+                description = "Delay time modulation amount (0=off, 32=subtle chorus, 64=moderate warble, 127=extreme vibrato). Adds movement to delay repeats.",
                 unit = "%",
                 category = "Modulation"
             ),
@@ -481,7 +481,7 @@ object MerisLVXLoader {
             version = "1.0.2b",
             midiChannel = 2,
             parameters = parameters,
-            description = "Meris LVX Modular Delay System - Complete MIDI CC implementation with 103 parameters including preamp, delay (40 parameters), dynamics, pitch, filter, modulation, and looper sections"
+            description = "Meris LVX Modular DELAY System - True delay pedal with multiple engines (Digital, BBD, Tape). Primary controls: Time (CC15), Engine (CC16), Feedback (CC19), Mix (CC1), Modulation (CC21). Unlike Mercury X, this creates traditional delay repeats with configurable feedback and modulation."
         )
     }
 }
