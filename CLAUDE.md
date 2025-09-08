@@ -51,6 +51,7 @@ This is a Kotlin-based Maven project called "midimcp" - a local MCP (Model Conte
 - `execute_program_change`: Switch pedal presets via MIDI program change
 - `send_sysex`: Send sysex data directly to a MIDI device for preset uploads or custom messages
 - `get_midi_status`: Get MIDI executor connection status
+- `rescan_midi_devices`: Re-scan for MIDI devices (useful if devices were connected after server startup)
 
 ### Architecture Design
 

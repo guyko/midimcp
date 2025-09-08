@@ -59,6 +59,8 @@ class HardwareMidiExecutor : MidiExecutor {
     private val logger = KotlinLogging.logger {}
     private var midiDevice: javax.sound.midi.MidiDevice? = null
     private var receiver: javax.sound.midi.Receiver? = null
+    private var lastConnectionAttempt: Long = 0
+    private val connectionCooldownMs = 5000 // Don't retry connections more often than every 5 seconds
     
     init {
         initializeMidiDevice()
@@ -126,8 +128,7 @@ class HardwareMidiExecutor : MidiExecutor {
             
             // If no receiver available, try to re-initialize MIDI devices (hot-plug support)
             if (receiver == null || midiDevice?.isOpen != true) {
-                logger.info { "No MIDI receiver available or device closed, attempting to re-scan for devices..." }
-                initializeMidiDevice()
+                tryFastConnection()
             }
             
             // Send to actual hardware if available
@@ -289,6 +290,49 @@ class HardwareMidiExecutor : MidiExecutor {
             initializeMidiDevice()
         } catch (e: Exception) {
             logger.error(e) { "Failed to reconnect MIDI device" }
+        }
+    }
+    
+    /**
+     * Attempts a fast MIDI connection with timeout to avoid blocking user commands
+     */
+    private fun tryFastConnection() {
+        val currentTime = System.currentTimeMillis()
+        
+        // Rate limit connection attempts to avoid performance issues
+        if (currentTime - lastConnectionAttempt < connectionCooldownMs) {
+            logger.debug { "Skipping MIDI connection attempt (cooldown period)" }
+            return
+        }
+        
+        lastConnectionAttempt = currentTime
+        
+        try {
+            // Quick timeout-based connection attempt
+            val connectionThread = Thread {
+                try {
+                    logger.debug { "Starting fast MIDI device detection..." }
+                    initializeMidiDevice()
+                } catch (e: Exception) {
+                    logger.debug(e) { "Fast MIDI connection failed: ${e.message}" }
+                }
+            }
+            
+            connectionThread.start()
+            // Give it a short time to complete, but don't block user commands
+            connectionThread.join(1000) // 1 second timeout
+            
+            if (connectionThread.isAlive) {
+                logger.debug { "MIDI connection taking too long, continuing without device (will retry later)" }
+                // Let the thread continue in background for future commands
+            } else if (receiver != null) {
+                logger.info { "Fast MIDI connection successful" }
+            } else {
+                logger.debug { "Fast MIDI connection completed but no device found" }
+            }
+            
+        } catch (e: Exception) {
+            logger.debug(e) { "Fast MIDI connection attempt failed: ${e.message}" }
         }
     }
 }
