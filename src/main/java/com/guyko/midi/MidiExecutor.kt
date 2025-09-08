@@ -100,8 +100,13 @@ class HardwareMidiExecutor : MidiExecutor {
             
             midiDevice?.let { device ->
                 if (!device.isOpen) {
-                    device.open()
-                    logger.info { "Opened MIDI device: ${device.deviceInfo.name}" }
+                    try {
+                        device.open()
+                        logger.info { "Opened MIDI device: ${device.deviceInfo.name}" }
+                    } catch (e: Exception) {
+                        logger.error(e) { "Failed to open MIDI device ${device.deviceInfo.name}. Device may be in use by another application (like SysEx Librarian). ${e.message}" }
+                        throw e
+                    }
                 }
                 receiver = device.receiver
                 logger.info { "MIDI receiver ready for hardware communication" }
@@ -119,20 +124,32 @@ class HardwareMidiExecutor : MidiExecutor {
             val midiBytes = command.toMidiBytes()
             val hexString = midiBytes.joinToString(" ") { "%02X".format(it) }
             
+            // If no receiver available, try to re-initialize MIDI devices (hot-plug support)
+            if (receiver == null || midiDevice?.isOpen != true) {
+                logger.info { "No MIDI receiver available or device closed, attempting to re-scan for devices..." }
+                initializeMidiDevice()
+            }
+            
             // Send to actual hardware if available
             receiver?.let { recv ->
-                val midiMessage = javax.sound.midi.ShortMessage(
-                    javax.sound.midi.ShortMessage.CONTROL_CHANGE,
-                    command.channel - 1, // MIDI channels are 0-indexed in Java MIDI API
-                    command.ccNumber,
-                    command.value
-                )
-                recv.send(midiMessage, -1) // -1 means send immediately
-                logger.info { "MIDI CC command sent to hardware: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+                // Check if device is still open before sending
+                if (midiDevice?.isOpen == true) {
+                    val midiMessage = javax.sound.midi.ShortMessage(
+                        javax.sound.midi.ShortMessage.CONTROL_CHANGE,
+                        command.channel - 1, // MIDI channels are 0-indexed in Java MIDI API
+                        command.ccNumber,
+                        command.value
+                    )
+                    recv.send(midiMessage, -1) // -1 means send immediately
+                    logger.info { "MIDI CC command sent to hardware: $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+                } else {
+                    logger.warn { "MIDI device is not open, cannot send command: $hexString. Device may have been closed by another application." }
+                    throw Exception("MIDI device is not open")
+                }
             } ?: run {
                 // Log only if no hardware available
                 println("MIDI (no device): $hexString")
-                logger.info { "MIDI CC command logged (no device): $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value})" }
+                logger.warn { "MIDI CC command logged (no device): $hexString (channel=${command.channel}, cc=${command.ccNumber}, value=${command.value}). Check MIDI device connection and ensure devices are powered on." }
             }
             
             MidiExecutionResult(
@@ -240,10 +257,16 @@ class HardwareMidiExecutor : MidiExecutor {
     }
     
     override fun getStatus(): String {
-        return if (receiver != null) {
-            "Hardware MIDI executor connected to: ${midiDevice?.deviceInfo?.name}"
+        return if (receiver != null && midiDevice != null) {
+            val deviceInfo = midiDevice!!.deviceInfo
+            val isOpen = midiDevice!!.isOpen
+            "Hardware MIDI executor connected to: ${deviceInfo.name} (${deviceInfo.description}) - Open: $isOpen"
+        } else if (midiDevice != null) {
+            val deviceInfo = midiDevice!!.deviceInfo
+            val isOpen = midiDevice!!.isOpen
+            "Hardware MIDI executor found device: ${deviceInfo.name} but no receiver available - Open: $isOpen"
         } else {
-            "Hardware MIDI executor (no device connected)"
+            "Hardware MIDI executor (no device found or device conflict)"
         }
     }
     
@@ -254,6 +277,18 @@ class HardwareMidiExecutor : MidiExecutor {
             logger.info { "MIDI device closed" }
         } catch (e: Exception) {
             logger.error(e) { "Error closing MIDI device" }
+        }
+    }
+    
+    fun reconnect() {
+        logger.info { "Attempting to reconnect MIDI device..." }
+        try {
+            close()
+            receiver = null
+            midiDevice = null
+            initializeMidiDevice()
+        } catch (e: Exception) {
+            logger.error(e) { "Failed to reconnect MIDI device" }
         }
     }
 }

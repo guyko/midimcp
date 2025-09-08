@@ -172,6 +172,14 @@ class MCPServer(
                 )
             ),
             mapOf(
+                "name" to "rescan_midi_devices",
+                "description" to "Re-scan for MIDI devices (useful if devices were connected after MCP server startup)",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf<String, Any>()
+                )
+            ),
+            mapOf(
                 "name" to "execute_program_change",
                 "description" to "Execute a MIDI program change to switch pedal preset",
                 "inputSchema" to mapOf(
@@ -234,6 +242,7 @@ class MCPServer(
             // "generate_enzo_x_preset" -> handleGenerateEnzoXPreset(id, arguments)
             "send_sysex" -> handleSendSysex(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
+            "rescan_midi_devices" -> handleRescanMidiDevices(id)
             else -> {
                 logger.error { "MCP tool call failed: Unknown tool '$toolName' (id=$id)" }
                 sendError(id, "Unknown tool: $toolName")
@@ -516,6 +525,43 @@ class MCPServer(
             ), id)
         } catch (e: Exception) {
             sendError(id, "Error getting MIDI status: ${e.message}")
+        }
+    }
+    
+    private fun handleRescanMidiDevices(id: Int?) {
+        try {
+            logger.info { "MCP rescan_midi_devices: Manually triggering MIDI device re-scan" }
+            
+            // If using HardwareMidiExecutor, trigger reconnection
+            if (midiExecutor is com.guyko.midi.HardwareMidiExecutor) {
+                (midiExecutor as com.guyko.midi.HardwareMidiExecutor).reconnect()
+            }
+            
+            val newStatus = midiExecutor.getStatus()
+            val isAvailable = midiExecutor.isAvailable()
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendLine("MIDI Device Re-scan Complete")
+                        appendLine("")
+                        appendLine("Connection Status: ${if (isAvailable) "CONNECTED ✅" else "DISCONNECTED ❌"}")
+                        appendLine("Device Details: $newStatus")
+                        appendLine("")
+                        if (isAvailable) {
+                            appendLine("MIDI devices are now ready for commands!")
+                        } else {
+                            appendLine("No MIDI devices found. Please check:")
+                            appendLine("1. MIDI interface is connected and powered")
+                            appendLine("2. Pedals are connected to MIDI interface")
+                            appendLine("3. No other applications are using the MIDI interface")
+                        }
+                    }
+                ))
+            ), id)
+        } catch (e: Exception) {
+            sendError(id, "Error rescanning MIDI devices: ${e.message}")
         }
     }
     

@@ -46,7 +46,7 @@
       "ccNumber": 5,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-18\u003dOFF, 19-36\u003dVolume Pedal, 37-54\u003dTube, 55-73\u003dTransistor, 74-91\u003dOp-Amp, 92-109\u003dDrive, 110-127\u003dBitcrusher",
+      "description": "Preamp/processing: 0-18\u003dOFF (clean), 19-36\u003dVolume Pedal, 37-54\u003dTube (warm), 55-73\u003dTransistor (bright), 74-91\u003dOp-Amp, 92-109\u003dDrive (overdrive), 110-127\u003dBitcrusher (lo-fi)",
       "category": "Preamp"
     },
     {
@@ -122,20 +122,20 @@
       "category": "Control"
     },
     {
-      "name": "Time",
+      "name": "Delay Time",
       "ccNumber": 15,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Delay time",
+      "description": "Primary delay time (0\u003dshortest ~1ms, 64≈400ms, 127≈2sec). This controls the main delay repeat timing.",
       "unit": "ms",
       "category": "Delay"
     },
     {
-      "name": "Delay Type",
+      "name": "Delay Engine",
       "ccNumber": 16,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-42\u003dDigital, 43-85\u003dBBD, 86-127\u003dTape",
+      "description": "Delay engine type: 0-42\u003dDigital (pristine, modern), 43-85\u003dBBD (analog bucket brigade, darker), 86-127\u003dTape (vintage tape echo, warm saturation)",
       "category": "Delay"
     },
     {
@@ -159,7 +159,7 @@
       "ccNumber": 19,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Delay feedback amount",
+      "description": "Delay feedback amount (0\u003dsingle repeat, 32\u003dfew repeats, 64\u003dmoderate trails, 95\u003dlong decay, 127\u003dinfinite/self-oscillation)",
       "unit": "%",
       "category": "Delay"
     },
@@ -173,11 +173,11 @@
       "category": "Delay"
     },
     {
-      "name": "Delay Mod",
+      "name": "Delay Modulation",
       "ccNumber": 21,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Delay modulation amount",
+      "description": "Delay time modulation amount (0\u003doff, 32\u003dsubtle chorus, 64\u003dmoderate warble, 127\u003dextreme vibrato). Adds movement to delay repeats.",
       "unit": "%",
       "category": "Modulation"
     },
@@ -832,5 +832,5 @@
       "category": "Looper"
     }
   ],
-  "description": "Meris LVX Modular Delay System - Complete MIDI CC implementation with 103 parameters including preamp, delay (40 parameters), dynamics, pitch, filter, modulation, and looper sections"
+  "description": "Meris LVX Modular DELAY System - True delay pedal with multiple engines (Digital, BBD, Tape). Primary controls: Time (CC15), Engine (CC16), Feedback (CC19), Mix (CC1), Modulation (CC21). Unlike Mercury X, this creates traditional delay repeats with configurable feedback and modulation."
 }

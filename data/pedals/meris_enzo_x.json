@@ -45,7 +45,7 @@
       "ccNumber": 5,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-21\u003dOff, 22-42\u003dVolume Pedal, 43-63\u003dTube, 64-85\u003dTransistor, 86-106\u003dOp-Amp, 107-127\u003dBitcrusher",
+      "description": "Input drive/saturation: 0-21\u003dOff (clean), 22-42\u003dVolume Pedal, 43-63\u003dTube (warm), 64-85\u003dTransistor (bright), 86-106\u003dOp-Amp (clean), 107-127\u003dBitcrusher (lo-fi digital)",
       "category": "Drive"
     },
     {
@@ -189,8 +189,8 @@
       "ccNumber": 22,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-25\u003dMono Synth, 26-51\u003dPoly Synth, 52-76\u003dArp Synth, 77-102\u003dDry Mono, 103-127\u003dDry Poly",
-      "category": "Oscillator"
+      "description": "Synthesizer tracking mode: 0-25\u003dMono Synth (monophonic tracking), 26-51\u003dPoly Synth (polyphonic tracking), 52-76\u003dArp Synth (arpeggiator mode), 77-102\u003dDry Mono (dry+mono synth), 103-127\u003dDry Poly (dry+poly synth). This is the CORE parameter that determines how Enzo tracks your guitar.",
+      "category": "Synth Engine"
     },
     {
       "name": "Synth Pitch",
@@ -206,7 +206,7 @@
       "ccNumber": 24,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Oscillator 1 waveform (Saw, Triangle, Square)",
+      "description": "Oscillator 1 waveform: 0-42\u003dSawtooth (bright/classic), 43-85\u003dTriangle (warm/smooth), 86-127\u003dSquare (hollow/woody). Sawtooth is most common for leads and basses.",
       "category": "Oscillator"
     },
     {
@@ -214,7 +214,7 @@
       "ccNumber": 25,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Oscillator 2 waveform (Saw, Triangle, Square)",
+      "description": "Oscillator 2 waveform: 0-42\u003dSawtooth, 43-85\u003dTriangle, 86-127\u003dSquare. Often set different from OSC1 for harmonic richness.",
       "category": "Oscillator"
     },
     {
@@ -334,7 +334,7 @@
       "ccNumber": 39,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Filter cutoff frequency",
+      "description": "Filter cutoff frequency (0\u003dvery dark/muffled, 64\u003dbalanced brightness, 127\u003dvery bright/open). This is the primary tone control for the synthesizer.",
       "unit": "Hz",
       "category": "Filter"
     },
@@ -351,7 +351,7 @@
       "ccNumber": 41,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Filter resonance/bandwidth amount",
+      "description": "Filter resonance amount (0\u003dsmooth, 32\u003dslight emphasis, 64\u003dnoticeable peak, 95\u003daggressive resonance, 127\u003dself-oscillation). Adds character to filter sweep.",
       "unit": "%",
       "category": "Filter"
     },
@@ -466,7 +466,7 @@
       "ccNumber": 55,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Amplitude envelope attack time",
+      "description": "Amplitude envelope attack time (0\u003dinstant/percussive, 32\u003dquick swell, 64\u003dmedium pad attack, 95\u003dslow string swell, 127\u003dvery slow fade-in). Critical for pad vs lead sounds.",
       "unit": "seconds",
       "category": "Envelope"
     },
@@ -618,5 +618,5 @@
       "category": "Control"
     }
   ],
-  "description": "Modular instrument synthesizer with 5 synth modes (Mono, Poly, Arp, Dry Mono, Dry Poly), dual oscillators, filters, envelopes, and comprehensive processing elements"
+  "description": "Modular guitar SYNTHESIZER that tracks your playing and generates synthesizer sounds. Key controls: Synth Mode (CC22) determines tracking type, OSC Wave Shapes (CC24/25), Filter Frequency (CC39), Filter Resonance (CC41), Amp Attack (CC55). Creates synth pads, leads, and basses from guitar input. NOT a delay or reverb pedal."
 }

@@ -45,7 +45,7 @@
       "ccNumber": 5,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-25\u003dOff, 26-51\u003dVolume Pedal, 52-76\u003dTube, 77-102\u003dTransistor, 103-127\u003dOp-Amp",
+      "description": "Preamp coloration: 0-25\u003dOff (bypassed), 26-51\u003dVolume Pedal, 52-76\u003dTube (warm saturation), 77-102\u003dTransistor (bright/punchy), 103-127\u003dOp-Amp (clean/modern)",
       "category": "Preamp"
     },
     {
@@ -100,21 +100,21 @@
       "category": "Control"
     },
     {
-      "name": "Time",
+      "name": "Predelay Time",
       "ccNumber": 15,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Predelay time",
+      "description": "Predelay time in milliseconds (0\u003d0ms, 64≈400ms, 127≈800ms). This is early reflection timing before reverb tank, not traditional delay repeats.",
       "unit": "ms",
-      "category": "Delay"
+      "category": "Predelay"
     },
     {
-      "name": "Type",
+      "name": "Predelay Type",
       "ccNumber": 16,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-42\u003dDigital, 43-85\u003dBBD, 86-127\u003dMagnetic",
-      "category": "Delay"
+      "description": "Predelay character: 0-42\u003dDigital (clean), 43-85\u003dBBD (analog warmth), 86-127\u003dMagnetic (tape saturation). Affects predelay tone, not reverb.",
+      "category": "Predelay"
     },
     {
       "name": "Left Note Division",
@@ -133,13 +133,13 @@
       "category": "Timing"
     },
     {
-      "name": "Feedback",
+      "name": "Predelay Feedback",
       "ccNumber": 19,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Predelay feedback amount",
+      "description": "Predelay feedback amount (0\u003dsingle reflection, 64\u003dmoderate repeats, 127\u003dinfinite). Creates predelay repeats before entering reverb tank.",
       "unit": "%",
-      "category": "Delay"
+      "category": "Predelay"
     },
     {
       "name": "Cross Feedback",
@@ -151,22 +151,22 @@
       "category": "Delay"
     },
     {
-      "name": "Modulation",
+      "name": "Predelay Modulation",
       "ccNumber": 21,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Predelay modulation amount",
+      "description": "Predelay time modulation amount (0\u003doff, 32\u003dsubtle, 64\u003dmoderate, 127\u003dextreme warble). Adds movement to predelay reflections.",
       "unit": "%",
-      "category": "Modulation"
+      "category": "Predelay"
     },
     {
-      "name": "Damping",
+      "name": "Predelay Damping",
       "ccNumber": 22,
       "minValue": 0,
       "maxValue": 127,
-      "description": "High frequency damping in predelay",
+      "description": "High frequency damping in predelay (0\u003dbright, 64\u003dnatural, 127\u003dvery dark). Affects predelay tone rolloff with each repeat.",
       "unit": "%",
-      "category": "Filter"
+      "category": "Predelay"
     },
     {
       "name": "Dry Blend",
@@ -198,7 +198,7 @@
       "ccNumber": 32,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-15\u003dUltraplate, 16-31\u003dCathedra, 32-47\u003dSpring, 48-63\u003d78 Room, 64-79\u003d78 Plate, 80-95\u003d78 Hall, 96-111\u003dPrism, 112-127\u003dGravity",
+      "description": "Reverb algorithm: 0-15\u003dUltraplate (bright plate), 16-31\u003dCathedra (cathedral), 32-47\u003dSpring (mechanical), 48-63\u003d78 Room (vintage room), 64-79\u003d78 Plate (vintage plate), 80-95\u003d78 Hall (vintage hall), 96-111\u003dPrism (shimmer), 112-127\u003dGravity (nonlinear)",
       "category": "Reverb"
     },
     {
@@ -582,5 +582,5 @@
       "category": "Control"
     }
   ],
-  "description": "Modular reverb system with 8 reverb structures (Ultraplate, Cathedra, Spring, 78 Room/Plate/Hall, Prism, Gravity) and comprehensive processing elements"
+  "description": "Modular reverb system with PREDELAY + REVERB TANK architecture. Features 8 reverb structures and comprehensive processing elements. IMPORTANT: This is NOT a traditional delay pedal - it uses predelay (early reflections) that feeds into reverb algorithms. Predelay creates initial echoes before the reverb tank, not standalone delay repeats."
 }
