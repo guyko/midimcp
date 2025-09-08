@@ -22,7 +22,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
 - 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, and Neural DSP Quad Cortex with full MIDI CC tables
-- 🎛️ **Preset Generation** - Generate complete sysex preset files for LVX, Mercury X, and Enzo X from natural language descriptions
+- 🎛️ **Preset Creation** - Create complete presets via multiple MIDI CC commands sent in sequence from natural language descriptions
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
 
@@ -105,9 +105,7 @@ Configure your AI assistant to connect to the MCP server using the appropriate M
 - `get_pedal` - Get pedal information and parameters
 - `list_pedals` - Show available pedals
 - `add_pedal` - Add new pedal configurations
-- `generate_lvx_preset` - Generate LVX delay preset sysex files
-- `generate_mercury_x_preset` - Generate Mercury X reverb preset sysex files
-- `generate_enzo_x_preset` - Generate Enzo X synthesizer preset sysex files
+- `send_sysex` - Send sysex data directly to MIDI devices for preset uploads or custom messages
 
 ## 🎵 Example Usage
 
@@ -209,79 +207,83 @@ AI assistant interprets *"switch to clean scene and enable reverb"* and sends:
 }
 ```
 
-### Preset Generation
+### Preset Creation via CC Commands
 
-Generate complete sysex preset files for Meris pedals from natural language descriptions.
+Create complete pedal presets by sending multiple MIDI CC commands in sequence. The AI assistant interprets natural language descriptions and creates presets by sending targeted CC command sequences that configure all aspects of the pedal's sound.
 
-#### LVX Delay Presets
-AI assistant queries MCP for LVX CC mappings, interprets *"create a warm vintage slapback delay"*, and sends:
+#### How Preset Creation Works
+1. **AI queries pedal capabilities** via `get_pedal` to understand available CC parameters
+2. **AI interprets natural language** like "warm vintage slapback delay" 
+3. **AI sends multiple CC commands** via `execute_midi_commands` to configure the preset
+4. **User hears changes in real-time** as each CC command adjusts pedal parameters
+5. **User saves preset on pedal** when satisfied with the sound
+
+#### LVX Delay Preset Creation
+AI assistant interprets *"create a warm vintage slapback delay"* and sends:
 ```json
 {
-  "tool": "generate_lvx_preset",
+  "tool": "execute_midi_commands",
   "arguments": {
-    "presetName": "Vintage Slapback",
-    "description": "Warm vintage slapback delay for rockabilly tones",
-    "parameters": {
-      "1": 85,    // Mix - high wet signal
-      "15": 35,   // Time - short slapback timing
-      "16": 86,   // Type - tape delay engine
-      "19": 25,   // Feedback - low repeats
-      "21": 15,   // Modulation - subtle tape warble
-      "80": 75,   // Filter - warm/dark tone
-      "62": 16    // Dynamics - light compression
-    }
+    "pedalId": "meris_lvx",
+    "commands": [
+      {"ccNumber": 16, "value": 86, "description": "Switch to Tape delay engine"},
+      {"ccNumber": 1, "value": 85, "description": "High wet mix signal"},
+      {"ccNumber": 15, "value": 35, "description": "Short slapback timing"},
+      {"ccNumber": 19, "value": 25, "description": "Low feedback for single repeat"},
+      {"ccNumber": 21, "value": 15, "description": "Subtle tape warble modulation"},
+      {"ccNumber": 80, "value": 75, "description": "Warm/dark filter tone"},
+      {"ccNumber": 62, "value": 16, "description": "Light dynamics compression"}
+    ]
   }
 }
 ```
 
-**Result**: Complete 231-byte LVX sysex file ready for upload to pedal! 🎛️
+**Result**: Pedal configured in real-time! User can tweak and save the preset on the pedal itself. 🎛️
 
-#### Mercury X Reverb Presets
-AI assistant queries MCP for Mercury X CC mappings, interprets *"create a large cathedral reverb with warm predelay"*, and sends:
+#### Mercury X Reverb Preset Creation
+AI assistant interprets *"create a large cathedral reverb with warm predelay"* and sends:
 ```json
 {
-  "tool": "generate_mercury_x_preset",
+  "tool": "execute_midi_commands",
   "arguments": {
-    "presetName": "Cathedral",
-    "description": "Large cathedral reverb with warm predelay for ambient music",
-    "parameters": {
-      "1": 90,    // Mix - high wet signal
-      "5": 1,     // Reverb Structure - Cathedra
-      "11": 95,   // Decay - very long
-      "12": 45,   // Pre-delay - medium room size
-      "13": 40,   // Predelay Time - noticeable separation
-      "25": 2,    // Preamp Type - warm tube preamp
-      "31": 1,    // Filter Type - high cut for warmth
-      "33": 85    // Filter Frequency - remove harsh highs
-    }
+    "pedalId": "meris_mercury_x",
+    "commands": [
+      {"ccNumber": 5, "value": 1, "description": "Select Cathedra reverb structure"},
+      {"ccNumber": 1, "value": 90, "description": "High wet mix signal"},
+      {"ccNumber": 11, "value": 95, "description": "Very long decay time"},
+      {"ccNumber": 12, "value": 45, "description": "Medium room size predelay"},
+      {"ccNumber": 13, "value": 40, "description": "Noticeable predelay separation"},
+      {"ccNumber": 25, "value": 2, "description": "Warm tube preamp type"},
+      {"ccNumber": 31, "value": 1, "description": "High cut filter for warmth"},
+      {"ccNumber": 33, "value": 85, "description": "Remove harsh frequencies"}
+    ]
   }
 }
 ```
 
-#### Enzo X Synthesizer Presets
-AI assistant queries MCP for Enzo X CC mappings, interprets *"create a classic poly synth pad with slow attack"*, and sends:
+#### Enzo X Synthesizer Preset Creation
+AI assistant interprets *"create a classic poly synth pad with slow attack"* and sends:
 ```json
 {
-  "tool": "generate_enzo_x_preset",
+  "tool": "execute_midi_commands",
   "arguments": {
-    "presetName": "Poly Pad",
-    "description": "Classic polyphonic synthesizer pad with slow attack for ambient textures",
-    "parameters": {
-      "1": 75,    // Mix - balanced
-      "5": 1,     // Synth Mode - Poly
-      "11": 1,    // Osc 1 Waveform - Sawtooth
-      "17": 2,    // Osc 2 Waveform - Triangle
-      "24": 70,   // Filter Cutoff - medium brightness
-      "25": 20,   // Filter Resonance - subtle emphasis
-      "29": 80,   // Amp Attack - slow attack
-      "31": 85,   // Amp Sustain - high sustain
-      "32": 60    // Amp Release - medium release
-    }
+    "pedalId": "meris_enzo_x",
+    "commands": [
+      {"ccNumber": 5, "value": 1, "description": "Select Poly Synth mode"},
+      {"ccNumber": 1, "value": 75, "description": "Balanced mix level"},
+      {"ccNumber": 11, "value": 1, "description": "Sawtooth oscillator 1"},
+      {"ccNumber": 17, "value": 2, "description": "Triangle oscillator 2"},
+      {"ccNumber": 24, "value": 70, "description": "Medium filter brightness"},
+      {"ccNumber": 25, "value": 20, "description": "Subtle filter resonance"},
+      {"ccNumber": 29, "value": 80, "description": "Slow amplitude attack"},
+      {"ccNumber": 31, "value": 85, "description": "High sustain level"},
+      {"ccNumber": 32, "value": 60, "description": "Medium release time"}
+    ]
   }
 }
 ```
 
-**Results**: Complete 231-byte sysex files ready for upload to pedals! 🎛️
+**Benefits**: Real-time preset creation with immediate audio feedback! Users hear every parameter change and can fine-tune before saving. 🎵
 
 ## 🎛️ Included Pedals
 
