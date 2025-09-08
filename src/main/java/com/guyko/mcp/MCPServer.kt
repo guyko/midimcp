@@ -189,7 +189,7 @@ class MCPServer(
             ),
             mapOf(
                 "name" to "generate_lvx_preset",
-                "description" to "Generate Meris LVX preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "description" to "Generate Meris LVX delay preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex. Always use descriptive preset names that reflect the sound (e.g., 'Vintage Slapback', 'Spacious Echo', 'Rhythmic Delay').",
                 "inputSchema" to mapOf(
                     "type" to "object",
                     "properties" to mapOf(
@@ -200,7 +200,7 @@ class MCPServer(
                         ),
                         "presetName" to mapOf(
                             "type" to "string", 
-                            "description" to "Name for the preset (max 16 characters)",
+                            "description" to "Descriptive name for the preset (max 16 characters). Use meaningful names like 'Warm Slapback', 'Cathedral Verb', 'Bright Chorus'. Avoid generic names like 'Preset 1'.",
                             "maxLength" to 16
                         ),
                         "description" to mapOf(
@@ -218,7 +218,7 @@ class MCPServer(
             ),
             mapOf(
                 "name" to "generate_mercury_x_preset",
-                "description" to "Generate Meris Mercury X reverb preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "description" to "Generate Meris Mercury X reverb preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex. Always use descriptive preset names that reflect the reverb character (e.g., 'Cathedral Hall', 'Warm Plate', 'Ambient Wash').",
                 "inputSchema" to mapOf(
                     "type" to "object",
                     "properties" to mapOf(
@@ -229,7 +229,7 @@ class MCPServer(
                         ),
                         "presetName" to mapOf(
                             "type" to "string", 
-                            "description" to "Name for the preset (max 16 characters)",
+                            "description" to "Descriptive name for the preset (max 16 characters). Use meaningful names like 'Warm Slapback', 'Cathedral Verb', 'Bright Chorus'. Avoid generic names like 'Preset 1'.",
                             "maxLength" to 16
                         ),
                         "description" to mapOf(
@@ -247,7 +247,7 @@ class MCPServer(
             ),
             mapOf(
                 "name" to "generate_enzo_x_preset",
-                "description" to "Generate Meris Enzo X synthesizer preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex.",
+                "description" to "Generate Meris Enzo X synthesizer preset sysex file from CC parameter values. AI assistant provides interpreted parameters from natural language, MCP generates the sysex. Always use descriptive preset names that reflect the synth character (e.g., 'Warm Poly Pad', 'Lead Mono Bass', 'Arp Sequence').",
                 "inputSchema" to mapOf(
                     "type" to "object",
                     "properties" to mapOf(
@@ -258,7 +258,7 @@ class MCPServer(
                         ),
                         "presetName" to mapOf(
                             "type" to "string", 
-                            "description" to "Name for the preset (max 16 characters)",
+                            "description" to "Descriptive name for the preset (max 16 characters). Use meaningful names like 'Warm Slapback', 'Cathedral Verb', 'Bright Chorus'. Avoid generic names like 'Preset 1'.",
                             "maxLength" to 16
                         ),
                         "description" to mapOf(
