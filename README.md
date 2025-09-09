@@ -325,6 +325,35 @@ Complete MIDI CC table including:
 - **Expression Control** (2 expression pedals with MIDI CC assignment)
 - **Program Management** (Scene selection, tempo control, tuner, gig view)
 
+## 🎵 Real-World Example: Microcosm-Style LVX Preset
+
+**User Request:** *"I'd like you to program my LVX to behave like a Microcosm pedal!"*
+
+**AI Assistant Response:**
+The AI interprets this complex musical request and creates a complete preset by:
+
+1. **Querying pedal capabilities** - Gets LVX parameter mappings from MCP server
+2. **Translating musical concept** - "Microcosm-style" → specific LVX parameters  
+3. **Executing batch commands** - Sends multiple MIDI CC commands in sequence
+4. **Real-time results** - User hears preset being built, saves when satisfied
+
+**Technical Implementation:**
+- **Poly delay structure** for granular-style processing (like Microcosm's multi-voice approach)
+- **BBD engine** for analog warmth and character  
+- **~600ms delay time** for ambient textures
+- **Granulize modulation** in feedback loop for signature granular effects
+- **Complex rhythmic timing** (left=triplet quarter, right=dotted eighth)
+- **Poly Chroma pitch shifting** + **State Variable filter** for character
+- **78% wet mix** for ambient, texture-heavy sound
+
+**What You Hear:**
+✨ Granular texture and grain similar to Microcosm  
+🎵 Warm, analog-style repeats with subtle pitch shifting  
+🔊 Complex stereo field with cross-feedback  
+🌊 Filtered, ambient character perfect for pads and textures  
+
+This showcases the system's ability to interpret abstract musical concepts and translate them into precise hardware control!
+
 ## 🧪 Testing
 
 Run the comprehensive test suite:
