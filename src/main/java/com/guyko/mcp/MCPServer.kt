@@ -11,6 +11,7 @@ import com.guyko.models.MidiSysex
 import com.guyko.persistence.PedalRepository
 import com.guyko.midi.MidiExecutor
 import com.guyko.midi.HardwareMidiExecutor
+import com.guyko.pedals.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -193,6 +194,54 @@ class MCPServer(
                 )
             ),
             mapOf(
+                "name" to "generate_h90_program",
+                "description" to "Generate H90 program file (pgm90 format) with dual algorithms and parameters. Creates binary program file for upload to Eventide H90.",
+                "inputSchema" to mapOf(
+                    "type" to "object",
+                    "properties" to mapOf(
+                        "name" to mapOf("type" to "string", "description" to "Program name"),
+                        "algorithmA" to mapOf(
+                            "type" to "object",
+                            "properties" to mapOf(
+                                "algorithmNumber" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 67, "description" to "Algorithm number (0-67)"),
+                                "parameters" to mapOf("type" to "object", "description" to "Algorithm parameters as key-value pairs"),
+                                "bypass" to mapOf("type" to "boolean", "default" to false),
+                                "mix" to mapOf("type" to "number", "minimum" to 0, "maximum" to 1, "default" to 1.0)
+                            ),
+                            "required" to listOf("algorithmNumber")
+                        ),
+                        "algorithmB" to mapOf(
+                            "type" to "object", 
+                            "properties" to mapOf(
+                                "algorithmNumber" to mapOf("type" to "integer", "minimum" to 0, "maximum" to 67, "description" to "Algorithm number (0-67)"),
+                                "parameters" to mapOf("type" to "object", "description" to "Algorithm parameters as key-value pairs"),
+                                "bypass" to mapOf("type" to "boolean", "default" to false),
+                                "mix" to mapOf("type" to "number", "minimum" to 0, "maximum" to 1, "default" to 1.0)
+                            ),
+                            "required" to listOf("algorithmNumber")
+                        ),
+                        "routing" to mapOf(
+                            "type" to "object",
+                            "properties" to mapOf(
+                                "mode" to mapOf("type" to "string", "enum" to listOf("SERIES_A_TO_B", "SERIES_B_TO_A", "PARALLEL", "SERIES_WITH_CROSSFADE"), "default" to "PARALLEL"),
+                                "spilloverTime" to mapOf("type" to "number", "default" to 2.0)
+                            )
+                        ),
+                        "globalParameters" to mapOf(
+                            "type" to "object",
+                            "properties" to mapOf(
+                                "tempo" to mapOf("type" to "number", "default" to 120.0),
+                                "tempoSync" to mapOf("type" to "boolean", "default" to false),
+                                "killDry" to mapOf("type" to "boolean", "default" to false),
+                                "programMix" to mapOf("type" to "number", "minimum" to 0, "maximum" to 1, "default" to 1.0),
+                                "expressionPedal" to mapOf("type" to "number", "minimum" to 0, "maximum" to 1, "default" to 0.0)
+                            )
+                        )
+                    ),
+                    "required" to listOf("name", "algorithmA", "algorithmB")
+                )
+            ),
+            mapOf(
                 "name" to "send_sysex",
                 "description" to "Send sysex data directly to a MIDI device. Used to upload presets or send custom sysex messages to guitar pedals.",
                 "inputSchema" to mapOf(
@@ -240,6 +289,7 @@ class MCPServer(
             // "generate_lvx_preset" -> handleGenerateLVXPreset(id, arguments)
             // "generate_mercury_x_preset" -> handleGenerateMercuryXPreset(id, arguments)
             // "generate_enzo_x_preset" -> handleGenerateEnzoXPreset(id, arguments)
+            "generate_h90_program" -> handleGenerateH90Program(id, arguments)
             "send_sysex" -> handleSendSysex(id, arguments)
             "get_midi_status" -> handleGetMidiStatus(id)
             "rescan_midi_devices" -> handleRescanMidiDevices(id)
@@ -652,5 +702,113 @@ class MCPServer(
             error["id"] = 0  // Use 0 as default for protocol compliance
         }
         writer.println(gson.toJson(error))
+    }
+    
+    private fun handleGenerateH90Program(id: Int?, arguments: JsonObject?) {
+        try {
+            val name = arguments?.get("name")?.asString
+            if (name.isNullOrBlank()) {
+                sendError(id, "Missing required parameter: name")
+                return
+            }
+            
+            // Parse algorithm A
+            val algorithmAObj = arguments?.get("algorithmA")?.asJsonObject
+            if (algorithmAObj == null) {
+                sendError(id, "Missing required parameter: algorithmA")
+                return
+            }
+            
+            val algorithmANumber = algorithmAObj.get("algorithmNumber")?.asInt
+            if (algorithmANumber == null) {
+                sendError(id, "Missing algorithmA.algorithmNumber")
+                return
+            }
+            
+            val algorithmAParams = algorithmAObj.get("parameters")?.asJsonObject?.entrySet()?.associate { 
+                it.key to it.value.asString 
+            } ?: emptyMap()
+            val algorithmABypass = algorithmAObj.get("bypass")?.asBoolean ?: false
+            val algorithmAMix = algorithmAObj.get("mix")?.asDouble ?: 1.0
+            
+            // Parse algorithm B
+            val algorithmBObj = arguments?.get("algorithmB")?.asJsonObject
+            if (algorithmBObj == null) {
+                sendError(id, "Missing required parameter: algorithmB")
+                return
+            }
+            
+            val algorithmBNumber = algorithmBObj.get("algorithmNumber")?.asInt
+            if (algorithmBNumber == null) {
+                sendError(id, "Missing algorithmB.algorithmNumber")
+                return
+            }
+            
+            val algorithmBParams = algorithmBObj.get("parameters")?.asJsonObject?.entrySet()?.associate {
+                it.key to it.value.asString
+            } ?: emptyMap()
+            val algorithmBBypass = algorithmBObj.get("bypass")?.asBoolean ?: false
+            val algorithmBMix = algorithmBObj.get("mix")?.asDouble ?: 1.0
+            
+            // Parse routing
+            val routingObj = arguments?.get("routing")?.asJsonObject
+            val routingMode = routingObj?.get("mode")?.asString?.let { 
+                try { RoutingMode.valueOf(it) } catch (e: Exception) { RoutingMode.PARALLEL }
+            } ?: RoutingMode.PARALLEL
+            val spilloverTime = routingObj?.get("spilloverTime")?.asDouble ?: 2.0
+            val routing = H90Routing(routingMode, spilloverTime)
+            
+            // Parse global parameters
+            val globalObj = arguments?.get("globalParameters")?.asJsonObject
+            val globalParams = H90GlobalParameters(
+                tempo = globalObj?.get("tempo")?.asDouble ?: 120.0,
+                tempoSync = globalObj?.get("tempoSync")?.asBoolean ?: false,
+                killDry = globalObj?.get("killDry")?.asBoolean ?: false,
+                presetMix = globalObj?.get("programMix")?.asDouble ?: 1.0,
+                expressionPedal = globalObj?.get("expressionPedal")?.asDouble ?: 0.0
+            )
+            
+            // Create H90 program
+            val program = H90Preset.create(
+                name = name,
+                algorithmANumber = algorithmANumber,
+                algorithmBNumber = algorithmBNumber,
+                algorithmAParams = algorithmAParams,
+                algorithmBParams = algorithmBParams,
+                routing = routing,
+                globalParams = globalParams
+            )
+            
+            // Generate program file
+            val programBytes = EventideH90PresetGenerator.generatePreset(program)
+            val base64Data = java.util.Base64.getEncoder().encodeToString(programBytes)
+            
+            // Get algorithm info for response
+            val algorithmAInfo = EventideH90AlgorithmMappings.getAlgorithmInfo(algorithmANumber)
+            val algorithmBInfo = EventideH90AlgorithmMappings.getAlgorithmInfo(algorithmBNumber)
+            
+            sendResponse("tools/call", mapOf(
+                "content" to listOf(mapOf(
+                    "type" to "text",
+                    "text" to buildString {
+                        appendLine("✅ H90 Program Generated Successfully!")
+                        appendLine("Program Name: $name")
+                        appendLine("Algorithm A: ${algorithmAInfo?.name ?: "Unknown"} (${algorithmAInfo?.category ?: "N/A"})")
+                        appendLine("Algorithm B: ${algorithmBInfo?.name ?: "Unknown"} (${algorithmBInfo?.category ?: "N/A"})")
+                        appendLine("Routing: ${routing.mode}")
+                        appendLine("File Size: ${programBytes.size} bytes")
+                        appendLine()
+                        appendLine("Base64 Program Data:")
+                        appendLine(base64Data)
+                        appendLine()
+                        appendLine("Save this data to a .pgm90 file to upload to your H90.")
+                    }
+                ))
+            ), id)
+            
+        } catch (e: Exception) {
+            logger.error(e) { "Failed to generate H90 program (id=$id)" }
+            sendError(id, "Failed to generate H90 program: ${e.message}")
+        }
     }
 }

@@ -21,7 +21,7 @@ A powerful **Model Context Protocol (MCP) server** that bridges AI assistants wi
 - 🎛️ **Persistent Pedal Knowledge** - Store MIDI CC mappings for any guitar pedal
 - 🤖 **AI Assistant Integration** - Works with Claude, ChatGPT, or any MCP-compatible AI
 - 🎵 **Real MIDI Output** - Sends actual MIDI commands to hardware
-- 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, and Neural DSP Quad Cortex with full MIDI CC tables
+- 📦 **Pre-loaded Pedals** - Includes Meris LVX delay, Mercury X reverb, Enzo X synthesizer, Neural DSP Quad Cortex, and Eventide H90 Harmonizer with full MIDI CC tables
 - 🎛️ **Preset Creation** - Create complete presets via multiple MIDI CC commands sent in sequence from natural language descriptions
 - 🧪 **Fully Tested** - 25 focused tests covering real functionality
 - ⚡ **Clean Architecture** - Separation between AI intelligence and MIDI execution
@@ -105,6 +105,7 @@ Configure your AI assistant to connect to the MCP server using the appropriate M
 - `get_pedal` - Get pedal information and parameters
 - `list_pedals` - Show available pedals
 - `add_pedal` - Add new pedal configurations
+- `generate_h90_program` - Generate H90 program files (.pgm90 format) for upload to Eventide H90
 - `send_sysex` - Send sysex data directly to MIDI devices for preset uploads or custom messages
 
 ## 🎵 Example Usage
@@ -285,6 +286,40 @@ AI assistant interprets *"create a classic poly synth pad with slow attack"* and
 
 **Benefits**: Real-time preset creation with immediate audio feedback! Users hear every parameter change and can fine-tune before saving. 🎵
 
+#### H90 Harmonizer Program Creation
+
+For the H90, program creation works differently - it generates downloadable .pgm90 files:
+
+```json
+{
+  "name": "generate_h90_program",
+  "arguments": {
+    "name": "Ethereal Pad",
+    "algorithmA": {
+      "algorithmNumber": 60,
+      "parameters": {
+        "mix": "0.8",
+        "size": "0.9",
+        "decay": "0.85"
+      }
+    },
+    "algorithmB": {
+      "algorithmNumber": 37,
+      "parameters": {
+        "intensity": "0.6",
+        "depth": "0.4",
+        "speed": "0.3"
+      }
+    },
+    "routing": {
+      "mode": "PARALLEL"
+    }
+  }
+}
+```
+
+**H90 Difference**: Creates binary .pgm90 files for upload rather than real-time MIDI control, matching H90's program-based architecture. 📁
+
 ## 🎛️ Included Pedals
 
 ### Meris LVX Delay (Pre-loaded - MIDI Channel 2)
@@ -324,6 +359,16 @@ Complete MIDI CC table including:
 - **Advanced Looper X** (Up to 4+ minutes, punch in/out, reverse, quantize)
 - **Expression Control** (2 expression pedals with MIDI CC assignment)
 - **Program Management** (Scene selection, tempo control, tuner, gig view)
+
+### Eventide H90 Harmonizer (Pre-loaded - MIDI Channel 8)
+Complete MIDI CC table and unique program generation:
+- **70+ Algorithms** across 9 categories (Delay, Distortion, EQ, Harmonizer, Looper, Modulation, Multi, Reverb, Synth, Utility)
+- **Dual Algorithm Engine** (Run two algorithms simultaneously with independent control)
+- **Program File Generation** (Creates .pgm90 files for upload to H90 via `generate_h90_program` tool)
+- **Advanced Routing** (Series A→B, Series B→A, Parallel, Series with crossfade)
+- **Expression Control** (Assignable expression pedal with multiple mapping options)
+- **Real-time Control** (Algorithm switching, parameter control, bypass, mix levels)
+- **Legendary Eventide Effects** (H910/H949 pitch shifters, Blackhole reverb, UltraTap delay, Crystals harmonizer)
 
 ## 🎵 Real-World Example: Microcosm-Style LVX Preset
 
