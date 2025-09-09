@@ -165,6 +165,26 @@ The tests demonstrate the AI assistant → MCP server execution flow:
 
 Tests include both successful execution and failure scenarios with mock hardware.
 
+### Key Usage Example: Microcosm-Style LVX Preset
+
+**User Request:** "I'd be happy to help you program your LVX to behave like a Microcosm pedal!"
+
+**AI Response Highlights:**
+- Configured **Poly delay structure** for granular-style processing
+- Used **BBD engine** for analog warmth, **~600ms delay time** for ambient textures
+- Applied **Granulize modulation** in feedback loop for Microcosm-style granular effects
+- Set **complex rhythmic timing** (left=triplet quarter, right=dotted eighth)
+- Added **Poly Chroma pitch shifting** and **State Variable filter** for character
+- Result: **78% wet mix** ambient preset with granular clouds and stereo textures
+
+**Technical Implementation:**
+- AI queried pedal parameters via MCP tools
+- Translated "Microcosm-style" to specific LVX CC commands
+- Executed multiple MIDI commands to create complete preset
+- User heard results in real-time and could save manually on pedal
+
+This demonstrates the system's ability to interpret complex musical requests and translate them into precise MIDI parameter changes using pedal-specific knowledge.
+
 ## Getting Started
 
 1. Build the project: `mvn compile`
