@@ -10,7 +10,7 @@
       "ccNumber": 1,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Wet/dry mix balance",
+      "description": "Wet/dry mix balance. ACTUAL VALUES: CC 0\u003ddry only, CC 64\u003d50% (too low for most uses), CC 84\u003d66% (balanced dry+delay), CC 127\u003dwet only. For balanced mix, use CC 84. The LVX mix control is logarithmic, so 66% sounds like equal dry/delay levels.",
       "unit": "%",
       "category": "Global"
     },
@@ -110,7 +110,7 @@
       "ccNumber": 13,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-21\u003dStandard, 22-42\u003dMultitap, 43-63\u003dMultifilter, 64-85\u003dPoly, 86-106\u003dReverse, 107-127\u003dSeries",
+      "description": "0-21\u003dStandard, 22-42\u003dMultitap, 43-63\u003dMultifilter, 64-85\u003dPoly, 86-106\u003dReverse, 107-127\u003dSeries. WARNING: Claude Desktop may unintentionally change this when only timing/modulation changes were requested.",
       "category": "Delay"
     },
     {
@@ -143,7 +143,7 @@
       "ccNumber": 17,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Note division for left channel",
+      "description": "Note division for left channel. ACTUAL VALUES: CC 0-7\u003dOff, CC 8-15\u003dwhole, CC 16-23\u003ddotted half, CC 24-31\u003dtriplet half, CC 32-39\u003dhalf, CC 40-47\u003ddotted quarter, CC 48-55\u003dtriplet quarter, CC 56-63\u003dquarter, CC 64-71\u003ddotted eighth, incrementing by 8 for each subdivision type.",
       "category": "Timing"
     },
     {
@@ -151,7 +151,7 @@
       "ccNumber": 18,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Note division for right channel",
+      "description": "Note division for right channel. ACTUAL VALUES: CC 0-7\u003dOff, CC 8-15\u003dwhole, CC 16-23\u003ddotted half, CC 24-31\u003dtriplet half, CC 32-39\u003dhalf, CC 40-47\u003ddotted quarter, CC 48-55\u003dtriplet quarter, CC 56-63\u003dquarter, CC 64-71\u003ddotted eighth, incrementing by 8 for each subdivision type.",
       "category": "Timing"
     },
     {
@@ -177,7 +177,7 @@
       "ccNumber": 21,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Delay time modulation amount (0\u003doff, 32\u003dsubtle chorus, 64\u003dmoderate warble, 127\u003dextreme vibrato). Adds movement to delay repeats.",
+      "description": "Built-in delay time wobble/warble (0\u003doff, 32\u003dsubtle, 64\u003dmoderate, 127\u003dextreme). This is SEPARATE from CC86 Mod Type. For general \u0027modulation\u0027 effects, use CC86 Mod Type\u003dChorus instead of this parameter.",
       "unit": "%",
       "category": "Modulation"
     },
@@ -698,7 +698,7 @@
       "ccNumber": 86,
       "minValue": 0,
       "maxValue": 127,
-      "description": "0-15\u003dOFF, 16-31\u003dChorus, 32-47\u003dFlanger, 48-63\u003dDyn Flanger, 64-79\u003dCassette, 80-95\u003dBarberpole, 96-111\u003dGranulize, 112-127\u003dRing Mod",
+      "description": "Modulation effects type. ACTUAL VALUES: CC 0-15\u003dOFF, CC 16-31\u003dChorus (CC 24\u003dsubtle chorus), CC 32-47\u003dFlanger, CC 48-63\u003dDyn Flanger, CC 64-79\u003dCassette, CC 80-95\u003dBarberpole, CC 96-111\u003dGranulize, CC 112-127\u003dRing Mod. For \u0027subtle modulation\u0027, use CC 24 (Chorus). This is separate from CC21 Delay Modulation.",
       "category": "Modulation"
     },
     {

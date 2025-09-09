@@ -20,7 +20,7 @@ object MerisLVXLoader {
                 ccNumber = 1,
                 minValue = 0,
                 maxValue = 127,
-                description = "Wet/dry mix balance",
+                description = "Wet/dry mix balance. ACTUAL VALUES: CC 0=dry only, CC 64=50% (too low for most uses), CC 84=66% (balanced dry+delay), CC 127=wet only. For balanced mix, use CC 84. The LVX mix control is logarithmic, so 66% sounds like equal dry/delay levels.",
                 unit = "%",
                 category = "Global"
             ),
@@ -139,7 +139,7 @@ object MerisLVXLoader {
                 ccNumber = 13,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-21=Standard, 22-42=Multitap, 43-63=Multifilter, 64-85=Poly, 86-106=Reverse, 107-127=Series",
+                description = "0-21=Standard, 22-42=Multitap, 43-63=Multifilter, 64-85=Poly, 86-106=Reverse, 107-127=Series. WARNING: Claude Desktop may unintentionally change this when only timing/modulation changes were requested.",
                 category = "Delay"
             ),
             
@@ -180,7 +180,7 @@ object MerisLVXLoader {
                 ccNumber = 17,
                 minValue = 0,
                 maxValue = 127,
-                description = "Note division for left channel",
+                description = "Note division for left channel. ACTUAL VALUES: CC 0=Off, CC 8=whole, CC 16=dotted half, CC 24=half, CC 32=triplet half, CC 40=dotted quarter, CC 48=quarter, CC 56=triplet quarter, CC 64=dotted eighth, incrementing by 8 for each subdivision type.",
                 category = "Timing"
             ),
             
@@ -190,7 +190,7 @@ object MerisLVXLoader {
                 ccNumber = 18,
                 minValue = 0,
                 maxValue = 127,
-                description = "Note division for right channel",
+                description = "Note division for right channel. ACTUAL VALUES: CC 0=Off, CC 8=whole, CC 16=dotted half, CC 24=half, CC 32=triplet half, CC 40=dotted quarter, CC 48=quarter, CC 56=triplet quarter, CC 64=dotted eighth, incrementing by 8 for each subdivision type.",
                 category = "Timing"
             ),
             
@@ -222,7 +222,7 @@ object MerisLVXLoader {
                 ccNumber = 21,
                 minValue = 0,
                 maxValue = 127,
-                description = "Delay time modulation amount (0=off, 32=subtle chorus, 64=moderate warble, 127=extreme vibrato). Adds movement to delay repeats.",
+                description = "Built-in delay time wobble/warble (0=off, 32=subtle, 64=moderate, 127=extreme). This is SEPARATE from CC86 Mod Type. For general 'modulation' effects, use CC86 Mod Type=Chorus instead of this parameter.",
                 unit = "%",
                 category = "Modulation"
             ),
@@ -359,7 +359,7 @@ object MerisLVXLoader {
                 ccNumber = 86,
                 minValue = 0,
                 maxValue = 127,
-                description = "0-15=OFF, 16-31=Chorus, 32-47=Flanger, 48-63=Dyn Flanger, 64-79=Cassette, 80-95=Barberpole, 96-111=Granulize, 112-127=Ring Mod",
+                description = "Modulation effects type. ACTUAL VALUES: CC 0-15=OFF, CC 16-31=Chorus (CC 24=subtle chorus), CC 32-47=Flanger, CC 48-63=Dyn Flanger, CC 64-79=Cassette, CC 80-95=Barberpole, CC 96-111=Granulize, CC 112-127=Ring Mod. For 'subtle modulation', use CC 24 (Chorus). This is separate from CC21 Delay Modulation.",
                 category = "Modulation"
             ),
             
