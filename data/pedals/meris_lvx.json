@@ -143,7 +143,7 @@
       "ccNumber": 17,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Note division for left channel. ACTUAL VALUES: CC 0-7\u003dOff, CC 8-15\u003dwhole, CC 16-23\u003ddotted half, CC 24-31\u003dtriplet half, CC 32-39\u003dhalf, CC 40-47\u003ddotted quarter, CC 48-55\u003dtriplet quarter, CC 56-63\u003dquarter, CC 64-71\u003ddotted eighth, incrementing by 8 for each subdivision type.",
+      "description": "Note division for left channel. ACTUAL VALUES: CC 0\u003dOff, CC 8\u003dwhole, CC 16\u003ddotted half, CC 24\u003dhalf, CC 32\u003dtriplet half, CC 40\u003ddotted quarter, CC 48\u003dquarter, CC 56\u003dtriplet quarter, CC 64\u003ddotted eighth, incrementing by 8 for each subdivision type.",
       "category": "Timing"
     },
     {
@@ -151,7 +151,7 @@
       "ccNumber": 18,
       "minValue": 0,
       "maxValue": 127,
-      "description": "Note division for right channel. ACTUAL VALUES: CC 0-7\u003dOff, CC 8-15\u003dwhole, CC 16-23\u003ddotted half, CC 24-31\u003dtriplet half, CC 32-39\u003dhalf, CC 40-47\u003ddotted quarter, CC 48-55\u003dtriplet quarter, CC 56-63\u003dquarter, CC 64-71\u003ddotted eighth, incrementing by 8 for each subdivision type.",
+      "description": "Note division for right channel. ACTUAL VALUES: CC 0\u003dOff, CC 8\u003dwhole, CC 16\u003ddotted half, CC 24\u003dhalf, CC 32\u003dtriplet half, CC 40\u003ddotted quarter, CC 48\u003dquarter, CC 56\u003dtriplet quarter, CC 64\u003ddotted eighth, incrementing by 8 for each subdivision type.",
       "category": "Timing"
     },
     {
