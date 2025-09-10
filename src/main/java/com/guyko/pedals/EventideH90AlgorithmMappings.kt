@@ -86,10 +86,37 @@ object EventideH90AlgorithmMappings {
                 "threshold" to ParameterInfo("Threshold", "Ducking sensitivity", "0-100%", "Input level for ducking"),
                 "release" to ParameterInfo("Release", "Delay return time", "0-5000ms", "How fast delays return")
             )
-        )
+        ),
         
-        // Additional algorithms would continue here but truncated for brevity
-        // In a real implementation, all 70+ algorithms would be included
+        // HARMONIZER ALGORITHMS
+        23 to AlgorithmInfo(
+            name = "MicroPitch",
+            category = "Harmonizer",
+            description = "Fine-resolution pitch shifter for doubling and chorusing",
+            keyParameters = mapOf(
+                "mix" to ParameterInfo("Mix", "Wet/dry balance", "0-100%", "Overall effect intensity"),
+                "pcha" to ParameterInfo("Pitch A", "Voice A detune", "0 to +50 cents", "Upward pitch shift"),
+                "pchb" to ParameterInfo("Pitch B", "Voice B detune", "0 to -50 cents", "Downward pitch shift"),
+                "dlya" to ParameterInfo("Delay A", "Voice A delay", "0-500ms", "Voice A timing offset"),
+                "dlyb" to ParameterInfo("Delay B", "Voice B delay", "0-500ms", "Voice B timing offset"),
+                "mod_depth" to ParameterInfo("Mod Depth", "Pitch modulation depth", "0-100%", "Chorus-like movement"),
+                "mod_rate" to ParameterInfo("Mod Rate", "Modulation speed", "0.1-10Hz", "Modulation frequency")
+            )
+        ),
+        
+        // MODULATION ALGORITHMS  
+        45 to AlgorithmInfo(
+            name = "TremoloPan",
+            category = "Modulation",
+            description = "Stereo tremolo with autopan capabilities",
+            keyParameters = mapOf(
+                "intensity" to ParameterInfo("Intensity", "Tremolo depth", "0-100%", "Volume modulation amount"),
+                "speed" to ParameterInfo("Speed", "Tremolo rate", "0.1-20Hz", "Modulation frequency"),
+                "pan_width" to ParameterInfo("Pan Width", "Stereo width", "0-100%", "Spatial movement"),
+                "shape" to ParameterInfo("Shape", "Waveform", "Sine/Triangle/Square/Random", "Modulation character"),
+                "phase" to ParameterInfo("Phase", "L/R phase offset", "0-180°", "Stereo relationship")
+            )
+        )
     )
     
     /**
