@@ -783,10 +783,10 @@ class MCPServer(
             val programBytes = EventideH90PresetGenerator.generatePreset(program)
             val base64Data = java.util.Base64.getEncoder().encodeToString(programBytes)
             
-            // Create actual file in Documents directory
-            val fileName = "${name.replace(" ", "_").replace("[^A-Za-z0-9_-]".toRegex(), "")}.pgm90"
+            // Create actual file in Documents directory with collision handling
+            val baseName = name.replace(" ", "_").replace("[^A-Za-z0-9_-]".toRegex(), "")
             val documentsDir = java.io.File(System.getProperty("user.home"), "Documents")
-            val file = java.io.File(documentsDir, fileName)
+            val file = getUniqueFileName(documentsDir, baseName, "pgm90")
             file.writeBytes(programBytes)
             
             // Get algorithm info for response
@@ -818,5 +818,20 @@ class MCPServer(
             logger.error(e) { "Failed to generate H90 program (id=$id)" }
             sendError(id, "Failed to generate H90 program: ${e.message}")
         }
+    }
+    
+    /**
+     * Generate a unique filename by appending (1), (2), etc. if file already exists
+     */
+    private fun getUniqueFileName(directory: java.io.File, baseName: String, extension: String): java.io.File {
+        var file = java.io.File(directory, "$baseName.$extension")
+        var counter = 1
+        
+        while (file.exists()) {
+            file = java.io.File(directory, "$baseName ($counter).$extension")
+            counter++
+        }
+        
+        return file
     }
 }
