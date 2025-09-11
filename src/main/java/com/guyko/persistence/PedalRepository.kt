@@ -29,9 +29,10 @@ class PedalRepository(private val dataDir: String = "data/pedals") {
             try {
                 val pedal = gson.fromJson(file.readText(), PedalModel::class.java)
                 pedals[pedal.id] = pedal
-                println("Loaded pedal: ${pedal.manufacturer} ${pedal.modelName} (${pedal.parameters.size} parameters)")
+                // Silent loading - no stdout output for Claude Desktop compatibility
             } catch (e: Exception) {
-                println("Failed to load pedal from ${file.name}: ${e.message}")
+                // Silent error handling - log to stderr if needed
+                System.err.println("Failed to load pedal from ${file.name}: ${e.message}")
             }
         }
     }
