@@ -109,21 +109,21 @@ object EventideH90PresetGenerator {
      * Generates a pgm90 preset file by copying and modifying a working preset
      */
     fun generatePreset(preset: H90Preset): ByteArray {
-        // Build preset from scratch to ensure correct algorithm IDs
-        return buildCompletePresetFromScratch(preset)
+        // Use working template but fix algorithm IDs properly
+        return modifyWorkingPreset(preset)
     }
     
     private fun modifyWorkingPreset(preset: H90Preset): ByteArray {
-        // Load the working TDrive Delay preset as template
-        val templatePath = System.getProperty("user.home") + "/Downloads/h90/presets/TDrive Delay.pgm90"
+        // Use the working dft.pgm90 file as template (has correct Crystals + TremoloPan algorithms)
+        val templatePath = System.getProperty("user.home") + "/Documents/dft.pgm90"
         val templateFile = java.io.File(templatePath)
         
         if (!templateFile.exists()) {
-            // Fallback to any working preset if TDrive Delay not found
+            // Fallback to any working preset if dft.pgm90 not found
             val presetsDir = java.io.File(System.getProperty("user.home") + "/Downloads/h90/presets")
             val workingPreset = presetsDir.listFiles()?.firstOrNull { it.name.endsWith(".pgm90") }
             if (workingPreset == null) {
-                throw RuntimeException("No working H90 preset found to use as template")
+                throw RuntimeException("No working H90 preset found to use as template. Please ensure dft.pgm90 exists in Documents folder.")
             }
             return modifyPresetFile(workingPreset.readBytes(), preset)
         }
@@ -151,46 +151,23 @@ object EventideH90PresetGenerator {
                 modifiedString = modifiedString.replaceFirst(matches[1].value, algorithmBJson)
             }
             
-            // Also update preset name in any readable text sections
+            // Update preset names in JSON to match the requested preset name
             val namePattern = "\"preset_name\":\"[^\"]*\"".toRegex()
             modifiedString = namePattern.replace(modifiedString) { 
                 "\"preset_name\":\"${preset.name}\""
             }
             
-            // Fix the binary result by updating all algorithm ID references in the binary structure
-            val binaryResult = modifiedString.toByteArray()
-            return updateBinaryAlgorithmIds(binaryResult, preset.algorithmA.algorithmNumber, preset.algorithmB.algorithmNumber)
+            // Also update any standalone preset name strings in the binary
+            val standaloneNamePattern = "dft".toRegex()
+            modifiedString = modifiedString.replace(standaloneNamePattern, preset.name.take(20))
+            
+            return modifiedString.toByteArray()
         }
         
         // If regex replacement fails, do byte-level replacement
         return replaceAlgorithmDataBinary(modifiedBytes, algorithmAJson, algorithmBJson, preset.name)
     }
     
-    /**
-     * Updates algorithm IDs in binary structure to fix algorithm mapping issues
-     */
-    private fun updateBinaryAlgorithmIds(bytes: ByteArray, algorithmAId: Int, algorithmBId: Int): ByteArray {
-        // The H90 .pgm90 format embeds algorithm IDs in multiple binary locations
-        // We need to ensure these match the algorithm IDs we're trying to use
-        
-        // For now, we'll use the template approach but with correct JSON generation
-        // This is a simplified approach that works for most cases
-        // A full implementation would need to understand all binary offsets where algorithm IDs are stored
-        
-        return bytes
-    }
-    
-    /**
-     * Build complete preset from scratch to ensure correct algorithm IDs
-     */
-    private fun buildCompletePresetFromScratch(preset: H90Preset): ByteArray {
-        // Generate algorithm JSON with correct IDs
-        val algorithmAJson = generateAlgorithmJson(preset.algorithmA, preset.globalParameters)
-        val algorithmBJson = generateAlgorithmJson(preset.algorithmB, preset.globalParameters)
-        
-        // Build the complete preset structure with the right algorithm IDs
-        return buildCompletePresetStructure(preset, algorithmAJson, algorithmBJson)
-    }
     
     private fun replaceAlgorithmDataBinary(bytes: ByteArray, algAJson: String, algBJson: String, presetName: String): ByteArray {
         // Find base64 algorithm data in binary and replace them without corrupting structure
