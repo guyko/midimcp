@@ -2102,6 +2102,49 @@
         }
       }
     },
+    "45": {
+      "name": "TremoloPan",
+      "category": "Modulation",
+      "description": "Stereo tremolo with autopan capabilities for spatial movement",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Tremolo effect intensity"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Tremolo rate",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Modulation frequency"
+        },
+        "Intensity": {
+          "displayName": "Intensity",
+          "description": "Tremolo depth",
+          "range": "0-100%",
+          "musicalFunction": "Volume modulation amount"
+        },
+        "Pan Width": {
+          "displayName": "Pan Width",
+          "description": "Stereo width",
+          "range": "0-100%",
+          "musicalFunction": "Spatial movement"
+        },
+        "Shape": {
+          "displayName": "Shape",
+          "description": "Waveform",
+          "range": "Sine/Triangle/Square/Random",
+          "musicalFunction": "Modulation character"
+        },
+        "Phase": {
+          "displayName": "Phase",
+          "description": "L/R phase offset",
+          "range": "0-180°",
+          "musicalFunction": "Stereo relationship"
+        }
+      }
+    },
     "49": {
       "name": "Blackhole",
       "category": "Reverb",
@@ -2185,6 +2228,1221 @@
           "description": "Envelope depth to destinations",
           "range": "-100 to +100%",
           "musicalFunction": "Dynamic response to playing"
+        }
+      }
+    },
+    "50": {
+      "name": "Instant Phaser",
+      "category": "Modulation",
+      "description": "Real-time controllable phaser with manual sweep control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Phaser effect intensity"
+        },
+        "Manual": {
+          "displayName": "Manual",
+          "description": "Manual sweep position",
+          "range": "0-100%",
+          "musicalFunction": "Real-time frequency control"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Resonance amount",
+          "range": "-100% to +100%",
+          "musicalFunction": "Phaser character"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Auto-sweep speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Automatic modulation"
+        },
+        "LFO Depth": {
+          "displayName": "LFO Depth",
+          "description": "Auto-sweep amount",
+          "range": "0-100%",
+          "musicalFunction": "LFO modulation depth"
+        }
+      }
+    },
+    "51": {
+      "name": "ModFilter",
+      "category": "Modulation",
+      "description": "Modulated filter with multiple filter types and LFO control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Filter effect intensity"
+        },
+        "Cutoff": {
+          "displayName": "Cutoff",
+          "description": "Filter cutoff frequency",
+          "range": "20Hz-20kHz",
+          "musicalFunction": "Brightness and tone"
+        },
+        "Resonance": {
+          "displayName": "Resonance",
+          "description": "Filter resonance amount",
+          "range": "0-100%",
+          "musicalFunction": "Filter emphasis"
+        },
+        "Filter Type": {
+          "displayName": "Filter Type",
+          "description": "Filter algorithm",
+          "range": "LP/HP/BP/Notch",
+          "musicalFunction": "Filter character"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Filter movement"
+        },
+        "LFO Depth": {
+          "displayName": "LFO Depth",
+          "description": "Modulation amount",
+          "range": "0-100%",
+          "musicalFunction": "Filter sweep range"
+        }
+      }
+    },
+    "52": {
+      "name": "Phaser",
+      "category": "Modulation",
+      "description": "Classic phasing effect with multiple stages and LFO control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Phaser effect intensity"
+        },
+        "Rate": {
+          "displayName": "Rate",
+          "description": "Sweep speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "LFO frequency"
+        },
+        "Depth": {
+          "displayName": "Depth",
+          "description": "Sweep range",
+          "range": "0-100%",
+          "musicalFunction": "Phase movement amount"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Resonance amount",
+          "range": "-100% to +100%",
+          "musicalFunction": "Phaser intensity"
+        },
+        "Stages": {
+          "displayName": "Stages",
+          "description": "Number of phase stages",
+          "range": "2-12 stages",
+          "musicalFunction": "Phaser complexity"
+        },
+        "Stereo": {
+          "displayName": "Stereo",
+          "description": "Stereo width",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial phasing"
+        }
+      }
+    },
+    "53": {
+      "name": "Q-Wah",
+      "category": "Modulation",
+      "description": "Envelope-controlled wah filter with adjustable sensitivity",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Wah effect intensity"
+        },
+        "Sensitivity": {
+          "displayName": "Sensitivity",
+          "description": "Envelope tracking sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Response to input dynamics"
+        },
+        "Range": {
+          "displayName": "Range",
+          "description": "Wah sweep range",
+          "range": "Narrow-Wide",
+          "musicalFunction": "Filter sweep extent"
+        },
+        "Resonance": {
+          "displayName": "Resonance",
+          "description": "Filter resonance",
+          "range": "0-100%",
+          "musicalFunction": "Wah character"
+        },
+        "Response": {
+          "displayName": "Response",
+          "description": "Envelope response speed",
+          "range": "Slow-Fast",
+          "musicalFunction": "Attack and decay timing"
+        }
+      }
+    },
+    "54": {
+      "name": "RingMod",
+      "category": "Modulation",
+      "description": "Ring modulation for metallic and robotic effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Ring mod effect intensity"
+        },
+        "Frequency": {
+          "displayName": "Frequency",
+          "description": "Carrier frequency",
+          "range": "1Hz-8kHz",
+          "musicalFunction": "Ring mod pitch"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Frequency modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Frequency movement"
+        },
+        "LFO Depth": {
+          "displayName": "LFO Depth",
+          "description": "Frequency modulation amount",
+          "range": "0-100%",
+          "musicalFunction": "Frequency sweep range"
+        },
+        "Waveform": {
+          "displayName": "Waveform",
+          "description": "Carrier waveform",
+          "range": "Sine/Triangle/Square/Saw",
+          "musicalFunction": "Ring mod character"
+        }
+      }
+    },
+    "55": {
+      "name": "Rotary",
+      "category": "Modulation",
+      "description": "Rotating speaker simulation with horn and rotor control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Rotary effect intensity"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Rotor speed",
+          "range": "Slow/Fast",
+          "musicalFunction": "Rotation rate"
+        },
+        "Horn Level": {
+          "displayName": "Horn Level",
+          "description": "High frequency rotor level",
+          "range": "0-100%",
+          "musicalFunction": "Treble rotor balance"
+        },
+        "Rotor Level": {
+          "displayName": "Rotor Level",
+          "description": "Low frequency rotor level",
+          "range": "0-100%",
+          "musicalFunction": "Bass rotor balance"
+        },
+        "Acceleration": {
+          "displayName": "Acceleration",
+          "description": "Speed change rate",
+          "range": "0-100%",
+          "musicalFunction": "Transition timing"
+        },
+        "Stereo Width": {
+          "displayName": "Stereo Width",
+          "description": "Spatial spread",
+          "range": "Mono-Wide",
+          "musicalFunction": "Rotary imaging"
+        }
+      }
+    },
+    "56": {
+      "name": "Sticky Tape",
+      "category": "Modulation",
+      "description": "Tape-style modulation with wow, flutter, and saturation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Tape effect intensity"
+        },
+        "Wow & Flutter": {
+          "displayName": "Wow & Flutter",
+          "description": "Tape transport irregularities",
+          "range": "0-100%",
+          "musicalFunction": "Vintage tape character"
+        },
+        "Saturation": {
+          "displayName": "Saturation",
+          "description": "Tape saturation amount",
+          "range": "0-100%",
+          "musicalFunction": "Magnetic tape distortion"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Tape speed variation",
+          "range": "0-100%",
+          "musicalFunction": "Pitch variation"
+        },
+        "Age": {
+          "displayName": "Age",
+          "description": "Tape age simulation",
+          "range": "New-Old",
+          "musicalFunction": "Degradation amount"
+        }
+      }
+    },
+    "57": {
+      "name": "Tricerachorus",
+      "category": "Modulation",
+      "description": "Three-voice chorus with independent LFO control per voice",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Chorus effect intensity"
+        },
+        "Rate 1": {
+          "displayName": "Rate 1",
+          "description": "Voice 1 modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Voice 1 LFO frequency"
+        },
+        "Rate 2": {
+          "displayName": "Rate 2",
+          "description": "Voice 2 modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Voice 2 LFO frequency"
+        },
+        "Rate 3": {
+          "displayName": "Rate 3",
+          "description": "Voice 3 modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Voice 3 LFO frequency"
+        },
+        "Depth": {
+          "displayName": "Depth",
+          "description": "Overall modulation depth",
+          "range": "0-100%",
+          "musicalFunction": "Chorus movement amount"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Stereo voice positioning",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial chorus distribution"
+        }
+      }
+    },
+    "58": {
+      "name": "Undulator",
+      "category": "Modulation",
+      "description": "Ring modulation with envelope following for dynamic effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Undulator effect intensity"
+        },
+        "Frequency": {
+          "displayName": "Frequency",
+          "description": "Carrier frequency",
+          "range": "1Hz-8kHz",
+          "musicalFunction": "Modulation pitch"
+        },
+        "Sensitivity": {
+          "displayName": "Sensitivity",
+          "description": "Envelope tracking sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Response to input dynamics"
+        },
+        "Range": {
+          "displayName": "Range",
+          "description": "Frequency modulation range",
+          "range": "Narrow-Wide",
+          "musicalFunction": "Dynamic frequency sweep"
+        },
+        "Response": {
+          "displayName": "Response",
+          "description": "Envelope response speed",
+          "range": "Slow-Fast",
+          "musicalFunction": "Attack and decay timing"
+        }
+      }
+    },
+    "59": {
+      "name": "Vibrato",
+      "category": "Modulation",
+      "description": "Classic vibrato effect with pitch modulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Vibrato effect intensity"
+        },
+        "Rate": {
+          "displayName": "Rate",
+          "description": "Vibrato speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "LFO frequency"
+        },
+        "Depth": {
+          "displayName": "Depth",
+          "description": "Pitch modulation amount",
+          "range": "0-100%",
+          "musicalFunction": "Vibrato intensity"
+        },
+        "Waveform": {
+          "displayName": "Waveform",
+          "description": "LFO waveform",
+          "range": "Sine/Triangle/Square/Random",
+          "musicalFunction": "Vibrato character"
+        },
+        "Lag": {
+          "displayName": "Lag",
+          "description": "Vibrato onset delay",
+          "range": "0-5000ms",
+          "musicalFunction": "Natural vibrato timing"
+        }
+      }
+    },
+    "60": {
+      "name": "SpaceTime",
+      "category": "Multi",
+      "description": "Multi-algorithm combining delay, reverb, and modulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Overall effect intensity"
+        },
+        "Delay Time": {
+          "displayName": "Delay Time",
+          "description": "Echo timing",
+          "range": "0-2000ms",
+          "musicalFunction": "Delay timing"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Delay regeneration",
+          "range": "0-100%",
+          "musicalFunction": "Echo repeats"
+        },
+        "Reverb Size": {
+          "displayName": "Reverb Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Ambient space"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Effect modulation",
+          "range": "0-100%",
+          "musicalFunction": "Movement and shimmer"
+        }
+      }
+    },
+    "61": {
+      "name": "DualVerb",
+      "category": "Reverb",
+      "description": "Dual reverb engines with independent control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Reverb A Size": {
+          "displayName": "Reverb A Size",
+          "description": "First reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Primary reverb space"
+        },
+        "Reverb B Size": {
+          "displayName": "Reverb B Size",
+          "description": "Second reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Secondary reverb space"
+        },
+        "A/B Mix": {
+          "displayName": "A/B Mix",
+          "description": "Balance between reverbs",
+          "range": "A-50%-B",
+          "musicalFunction": "Reverb blend"
+        },
+        "Pre Delay": {
+          "displayName": "Pre Delay",
+          "description": "Delay before reverb",
+          "range": "0-1000ms",
+          "musicalFunction": "Initial echo"
+        }
+      }
+    },
+    "62": {
+      "name": "DynaVerb",
+      "category": "Reverb",
+      "description": "Dynamic reverb with envelope-controlled decay",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Sensitivity": {
+          "displayName": "Sensitivity",
+          "description": "Dynamic response sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Input level tracking"
+        },
+        "Threshold": {
+          "displayName": "Threshold",
+          "description": "Gate threshold",
+          "range": "-60dB to 0dB",
+          "musicalFunction": "Reverb gate level"
+        },
+        "Attack": {
+          "displayName": "Attack",
+          "description": "Reverb onset speed",
+          "range": "0-1000ms",
+          "musicalFunction": "Reverb fade-in"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Reverb decay control",
+          "range": "0-10 seconds",
+          "musicalFunction": "Dynamic decay timing"
+        }
+      }
+    },
+    "64": {
+      "name": "Hall",
+      "category": "Reverb",
+      "description": "Concert hall reverb with natural acoustics",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Hall size",
+          "range": "Small to Large",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Reverb decay time",
+          "range": "0.1-10 seconds",
+          "musicalFunction": "Reverb sustain"
+        },
+        "Pre Delay": {
+          "displayName": "Pre Delay",
+          "description": "Delay before reverb",
+          "range": "0-1000ms",
+          "musicalFunction": "Initial echo"
+        },
+        "Damping": {
+          "displayName": "Damping",
+          "description": "High frequency absorption",
+          "range": "0-100%",
+          "musicalFunction": "Natural hall absorption"
+        }
+      }
+    },
+    "65": {
+      "name": "MangledVerb",
+      "category": "Reverb",
+      "description": "Mangled and distorted reverb with creative processing",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Mangle": {
+          "displayName": "Mangle",
+          "description": "Distortion and processing amount",
+          "range": "0-100%",
+          "musicalFunction": "Creative destruction"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Reverb feedback",
+          "range": "0-100%",
+          "musicalFunction": "Regenerative reverb"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Reverb modulation",
+          "range": "0-100%",
+          "musicalFunction": "Movement and chaos"
+        }
+      }
+    },
+    "66": {
+      "name": "ModEchoVerb",
+      "category": "Reverb",
+      "description": "Modulated echo and reverb combination",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Echo Time": {
+          "displayName": "Echo Time",
+          "description": "Echo delay time",
+          "range": "0-2000ms",
+          "musicalFunction": "Echo timing"
+        },
+        "Echo Level": {
+          "displayName": "Echo Level",
+          "description": "Echo amount",
+          "range": "0-100%",
+          "musicalFunction": "Echo intensity"
+        },
+        "Reverb Size": {
+          "displayName": "Reverb Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Ambient space"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Effect modulation",
+          "range": "0-100%",
+          "musicalFunction": "Movement and shimmer"
+        }
+      }
+    },
+    "67": {
+      "name": "Plate",
+      "category": "Reverb",
+      "description": "Classic plate reverb emulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Plate decay time",
+          "range": "0.1-10 seconds",
+          "musicalFunction": "Reverb sustain"
+        },
+        "Pre Delay": {
+          "displayName": "Pre Delay",
+          "description": "Delay before reverb",
+          "range": "0-1000ms",
+          "musicalFunction": "Initial echo"
+        },
+        "Damping": {
+          "displayName": "Damping",
+          "description": "High frequency damping",
+          "range": "0-100%",
+          "musicalFunction": "Plate character"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Plate modulation",
+          "range": "0-100%",
+          "musicalFunction": "Vintage plate movement"
+        }
+      }
+    },
+    "68": {
+      "name": "Reverse Reverb",
+      "category": "Reverb",
+      "description": "Reverse reverb effect for dramatic swells",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverse reverb intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Buildup": {
+          "displayName": "Buildup",
+          "description": "Reverse swell time",
+          "range": "0-5000ms",
+          "musicalFunction": "Swell timing"
+        },
+        "Gate": {
+          "displayName": "Gate",
+          "description": "Gate threshold",
+          "range": "-60dB to 0dB",
+          "musicalFunction": "Trigger sensitivity"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Post-reverb decay",
+          "range": "0-10 seconds",
+          "musicalFunction": "Tail decay"
+        }
+      }
+    },
+    "69": {
+      "name": "Room",
+      "category": "Reverb",
+      "description": "Small room reverb simulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Room size",
+          "range": "Closet to Large Room",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Room decay time",
+          "range": "0.1-3 seconds",
+          "musicalFunction": "Reverb sustain"
+        },
+        "Damping": {
+          "displayName": "Damping",
+          "description": "Surface absorption",
+          "range": "0-100%",
+          "musicalFunction": "Room materials"
+        },
+        "Early Reflections": {
+          "displayName": "Early Reflections",
+          "description": "Early reflection level",
+          "range": "0-100%",
+          "musicalFunction": "Room definition"
+        }
+      }
+    },
+    "70": {
+      "name": "SP2016 Reverb",
+      "category": "Reverb",
+      "description": "Classic SP2016 reverb algorithms",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Reverb intensity"
+        },
+        "Algorithm": {
+          "displayName": "Algorithm",
+          "description": "Reverb algorithm",
+          "range": "Room/Stereo Room/Hi-Density Plate",
+          "musicalFunction": "Reverb character"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Reverb decay time",
+          "range": "0.1-10 seconds",
+          "musicalFunction": "Reverb sustain"
+        },
+        "Pre Delay": {
+          "displayName": "Pre Delay",
+          "description": "Delay before reverb",
+          "range": "0-1000ms",
+          "musicalFunction": "Initial echo"
+        },
+        "Position": {
+          "displayName": "Position",
+          "description": "Listening position",
+          "range": "Close-Far",
+          "musicalFunction": "Spatial perspective"
+        }
+      }
+    },
+    "71": {
+      "name": "Spring",
+      "category": "Reverb",
+      "description": "Spring reverb tank emulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Spring reverb intensity"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Spring decay time",
+          "range": "0.1-5 seconds",
+          "musicalFunction": "Spring sustain"
+        },
+        "Tension": {
+          "displayName": "Tension",
+          "description": "Spring tension",
+          "range": "Loose-Tight",
+          "musicalFunction": "Spring character"
+        },
+        "Dwell": {
+          "displayName": "Dwell",
+          "description": "Send level to springs",
+          "range": "0-100%",
+          "musicalFunction": "Drive level"
+        },
+        "Tone": {
+          "displayName": "Tone",
+          "description": "Spring tone",
+          "range": "Dark-Bright",
+          "musicalFunction": "Spring frequency response"
+        }
+      }
+    },
+    "72": {
+      "name": "TremoloVerb",
+      "category": "Reverb",
+      "description": "Reverb with tremolo modulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Reverb Size": {
+          "displayName": "Reverb Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Tremolo Rate": {
+          "displayName": "Tremolo Rate",
+          "description": "Tremolo speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Modulation frequency"
+        },
+        "Tremolo Depth": {
+          "displayName": "Tremolo Depth",
+          "description": "Tremolo intensity",
+          "range": "0-100%",
+          "musicalFunction": "Volume modulation"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Reverb decay time",
+          "range": "0.1-10 seconds",
+          "musicalFunction": "Reverb sustain"
+        }
+      }
+    },
+    "73": {
+      "name": "Wormhole",
+      "category": "Reverb",
+      "description": "Otherworldly reverb with pitch shifting",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Wormhole intensity"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Wormhole size",
+          "range": "Small to Massive",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Pitch Shift": {
+          "displayName": "Pitch Shift",
+          "description": "Reverb pitch shifting",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic movement"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Regenerative feedback",
+          "range": "0-100%",
+          "musicalFunction": "Wormhole depth"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Wormhole movement",
+          "range": "0-100%",
+          "musicalFunction": "Cosmic modulation"
+        }
+      }
+    },
+    "74": {
+      "name": "PolySynth",
+      "category": "Synth",
+      "description": "Polyphonic synthesizer with multiple oscillators",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Synth level"
+        },
+        "Oscillator": {
+          "displayName": "Oscillator",
+          "description": "Oscillator waveform",
+          "range": "Sine/Triangle/Square/Saw",
+          "musicalFunction": "Basic tone"
+        },
+        "Filter Cutoff": {
+          "displayName": "Filter Cutoff",
+          "description": "Low-pass filter frequency",
+          "range": "20Hz-20kHz",
+          "musicalFunction": "Brightness"
+        },
+        "Resonance": {
+          "displayName": "Resonance",
+          "description": "Filter resonance",
+          "range": "0-100%",
+          "musicalFunction": "Filter character"
+        },
+        "Attack": {
+          "displayName": "Attack",
+          "description": "Envelope attack time",
+          "range": "0-5000ms",
+          "musicalFunction": "Note onset"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Envelope release time",
+          "range": "0-10 seconds",
+          "musicalFunction": "Note decay"
+        }
+      }
+    },
+    "75": {
+      "name": "Synthonizer",
+      "category": "Synth",
+      "description": "Guitar-to-synth converter with polyphonic tracking",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Synth level"
+        },
+        "Synth Voice": {
+          "displayName": "Synth Voice",
+          "description": "Synthesizer voice type",
+          "range": "Various synth sounds",
+          "musicalFunction": "Synth character"
+        },
+        "Tracking": {
+          "displayName": "Tracking",
+          "description": "Pitch tracking sensitivity",
+          "range": "Fast/Medium/Slow",
+          "musicalFunction": "Response vs accuracy"
+        },
+        "Portamento": {
+          "displayName": "Portamento",
+          "description": "Pitch glide time",
+          "range": "0-1000ms",
+          "musicalFunction": "Note transitions"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Synth filter control",
+          "range": "Open-Closed",
+          "musicalFunction": "Synth brightness"
+        }
+      }
+    },
+    "76": {
+      "name": "Aggravate",
+      "category": "Distortion",
+      "description": "Heavy distortion with aggressive character",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Distortion intensity"
+        },
+        "Drive": {
+          "displayName": "Drive",
+          "description": "Distortion amount",
+          "range": "0-100%",
+          "musicalFunction": "Saturation level"
+        },
+        "Tone": {
+          "displayName": "Tone",
+          "description": "Frequency response",
+          "range": "Dark-Bright",
+          "musicalFunction": "Tonal character"
+        },
+        "Gate": {
+          "displayName": "Gate",
+          "description": "Noise gate threshold",
+          "range": "-90dB to 0dB",
+          "musicalFunction": "Noise reduction"
+        },
+        "Level": {
+          "displayName": "Level",
+          "description": "Output level",
+          "range": "0-100%",
+          "musicalFunction": "Final volume"
+        }
+      }
+    },
+    "77": {
+      "name": "CrushStation",
+      "category": "Distortion",
+      "description": "Bit crushing and sample rate reduction",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Crush effect intensity"
+        },
+        "Sample Rate": {
+          "displayName": "Sample Rate",
+          "description": "Sample rate reduction",
+          "range": "1-48kHz",
+          "musicalFunction": "Digital aliasing"
+        },
+        "Bit Depth": {
+          "displayName": "Bit Depth",
+          "description": "Bit depth reduction",
+          "range": "1-24 bits",
+          "musicalFunction": "Digital noise"
+        },
+        "Drive": {
+          "displayName": "Drive",
+          "description": "Input overdrive",
+          "range": "0-100%",
+          "musicalFunction": "Pre-crush saturation"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Post-crush filtering",
+          "range": "Low/High pass",
+          "musicalFunction": "Tone shaping"
+        }
+      }
+    },
+    "78": {
+      "name": "PitchFuzz",
+      "category": "Distortion",
+      "description": "Octave fuzz with pitch tracking",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Fuzz intensity"
+        },
+        "Fuzz": {
+          "displayName": "Fuzz",
+          "description": "Fuzz amount",
+          "range": "0-100%",
+          "musicalFunction": "Saturation level"
+        },
+        "Octave": {
+          "displayName": "Octave",
+          "description": "Octave up level",
+          "range": "0-100%",
+          "musicalFunction": "Octave fuzz amount"
+        },
+        "Gate": {
+          "displayName": "Gate",
+          "description": "Noise gate",
+          "range": "-90dB to 0dB",
+          "musicalFunction": "Cleanup"
+        },
+        "Tone": {
+          "displayName": "Tone",
+          "description": "Fuzz tone",
+          "range": "Dark-Bright",
+          "musicalFunction": "Frequency character"
+        }
+      }
+    },
+    "79": {
+      "name": "Sculpt",
+      "category": "Distortion",
+      "description": "Multi-band distortion with frequency sculpting",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Sculpt intensity"
+        },
+        "Low Drive": {
+          "displayName": "Low Drive",
+          "description": "Low frequency distortion",
+          "range": "0-100%",
+          "musicalFunction": "Bass saturation"
+        },
+        "Mid Drive": {
+          "displayName": "Mid Drive",
+          "description": "Mid frequency distortion",
+          "range": "0-100%",
+          "musicalFunction": "Mid saturation"
+        },
+        "High Drive": {
+          "displayName": "High Drive",
+          "description": "High frequency distortion",
+          "range": "0-100%",
+          "musicalFunction": "Treble saturation"
+        },
+        "Crossover": {
+          "displayName": "Crossover",
+          "description": "Frequency band separation",
+          "range": "100Hz-10kHz",
+          "musicalFunction": "Band splitting"
+        }
+      }
+    },
+    "80": {
+      "name": "EQ",
+      "category": "EQ",
+      "description": "Multi-band equalizer",
+      "parameters": {
+        "Low Gain": {
+          "displayName": "Low Gain",
+          "description": "Low frequency gain",
+          "range": "-15dB to +15dB",
+          "musicalFunction": "Bass adjustment"
+        },
+        "Low Mid Gain": {
+          "displayName": "Low Mid Gain",
+          "description": "Low mid frequency gain",
+          "range": "-15dB to +15dB",
+          "musicalFunction": "Low mid adjustment"
+        },
+        "High Mid Gain": {
+          "displayName": "High Mid Gain",
+          "description": "High mid frequency gain",
+          "range": "-15dB to +15dB",
+          "musicalFunction": "High mid adjustment"
+        },
+        "High Gain": {
+          "displayName": "High Gain",
+          "description": "High frequency gain",
+          "range": "-15dB to +15dB",
+          "musicalFunction": "Treble adjustment"
+        },
+        "Level": {
+          "displayName": "Level",
+          "description": "Output level",
+          "range": "0-100%",
+          "musicalFunction": "Final volume"
+        }
+      }
+    },
+    "81": {
+      "name": "EQ Compressor",
+      "category": "EQ",
+      "description": "EQ combined with compression",
+      "parameters": {
+        "Threshold": {
+          "displayName": "Threshold",
+          "description": "Compression threshold",
+          "range": "-60dB to 0dB",
+          "musicalFunction": "Compression onset"
+        },
+        "Ratio": {
+          "displayName": "Ratio",
+          "description": "Compression ratio",
+          "range": "1:1 to 20:1",
+          "musicalFunction": "Compression intensity"
+        },
+        "Attack": {
+          "displayName": "Attack",
+          "description": "Compression attack",
+          "range": "0-100ms",
+          "musicalFunction": "Response speed"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Compression release",
+          "range": "10ms-5 seconds",
+          "musicalFunction": "Recovery time"
+        },
+        "EQ": {
+          "displayName": "EQ",
+          "description": "Tonal adjustment",
+          "range": "Dark-Bright",
+          "musicalFunction": "Frequency response"
+        }
+      }
+    },
+    "82": {
+      "name": "Mute",
+      "category": "Utility",
+      "description": "Signal mute/kill switch",
+      "parameters": {
+        "Mute": {
+          "displayName": "Mute",
+          "description": "Mute on/off",
+          "range": "Off/On",
+          "musicalFunction": "Signal kill"
+        },
+        "Fade Time": {
+          "displayName": "Fade Time",
+          "description": "Mute fade duration",
+          "range": "0-1000ms",
+          "musicalFunction": "Transition timing"
+        }
+      }
+    },
+    "83": {
+      "name": "Thru",
+      "category": "Utility",
+      "description": "Signal pass-through",
+      "parameters": {
+        "Level": {
+          "displayName": "Level",
+          "description": "Output level",
+          "range": "0-100%",
+          "musicalFunction": "Signal level"
         }
       }
     }
