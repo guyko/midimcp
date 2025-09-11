@@ -132,12 +132,9 @@ object EventideH90PresetGenerator {
     }
     
     private fun modifyPresetFile(templateBytes: ByteArray, preset: H90Preset): ByteArray {
-        // Generate new algorithm JSON
-        val algorithmAJson = generateAlgorithmJson(preset.algorithmA, preset.globalParameters)
-        val algorithmBJson = generateAlgorithmJson(preset.algorithmB, preset.globalParameters)
-        
-        // Use binary-safe replacement to avoid UTF-8 corruption
-        return replaceAlgorithmDataBinary(templateBytes, algorithmAJson, algorithmBJson, preset.name)
+        // For now, just copy the template and replace the preset name
+        // The template already has the correct algorithms (Crystals ID 23, TremoloPan ID 45)
+        return replacePresetName(templateBytes, preset.name)
     }
     
     
