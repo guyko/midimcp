@@ -1,0 +1,2192 @@
+{
+  "version": "1.11.4",
+  "description": "Eventide H90 Algorithm Mappings with detailed parameters",
+  "algorithms": {
+    "0": {
+      "name": "Delay",
+      "category": "Delay",
+      "description": "Classic digital delay with up to 4 seconds - clean, pristine digital echoes",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Overall effect intensity"
+        },
+        "Time": {
+          "displayName": "Time",
+          "description": "Delay time",
+          "range": "0-4000ms",
+          "musicalFunction": "Echo timing"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Regeneration amount",
+          "range": "0-100%",
+          "musicalFunction": "Echo repeats and sustain"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "High frequency rolloff",
+          "range": "20Hz-20kHz",
+          "musicalFunction": "Echo tone shaping"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Delay time modulation",
+          "range": "0-100%",
+          "musicalFunction": "Chorus-like movement"
+        }
+      }
+    },
+    "1": {
+      "name": "Band Delay",
+      "category": "Delay",
+      "description": "Delays with user selectable modulated filters",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Level of feedback A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Level of feedback B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Resonance": {
+          "displayName": "Resonance",
+          "description": "Filter resonance/sharpness",
+          "range": "0-10",
+          "musicalFunction": "Dramatic resonance effects"
+        },
+        "Modulation Depth": {
+          "displayName": "Modulation Depth",
+          "description": "Filter frequency modulation",
+          "range": "0-100%",
+          "musicalFunction": "Filter movement"
+        }
+      }
+    },
+    "2": {
+      "name": "Bouquet Delay",
+      "category": "Delay",
+      "description": "Analog delay pedal emulation with two flavors and modern tricks",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-50% delayed, 50-100% dry mix out",
+          "musicalFunction": "Signal balance control"
+        },
+        "Delay": {
+          "displayName": "Delay",
+          "description": "Delay length control",
+          "range": "0-600ms",
+          "musicalFunction": "Echo timing (LoFi mode best up to 300ms)"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Feedback level",
+          "range": "0-100%",
+          "musicalFunction": "Self-oscillation capable in Modern mode"
+        },
+        "Mod Depth": {
+          "displayName": "Mod Depth",
+          "description": "BBD modulation amount",
+          "range": "0-100%",
+          "musicalFunction": "Vintage wobble effect"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Modulation speed",
+          "range": "0.01-20Hz",
+          "musicalFunction": "Modulation frequency"
+        },
+        "LFO Shape": {
+          "displayName": "LFO Shape",
+          "description": "Modulation waveform",
+          "range": "Various shapes",
+          "musicalFunction": "Modulation character"
+        }
+      }
+    },
+    "3": {
+      "name": "Digital Delay",
+      "category": "Delay",
+      "description": "Twin 3 second delays with independent time and feedback controls",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "High/low pass filter",
+          "range": "-100 to +100",
+          "musicalFunction": "Delay tone shaping"
+        }
+      }
+    },
+    "4": {
+      "name": "Ducked Delay",
+      "category": "Delay",
+      "description": "Delay levels dynamically lower while playing, restore when you stop",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Threshold": {
+          "displayName": "Threshold",
+          "description": "Ducking sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Input level for ducking trigger"
+        },
+        "Sensitivity": {
+          "displayName": "Sensitivity",
+          "description": "Ducking response",
+          "range": "0-100%",
+          "musicalFunction": "How responsive ducking is"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Delay return time",
+          "range": "0-5000ms",
+          "musicalFunction": "How fast delays return after stopping"
+        }
+      }
+    },
+    "5": {
+      "name": "Filter Pong",
+      "category": "Delay",
+      "description": "Dual delays ping pong between outputs with filter effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Filter control",
+          "range": "HP/LP filter",
+          "musicalFunction": "Ping-pong tone shaping"
+        }
+      }
+    },
+    "6": {
+      "name": "Head Space",
+      "category": "Delay",
+      "description": "Authentic tape delay emulation with adjustable playback heads",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Dry and wet signal levels",
+          "range": "0-5 delayed, 5-10 dry out",
+          "musicalFunction": "Tape delay balance"
+        },
+        "Delay Time": {
+          "displayName": "Delay Time",
+          "description": "Longest delay possible",
+          "range": "200-3000ms",
+          "musicalFunction": "Tape speed control"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Tape speed",
+          "range": "Half/Full",
+          "musicalFunction": "30ips to 1.875ips range"
+        },
+        "Rec Drive": {
+          "displayName": "Rec Drive",
+          "description": "Tape saturation",
+          "range": "0-100%",
+          "musicalFunction": "Overdriven tape character"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Master feedback for all heads",
+          "range": "0-100%",
+          "musicalFunction": "Self-oscillation capable"
+        },
+        "Boil": {
+          "displayName": "Boil",
+          "description": "Performance parameter",
+          "range": "Momentary",
+          "musicalFunction": "Dramatic tape manipulation"
+        },
+        "Breakdown": {
+          "displayName": "Breakdown",
+          "description": "Performance parameter",
+          "range": "Momentary",
+          "musicalFunction": "Tape breakdown effects"
+        }
+      }
+    },
+    "7": {
+      "name": "Mod Delay",
+      "category": "Delay",
+      "description": "Modulated delays - great for creating chorus effects and chorused delays",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Modulation Depth": {
+          "displayName": "Modulation Depth",
+          "description": "Delay time modulation",
+          "range": "0-100%",
+          "musicalFunction": "Chorus-like movement"
+        },
+        "Modulation Speed": {
+          "displayName": "Modulation Speed",
+          "description": "Modulation rate",
+          "range": "0-5Hz",
+          "musicalFunction": "LFO frequency"
+        }
+      }
+    },
+    "8": {
+      "name": "MultiTap",
+      "category": "Delay",
+      "description": "10 delay taps with controls for delay time, diffusion, tap levels, and spacing",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Diffusion": {
+          "displayName": "Diffusion",
+          "description": "Tap diffusion amount",
+          "range": "0-100%",
+          "musicalFunction": "Tap stereo spread"
+        },
+        "Spacing": {
+          "displayName": "Spacing",
+          "description": "Tap spacing pattern",
+          "range": "Various patterns",
+          "musicalFunction": "Rhythmic tap arrangement"
+        }
+      }
+    },
+    "9": {
+      "name": "Reverse",
+      "category": "Delay",
+      "description": "Reverse audio effects - audio broken into segments and played backwards",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "X-Fade": {
+          "displayName": "X-Fade",
+          "description": "Crossfade rate at splice points",
+          "range": "2-200ms",
+          "musicalFunction": "Smooth vs rhythmic reverse"
+        },
+        "Modulation Depth": {
+          "displayName": "Modulation Depth",
+          "description": "Delay modulation amount",
+          "range": "0-10",
+          "musicalFunction": "Reverse effect movement"
+        }
+      }
+    },
+    "10": {
+      "name": "Tape Echo",
+      "category": "Delay",
+      "description": "Simulates hiss, wow and flutter of analog tape delay",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Saturation": {
+          "displayName": "Saturation",
+          "description": "Tape saturation amount",
+          "range": "0-100%",
+          "musicalFunction": "Magnetic tape distortion"
+        },
+        "Wow & Flutter": {
+          "displayName": "Wow & Flutter",
+          "description": "Tape transport irregularities",
+          "range": "0-100%",
+          "musicalFunction": "Vintage tape character"
+        }
+      }
+    },
+    "11": {
+      "name": "UltraTap",
+      "category": "Delay",
+      "description": "Versatile multi-tap delay-line effect capable of myriad sounds",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mix",
+          "range": "0-100%",
+          "musicalFunction": "Special nonlinear taper"
+        },
+        "Length": {
+          "displayName": "Length",
+          "description": "Total time over which taps are spaced",
+          "range": "0-10 seconds",
+          "musicalFunction": "Tap spacing range"
+        },
+        "Taps": {
+          "displayName": "Taps",
+          "description": "Number of delay taps",
+          "range": "1-64",
+          "musicalFunction": "Tap quantity"
+        },
+        "Predelay": {
+          "displayName": "Predelay",
+          "description": "Time before first tap starts",
+          "range": "0-1 second",
+          "musicalFunction": "Initial delay offset"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Rhythmic spacing of taps",
+          "range": "Negative/Zero/Positive",
+          "musicalFunction": "Speeding up/constant/slowing down feel"
+        },
+        "Taper": {
+          "displayName": "Taper",
+          "description": "Fade of the taps",
+          "range": "Negative/Zero/Positive",
+          "musicalFunction": "Fade up/equal/fade down"
+        }
+      }
+    },
+    "12": {
+      "name": "Vintage Delay",
+      "category": "Delay",
+      "description": "Simulates analog and digital delays from days gone by",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Bits": {
+          "displayName": "Bits",
+          "description": "ADC resolution simulation",
+          "range": "8-16 bits",
+          "musicalFunction": "Vintage digital noise simulation"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Tone control",
+          "range": "Band-limited",
+          "musicalFunction": "Old school delay tone"
+        }
+      }
+    },
+    "13": {
+      "name": "Vintage Echo",
+      "category": "Delay",
+      "description": "Analog echo simulator with authentic tape delay character",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Wow & Flutter": {
+          "displayName": "Wow & Flutter",
+          "description": "Tape transport irregularities",
+          "range": "0-100%",
+          "musicalFunction": "Vintage tape character"
+        },
+        "High Cut": {
+          "displayName": "High Cut",
+          "description": "High frequency filtering",
+          "range": "1kHz-20kHz",
+          "musicalFunction": "Vintage delay tone"
+        }
+      }
+    },
+    "14": {
+      "name": "Shimmer",
+      "category": "Delay",
+      "description": "Delay combined with reverb and pitch shifting for ethereal textures",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Delay Time": {
+          "displayName": "Delay Time",
+          "description": "Delay timing",
+          "range": "0-2000ms",
+          "musicalFunction": "Echo timing"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Delay regeneration",
+          "range": "0-100%",
+          "musicalFunction": "Echo repeats"
+        },
+        "Pitch Shift": {
+          "displayName": "Pitch Shift",
+          "description": "Harmonic shift amount",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Octave/harmony generation"
+        },
+        "Reverb Size": {
+          "displayName": "Reverb Size",
+          "description": "Reverb space size",
+          "range": "Small to Large",
+          "musicalFunction": "Ambient space"
+        },
+        "Shimmer Level": {
+          "displayName": "Shimmer Level",
+          "description": "Pitch-shifted signal level",
+          "range": "0-100%",
+          "musicalFunction": "Harmonic content"
+        }
+      }
+    },
+    "15": {
+      "name": "Swell",
+      "category": "Delay",
+      "description": "Delay with automatic volume swells and smooth fadeins",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Time": {
+          "displayName": "Delay Time",
+          "description": "Delay timing",
+          "range": "0-3000ms",
+          "musicalFunction": "Echo timing"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Delay regeneration",
+          "range": "0-100%",
+          "musicalFunction": "Echo repeats"
+        },
+        "Attack": {
+          "displayName": "Attack",
+          "description": "Volume swell speed",
+          "range": "0-5000ms",
+          "musicalFunction": "Fade-in timing"
+        },
+        "Threshold": {
+          "displayName": "Threshold",
+          "description": "Swell trigger level",
+          "range": "0-100%",
+          "musicalFunction": "Input sensitivity"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Fade-out timing",
+          "range": "0-5000ms",
+          "musicalFunction": "Decay speed"
+        }
+      }
+    },
+    "16": {
+      "name": "Timefactor",
+      "category": "Delay",
+      "description": "Advanced delay effects from the classic Eventide TimeFactor pedal",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Mix": {
+          "displayName": "Delay Mix",
+          "description": "Relative level of Delay A and Delay B",
+          "range": "A-50%-B",
+          "musicalFunction": "Stereo delay balance"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Delay time A",
+          "range": "0-3000ms",
+          "musicalFunction": "Primary delay timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Delay time B",
+          "range": "0-3000ms",
+          "musicalFunction": "Secondary delay timing"
+        },
+        "Feedback A": {
+          "displayName": "Feedback A",
+          "description": "Feedback level A",
+          "range": "0-100%",
+          "musicalFunction": "Delay A repeats"
+        },
+        "Feedback B": {
+          "displayName": "Feedback B",
+          "description": "Feedback level B",
+          "range": "0-100%",
+          "musicalFunction": "Delay B repeats"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Delay time modulation",
+          "range": "0-100%",
+          "musicalFunction": "Chorus-like movement"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Delay tone shaping",
+          "range": "Low/High pass",
+          "musicalFunction": "Echo filtering"
+        }
+      }
+    },
+    "18": {
+      "name": "Arpeggiate",
+      "category": "Delay",
+      "description": "Creates arpeggiated patterns from single notes using multiple delays",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Pattern": {
+          "displayName": "Pattern",
+          "description": "Arpeggio pattern selection",
+          "range": "Various patterns",
+          "musicalFunction": "Rhythmic sequence"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Arpeggio tempo",
+          "range": "60-200 BPM",
+          "musicalFunction": "Pattern timing"
+        },
+        "Pitch 1": {
+          "displayName": "Pitch 1",
+          "description": "First arpeggio note pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Pitch 2": {
+          "displayName": "Pitch 2",
+          "description": "Second arpeggio note pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Pitch 3": {
+          "displayName": "Pitch 3",
+          "description": "Third arpeggio note pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        }
+      }
+    },
+    "19": {
+      "name": "Freeze",
+      "category": "Delay",
+      "description": "Audio capture and infinite sustain with controllable decay",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Frozen signal level"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Playback speed control",
+          "range": "0.25x to 4x",
+          "musicalFunction": "Pitch and timing shift"
+        },
+        "Smooth": {
+          "displayName": "Smooth",
+          "description": "Crossfade smoothness",
+          "range": "0-100%",
+          "musicalFunction": "Loop transition quality"
+        },
+        "Attack": {
+          "displayName": "Attack",
+          "description": "Freeze onset speed",
+          "range": "0-1000ms",
+          "musicalFunction": "Capture timing"
+        },
+        "Release": {
+          "displayName": "Release",
+          "description": "Unfreeze decay time",
+          "range": "0-5000ms",
+          "musicalFunction": "Fade-out speed"
+        },
+        "Trigger": {
+          "displayName": "Trigger",
+          "description": "Freeze activation method",
+          "range": "Manual/Auto",
+          "musicalFunction": "Control method"
+        }
+      }
+    },
+    "20": {
+      "name": "Looper",
+      "category": "Delay",
+      "description": "Real-time loop recording and playback with overdubbing",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Loop level vs dry",
+          "range": "0-100%",
+          "musicalFunction": "Loop playback level"
+        },
+        "Record Level": {
+          "displayName": "Record Level",
+          "description": "Input recording level",
+          "range": "0-100%",
+          "musicalFunction": "Recording sensitivity"
+        },
+        "Playback Speed": {
+          "displayName": "Playback Speed",
+          "description": "Loop playback rate",
+          "range": "0.25x to 4x",
+          "musicalFunction": "Pitch and timing control"
+        },
+        "Fade Time": {
+          "displayName": "Fade Time",
+          "description": "Loop crossfade duration",
+          "range": "0-1000ms",
+          "musicalFunction": "Seamless loop quality"
+        },
+        "Reverse": {
+          "displayName": "Reverse",
+          "description": "Backward playback",
+          "range": "Off/On",
+          "musicalFunction": "Reverse loop playback"
+        },
+        "Overdub Level": {
+          "displayName": "Overdub Level",
+          "description": "Additional layer recording level",
+          "range": "0-100%",
+          "musicalFunction": "Layer accumulation"
+        }
+      }
+    },
+    "21": {
+      "name": "Pong",
+      "category": "Delay",
+      "description": "Ping-pong delay that bounces between left and right channels",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Delay Time": {
+          "displayName": "Delay Time",
+          "description": "Ping-pong timing",
+          "range": "0-3000ms",
+          "musicalFunction": "Bounce timing"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Cross-channel feedback",
+          "range": "0-100%",
+          "musicalFunction": "Bounce repeats"
+        },
+        "Stereo Width": {
+          "displayName": "Stereo Width",
+          "description": "Spatial separation",
+          "range": "0-100%",
+          "musicalFunction": "Left/right spread"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Ping-pong tone",
+          "range": "Low/High pass",
+          "musicalFunction": "Bounce character"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Delay time movement",
+          "range": "0-100%",
+          "musicalFunction": "Dynamic bounce timing"
+        }
+      }
+    },
+    "22": {
+      "name": "Resonator",
+      "category": "Delay",
+      "description": "Tuned resonant delays that create pitched echo effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Resonator level"
+        },
+        "Root Note": {
+          "displayName": "Root Note",
+          "description": "Base pitch for resonances",
+          "range": "C-B chromatic",
+          "musicalFunction": "Fundamental tuning"
+        },
+        "Scale": {
+          "displayName": "Scale",
+          "description": "Musical scale selection",
+          "range": "Major/Minor/Pentatonic/etc",
+          "musicalFunction": "Harmonic content"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Resonance sustain time",
+          "range": "0-10 seconds",
+          "musicalFunction": "Note length"
+        },
+        "Brightness": {
+          "displayName": "Brightness",
+          "description": "High frequency content",
+          "range": "Dark-Bright",
+          "musicalFunction": "Tonal character"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Stereo resonance distribution",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial imaging"
+        }
+      }
+    },
+    "17": {
+      "name": "WeedWacker",
+      "category": "Distortion",
+      "description": "Two-stage overdrive with noise gate, inspired by famous green overdrive",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Global mix level of entire WeedWacker effect",
+          "range": "0-100%",
+          "musicalFunction": "Clean/dirty balance"
+        },
+        "Drive": {
+          "displayName": "Drive",
+          "description": "Overdrive amount for primary stage",
+          "range": "0-100%",
+          "musicalFunction": "Saturation intensity"
+        },
+        "Tone": {
+          "displayName": "Tone",
+          "description": "Frequency response control",
+          "range": "Dark-Bright",
+          "musicalFunction": "Tonal character"
+        },
+        "Gate": {
+          "displayName": "Gate",
+          "description": "Noise gate threshold",
+          "range": "-90dB to 0dB",
+          "musicalFunction": "Gate sensitivity (-90dB = off)"
+        },
+        "Stage 2": {
+          "displayName": "Stage 2",
+          "description": "Second overdrive stage activation",
+          "range": "Off/On",
+          "musicalFunction": "Additional gain stage"
+        },
+        "Level": {
+          "displayName": "Level",
+          "description": "Output level control",
+          "range": "0-100%",
+          "musicalFunction": "Final output volume"
+        }
+      }
+    },
+    "23": {
+      "name": "Crystals",
+      "category": "Harmonizer",
+      "description": "Classic Eventide effect combining twin reverse pitch shifters, delays, feedback, and reverb",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry mixer",
+          "range": "0-100%",
+          "musicalFunction": "100% is all wet signal"
+        },
+        "Pitch A/B Mix": {
+          "displayName": "Pitch A/B Mix",
+          "description": "Ratio of Pitch A to Pitch B level",
+          "range": "A-50%-B",
+          "musicalFunction": "Pitch voice balance"
+        },
+        "Pitch Shift A": {
+          "displayName": "Pitch Shift A",
+          "description": "Pitch shift amount A",
+          "range": "Cents",
+          "musicalFunction": "Fine pitch control (1 cent = 1/100th semitone)"
+        },
+        "Pitch Shift B": {
+          "displayName": "Pitch Shift B",
+          "description": "Pitch shift amount B",
+          "range": "Cents",
+          "musicalFunction": "Fine pitch control (1 cent = 1/100th semitone)"
+        },
+        "Reverse Delay A": {
+          "displayName": "Reverse Delay A",
+          "description": "Reverse time buffer A length",
+          "range": "ms or tempo sync",
+          "musicalFunction": "Climbing/cascading delays"
+        },
+        "Reverse Delay B": {
+          "displayName": "Reverse Delay B",
+          "description": "Reverse time buffer B length",
+          "range": "ms or tempo sync",
+          "musicalFunction": "Crystalline textures"
+        }
+      }
+    },
+    "24": {
+      "name": "Diatonic",
+      "category": "Harmonizer",
+      "description": "Diatonic pitch shifting that follows musical scales and keys",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Harmonized signal level"
+        },
+        "Key": {
+          "displayName": "Key",
+          "description": "Musical key selection",
+          "range": "C-B chromatic",
+          "musicalFunction": "Root key for scale"
+        },
+        "Scale": {
+          "displayName": "Scale",
+          "description": "Scale type selection",
+          "range": "Major/Minor/Dorian/etc",
+          "musicalFunction": "Harmonic intervals"
+        },
+        "Voice 1": {
+          "displayName": "Voice 1",
+          "description": "First harmony interval",
+          "range": "Scale degrees",
+          "musicalFunction": "Primary harmony voice"
+        },
+        "Voice 2": {
+          "displayName": "Voice 2",
+          "description": "Second harmony interval",
+          "range": "Scale degrees",
+          "musicalFunction": "Secondary harmony voice"
+        },
+        "Delay": {
+          "displayName": "Delay",
+          "description": "Harmony voice delay",
+          "range": "0-500ms",
+          "musicalFunction": "Voice timing offset"
+        }
+      }
+    },
+    "25": {
+      "name": "H910",
+      "category": "Harmonizer",
+      "description": "Classic Eventide H910 harmonizer with vintage pitch shifting character",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Pitch shifted signal level"
+        },
+        "Pitch": {
+          "displayName": "Pitch",
+          "description": "Pitch shift amount",
+          "range": "-1 octave to +1 octave",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Anti-Feedback": {
+          "displayName": "Anti-Feedback",
+          "description": "Feedback suppression",
+          "range": "0-100%",
+          "musicalFunction": "Prevents oscillation"
+        },
+        "Delay": {
+          "displayName": "Delay",
+          "description": "Output delay time",
+          "range": "0-500ms",
+          "musicalFunction": "Voice timing"
+        }
+      }
+    },
+    "26": {
+      "name": "H949",
+      "category": "Harmonizer",
+      "description": "Legendary H949 harmonizer with dual pitch engines and reverse mode",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Pitch shifted signal level"
+        },
+        "Pitch A": {
+          "displayName": "Pitch A",
+          "description": "Voice A pitch shift",
+          "range": "-2 octaves to +2 octaves",
+          "musicalFunction": "Primary harmony voice"
+        },
+        "Pitch B": {
+          "displayName": "Pitch B",
+          "description": "Voice B pitch shift",
+          "range": "-2 octaves to +2 octaves",
+          "musicalFunction": "Secondary harmony voice"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Voice A delay time",
+          "range": "0-500ms",
+          "musicalFunction": "Voice A timing"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Voice B delay time",
+          "range": "0-500ms",
+          "musicalFunction": "Voice B timing"
+        },
+        "Reverse": {
+          "displayName": "Reverse",
+          "description": "Reverse playback mode",
+          "range": "Off/On",
+          "musicalFunction": "Backward pitch shifting"
+        }
+      }
+    },
+    "27": {
+      "name": "HarModulator",
+      "category": "Harmonizer",
+      "description": "Harmonizer combined with modulation effects for complex textures",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Pitch Shift": {
+          "displayName": "Pitch Shift",
+          "description": "Harmony interval",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic content"
+        },
+        "Modulation Type": {
+          "displayName": "Modulation Type",
+          "description": "Modulation algorithm",
+          "range": "Chorus/Flanger/Phaser",
+          "musicalFunction": "Modulation character"
+        },
+        "Mod Depth": {
+          "displayName": "Mod Depth",
+          "description": "Modulation intensity",
+          "range": "0-100%",
+          "musicalFunction": "Movement amount"
+        },
+        "Mod Rate": {
+          "displayName": "Mod Rate",
+          "description": "Modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Modulation frequency"
+        }
+      }
+    },
+    "28": {
+      "name": "HarPeggiator",
+      "category": "Harmonizer",
+      "description": "Creates arpeggiated patterns from harmonized voices",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Arpeggio level"
+        },
+        "Pattern": {
+          "displayName": "Pattern",
+          "description": "Arpeggio sequence",
+          "range": "Various patterns",
+          "musicalFunction": "Rhythmic sequence"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Arpeggio tempo",
+          "range": "60-200 BPM",
+          "musicalFunction": "Pattern timing"
+        },
+        "Voice 1": {
+          "displayName": "Voice 1",
+          "description": "First arpeggio pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Voice 2": {
+          "displayName": "Voice 2",
+          "description": "Second arpeggio pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Voice 3": {
+          "displayName": "Voice 3",
+          "description": "Third arpeggio pitch",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic interval"
+        }
+      }
+    },
+    "29": {
+      "name": "MicroPitch",
+      "category": "Harmonizer",
+      "description": "Fine-resolution pitch shifter for doubling and chorusing effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Overall effect intensity"
+        },
+        "Pitch A": {
+          "displayName": "Pitch A",
+          "description": "Voice A detune",
+          "range": "-50 to +50 cents",
+          "musicalFunction": "Fine pitch adjustment"
+        },
+        "Pitch B": {
+          "displayName": "Pitch B",
+          "description": "Voice B detune",
+          "range": "-50 to +50 cents",
+          "musicalFunction": "Fine pitch adjustment"
+        },
+        "Delay A": {
+          "displayName": "Delay A",
+          "description": "Voice A delay",
+          "range": "0-500ms",
+          "musicalFunction": "Voice A timing offset"
+        },
+        "Delay B": {
+          "displayName": "Delay B",
+          "description": "Voice B delay",
+          "range": "0-500ms",
+          "musicalFunction": "Voice B timing offset"
+        },
+        "Mod Depth": {
+          "displayName": "Mod Depth",
+          "description": "Pitch modulation depth",
+          "range": "0-100%",
+          "musicalFunction": "Chorus-like movement"
+        },
+        "Mod Rate": {
+          "displayName": "Mod Rate",
+          "description": "Modulation speed",
+          "range": "0.1-10Hz",
+          "musicalFunction": "Modulation frequency"
+        }
+      }
+    },
+    "30": {
+      "name": "Octaver",
+      "category": "Harmonizer",
+      "description": "Octave doubling and sub-octave generation for thickening sounds",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Octave effect level"
+        },
+        "Sub Octave": {
+          "displayName": "Sub Octave",
+          "description": "Lower octave level",
+          "range": "0-100%",
+          "musicalFunction": "Bass enhancement"
+        },
+        "Octave Up": {
+          "displayName": "Octave Up",
+          "description": "Higher octave level",
+          "range": "0-100%",
+          "musicalFunction": "Brightness enhancement"
+        },
+        "Tracking": {
+          "displayName": "Tracking",
+          "description": "Pitch tracking sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Accuracy vs responsiveness"
+        },
+        "Filter": {
+          "displayName": "Filter",
+          "description": "Octave tone shaping",
+          "range": "Low/High pass",
+          "musicalFunction": "Octave character"
+        }
+      }
+    },
+    "31": {
+      "name": "PitchFlex",
+      "category": "Harmonizer",
+      "description": "Flexible pitch shifting with real-time control and expression",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Pitch shifted signal level"
+        },
+        "Pitch Shift": {
+          "displayName": "Pitch Shift",
+          "description": "Base pitch shift amount",
+          "range": "-2 octaves to +2 octaves",
+          "musicalFunction": "Harmonic interval"
+        },
+        "Flex Range": {
+          "displayName": "Flex Range",
+          "description": "Expression control range",
+          "range": "±1 to ±12 semitones",
+          "musicalFunction": "Real-time pitch bend range"
+        },
+        "Tracking": {
+          "displayName": "Tracking",
+          "description": "Pitch tracking mode",
+          "range": "Fast/Medium/Slow",
+          "musicalFunction": "Response speed vs accuracy"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Pitch shift feedback",
+          "range": "0-100%",
+          "musicalFunction": "Regenerative harmonies"
+        }
+      }
+    },
+    "32": {
+      "name": "PolyFlex",
+      "category": "Harmonizer",
+      "description": "Polyphonic pitch shifting with chord recognition and flexible voicing",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Harmonized signal level"
+        },
+        "Shift Mode": {
+          "displayName": "Shift Mode",
+          "description": "Pitch shifting algorithm",
+          "range": "Classic/Modern/Smooth",
+          "musicalFunction": "Character and quality"
+        },
+        "Voice 1": {
+          "displayName": "Voice 1",
+          "description": "First harmony voice",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Primary harmony"
+        },
+        "Voice 2": {
+          "displayName": "Voice 2",
+          "description": "Second harmony voice",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Secondary harmony"
+        },
+        "Voice 3": {
+          "displayName": "Voice 3",
+          "description": "Third harmony voice",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Tertiary harmony"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Stereo voice positioning",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial distribution"
+        }
+      }
+    },
+    "33": {
+      "name": "Polyphony",
+      "category": "Harmonizer",
+      "description": "Advanced polyphonic harmonizer with intelligent voice leading",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Polyphonic harmony level"
+        },
+        "Key": {
+          "displayName": "Key",
+          "description": "Musical key",
+          "range": "C-B chromatic",
+          "musicalFunction": "Harmonic center"
+        },
+        "Scale": {
+          "displayName": "Scale",
+          "description": "Scale selection",
+          "range": "Major/Minor/Modal scales",
+          "musicalFunction": "Available intervals"
+        },
+        "Voices": {
+          "displayName": "Voices",
+          "description": "Number of harmony voices",
+          "range": "1-4 voices",
+          "musicalFunction": "Harmonic density"
+        },
+        "Voicing": {
+          "displayName": "Voicing",
+          "description": "Chord voicing style",
+          "range": "Close/Open/Wide",
+          "musicalFunction": "Harmonic spacing"
+        }
+      }
+    },
+    "34": {
+      "name": "Prism Shift",
+      "category": "Harmonizer",
+      "description": "Multi-tap pitch shifter creating prismatic harmonic effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Prismatic effect level"
+        },
+        "Root Shift": {
+          "displayName": "Root Shift",
+          "description": "Base pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Fundamental shift"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Harmonic interval spread",
+          "range": "Narrow-Wide",
+          "musicalFunction": "Spectral distribution"
+        },
+        "Voices": {
+          "displayName": "Voices",
+          "description": "Number of shifted voices",
+          "range": "2-8 voices",
+          "musicalFunction": "Harmonic complexity"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Voice pitch modulation",
+          "range": "0-100%",
+          "musicalFunction": "Shimmer and movement"
+        }
+      }
+    },
+    "35": {
+      "name": "Quadravox",
+      "category": "Harmonizer",
+      "description": "Four-voice harmonizer with independent pitch and timing control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Four-voice harmony level"
+        },
+        "Voice 1 Pitch": {
+          "displayName": "Voice 1 Pitch",
+          "description": "First voice pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Primary harmony voice"
+        },
+        "Voice 2 Pitch": {
+          "displayName": "Voice 2 Pitch",
+          "description": "Second voice pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Secondary harmony voice"
+        },
+        "Voice 3 Pitch": {
+          "displayName": "Voice 3 Pitch",
+          "description": "Third voice pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Tertiary harmony voice"
+        },
+        "Voice 4 Pitch": {
+          "displayName": "Voice 4 Pitch",
+          "description": "Fourth voice pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Quaternary harmony voice"
+        },
+        "Pan Spread": {
+          "displayName": "Pan Spread",
+          "description": "Stereo voice positioning",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial voice distribution"
+        }
+      }
+    },
+    "36": {
+      "name": "Resonator",
+      "category": "Harmonizer",
+      "description": "Tuned resonant filters that create pitched harmonic content",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Resonator effect level"
+        },
+        "Root Note": {
+          "displayName": "Root Note",
+          "description": "Base pitch for resonances",
+          "range": "C-B chromatic",
+          "musicalFunction": "Fundamental tuning"
+        },
+        "Scale": {
+          "displayName": "Scale",
+          "description": "Musical scale selection",
+          "range": "Major/Minor/Pentatonic/etc",
+          "musicalFunction": "Harmonic content"
+        },
+        "Decay": {
+          "displayName": "Decay",
+          "description": "Resonance sustain time",
+          "range": "0-10 seconds",
+          "musicalFunction": "Note length"
+        },
+        "Brightness": {
+          "displayName": "Brightness",
+          "description": "High frequency content",
+          "range": "Dark-Bright",
+          "musicalFunction": "Tonal character"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Stereo resonance distribution",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial imaging"
+        }
+      }
+    },
+    "37": {
+      "name": "Harmonizer+",
+      "category": "Harmonizer",
+      "description": "Enhanced harmonizer with advanced pitch tracking and voice control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Harmonized signal level"
+        },
+        "Pitch 1": {
+          "displayName": "Pitch 1",
+          "description": "First voice pitch shift",
+          "range": "-24 to +24 semitones",
+          "musicalFunction": "Primary harmony interval"
+        },
+        "Pitch 2": {
+          "displayName": "Pitch 2",
+          "description": "Second voice pitch shift",
+          "range": "-24 to +24 semitones",
+          "musicalFunction": "Secondary harmony interval"
+        },
+        "Tracking": {
+          "displayName": "Tracking",
+          "description": "Pitch tracking quality",
+          "range": "Fast/Medium/Smooth",
+          "musicalFunction": "Response vs quality tradeoff"
+        },
+        "Glide": {
+          "displayName": "Glide",
+          "description": "Pitch change smoothing",
+          "range": "0-100%",
+          "musicalFunction": "Portamento effect"
+        }
+      }
+    },
+    "38": {
+      "name": "VocalShift",
+      "category": "Harmonizer",
+      "description": "Optimized pitch shifting for vocal harmonies with formant control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Vocal harmony level"
+        },
+        "Pitch": {
+          "displayName": "Pitch",
+          "description": "Vocal pitch shift",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Vocal harmony interval"
+        },
+        "Formant": {
+          "displayName": "Formant",
+          "description": "Vocal character preservation",
+          "range": "-100% to +100%",
+          "musicalFunction": "Natural vocal sound"
+        },
+        "Gender": {
+          "displayName": "Gender",
+          "description": "Gender characteristic shift",
+          "range": "Male-Female",
+          "musicalFunction": "Vocal character change"
+        },
+        "Tracking": {
+          "displayName": "Tracking",
+          "description": "Vocal tracking sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Accuracy for vocal input"
+        }
+      }
+    },
+    "39": {
+      "name": "VocalShiftMIDI",
+      "category": "Harmonizer",
+      "description": "MIDI-controlled vocal harmonizer with real-time pitch tracking",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Vocal harmony level"
+        },
+        "MIDI Mode": {
+          "displayName": "MIDI Mode",
+          "description": "MIDI control method",
+          "range": "Chromatic/Scale/Chord",
+          "musicalFunction": "Harmony generation style"
+        },
+        "Formant": {
+          "displayName": "Formant",
+          "description": "Vocal character control",
+          "range": "-100% to +100%",
+          "musicalFunction": "Natural vocal preservation"
+        },
+        "Voices": {
+          "displayName": "Voices",
+          "description": "Number of harmony voices",
+          "range": "1-4 voices",
+          "musicalFunction": "Harmonic complexity"
+        },
+        "Spread": {
+          "displayName": "Spread",
+          "description": "Voice stereo positioning",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial vocal distribution"
+        }
+      }
+    },
+    "40": {
+      "name": "VocalTune",
+      "category": "Harmonizer",
+      "description": "Auto-tune style pitch correction with vocal enhancement",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Tuned vocal level"
+        },
+        "Correction": {
+          "displayName": "Correction",
+          "description": "Pitch correction strength",
+          "range": "0-100%",
+          "musicalFunction": "Tuning intensity"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Correction response time",
+          "range": "Slow-Instant",
+          "musicalFunction": "Natural vs robotic sound"
+        },
+        "Key": {
+          "displayName": "Key",
+          "description": "Musical key for correction",
+          "range": "C-B chromatic",
+          "musicalFunction": "Target pitch center"
+        },
+        "Scale": {
+          "displayName": "Scale",
+          "description": "Scale for pitch targets",
+          "range": "Major/Minor/Chromatic",
+          "musicalFunction": "Available pitch targets"
+        }
+      }
+    },
+    "41": {
+      "name": "Quadravox+",
+      "category": "Harmonizer",
+      "description": "Enhanced four-voice harmonizer with advanced control and modulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Four-voice harmony level"
+        },
+        "Voice 1": {
+          "displayName": "Voice 1",
+          "description": "First voice settings",
+          "range": "Pitch/Level/Pan",
+          "musicalFunction": "Primary harmony voice"
+        },
+        "Voice 2": {
+          "displayName": "Voice 2",
+          "description": "Second voice settings",
+          "range": "Pitch/Level/Pan",
+          "musicalFunction": "Secondary harmony voice"
+        },
+        "Voice 3": {
+          "displayName": "Voice 3",
+          "description": "Third voice settings",
+          "range": "Pitch/Level/Pan",
+          "musicalFunction": "Tertiary harmony voice"
+        },
+        "Voice 4": {
+          "displayName": "Voice 4",
+          "description": "Fourth voice settings",
+          "range": "Pitch/Level/Pan",
+          "musicalFunction": "Quaternary harmony voice"
+        },
+        "Modulation": {
+          "displayName": "Modulation",
+          "description": "Voice modulation control",
+          "range": "0-100%",
+          "musicalFunction": "Dynamic voice movement"
+        }
+      }
+    },
+    "42": {
+      "name": "Looper",
+      "category": "Delay",
+      "description": "Real-time loop recording and playback with overdubbing capabilities",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Loop level vs dry signal",
+          "range": "0-100%",
+          "musicalFunction": "Loop playback level"
+        },
+        "Record Level": {
+          "displayName": "Record Level",
+          "description": "Input recording sensitivity",
+          "range": "0-100%",
+          "musicalFunction": "Recording gain"
+        },
+        "Loop Length": {
+          "displayName": "Loop Length",
+          "description": "Maximum loop duration",
+          "range": "1-60 seconds",
+          "musicalFunction": "Loop capacity"
+        },
+        "Playback Speed": {
+          "displayName": "Playback Speed",
+          "description": "Loop playback rate",
+          "range": "0.25x to 4x",
+          "musicalFunction": "Pitch and timing control"
+        },
+        "Overdub Level": {
+          "displayName": "Overdub Level",
+          "description": "Layer recording level",
+          "range": "0-100%",
+          "musicalFunction": "Layer accumulation"
+        },
+        "Reverse": {
+          "displayName": "Reverse",
+          "description": "Backward playback",
+          "range": "Off/On",
+          "musicalFunction": "Reverse loop playback"
+        }
+      }
+    },
+    "43": {
+      "name": "Chorus",
+      "category": "Modulation",
+      "description": "Classic chorus effect with multiple voices and rich modulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Chorus effect intensity"
+        },
+        "Rate": {
+          "displayName": "Rate",
+          "description": "Modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "LFO frequency"
+        },
+        "Depth": {
+          "displayName": "Depth",
+          "description": "Modulation intensity",
+          "range": "0-100%",
+          "musicalFunction": "Chorus movement amount"
+        },
+        "Voices": {
+          "displayName": "Voices",
+          "description": "Number of chorus voices",
+          "range": "1-4 voices",
+          "musicalFunction": "Chorus thickness"
+        },
+        "Stereo Width": {
+          "displayName": "Stereo Width",
+          "description": "Spatial spread",
+          "range": "Mono-Wide",
+          "musicalFunction": "Stereo imaging"
+        },
+        "Tone": {
+          "displayName": "Tone",
+          "description": "Frequency response",
+          "range": "Dark-Bright",
+          "musicalFunction": "Chorus character"
+        }
+      }
+    },
+    "44": {
+      "name": "Even-Vibe",
+      "category": "Modulation",
+      "description": "Vintage univibe-style rotating speaker simulation",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Vibe effect intensity"
+        },
+        "Speed": {
+          "displayName": "Speed",
+          "description": "Rotation speed",
+          "range": "Slow-Fast",
+          "musicalFunction": "Vibe modulation rate"
+        },
+        "Intensity": {
+          "displayName": "Intensity",
+          "description": "Effect depth",
+          "range": "0-100%",
+          "musicalFunction": "Vibe movement amount"
+        },
+        "Mode": {
+          "displayName": "Mode",
+          "description": "Operating mode",
+          "range": "Chorus/Vibrato",
+          "musicalFunction": "Vibe character"
+        },
+        "Bias": {
+          "displayName": "Bias",
+          "description": "Modulation offset",
+          "range": "-100% to +100%",
+          "musicalFunction": "Asymmetric modulation"
+        }
+      }
+    },
+    "46": {
+      "name": "Flanger",
+      "category": "Modulation",
+      "description": "Classic flanging effect with swept delay line and feedback",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Flanger effect intensity"
+        },
+        "Rate": {
+          "displayName": "Rate",
+          "description": "Sweep speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "LFO frequency"
+        },
+        "Depth": {
+          "displayName": "Depth",
+          "description": "Sweep range",
+          "range": "0-100%",
+          "musicalFunction": "Flange movement amount"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Resonance amount",
+          "range": "-100% to +100%",
+          "musicalFunction": "Flange intensity and character"
+        },
+        "Manual": {
+          "displayName": "Manual",
+          "description": "Sweep center position",
+          "range": "0-100%",
+          "musicalFunction": "Delay line offset"
+        },
+        "Stereo": {
+          "displayName": "Stereo",
+          "description": "Stereo width",
+          "range": "Mono-Wide",
+          "musicalFunction": "Spatial flanging"
+        }
+      }
+    },
+    "47": {
+      "name": "Harmadillo",
+      "category": "Modulation",
+      "description": "Harmonized modulation combining pitch shifting with tremolo effects",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Effect intensity"
+        },
+        "Pitch": {
+          "displayName": "Pitch",
+          "description": "Harmony interval",
+          "range": "-12 to +12 semitones",
+          "musicalFunction": "Harmonic content"
+        },
+        "Tremolo Rate": {
+          "displayName": "Tremolo Rate",
+          "description": "Amplitude modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Tremolo frequency"
+        },
+        "Tremolo Depth": {
+          "displayName": "Tremolo Depth",
+          "description": "Amplitude modulation amount",
+          "range": "0-100%",
+          "musicalFunction": "Volume modulation"
+        },
+        "Pan": {
+          "displayName": "Pan",
+          "description": "Stereo positioning",
+          "range": "L-Center-R",
+          "musicalFunction": "Spatial placement"
+        }
+      }
+    },
+    "48": {
+      "name": "Instant Flanger",
+      "category": "Modulation",
+      "description": "Real-time controllable flanger with manual sweep control",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Flanger effect intensity"
+        },
+        "Manual": {
+          "displayName": "Manual",
+          "description": "Manual sweep position",
+          "range": "0-100%",
+          "musicalFunction": "Real-time delay control"
+        },
+        "Feedback": {
+          "displayName": "Feedback",
+          "description": "Resonance amount",
+          "range": "-100% to +100%",
+          "musicalFunction": "Flange character"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Auto-sweep speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Automatic modulation"
+        },
+        "LFO Depth": {
+          "displayName": "LFO Depth",
+          "description": "Auto-sweep amount",
+          "range": "0-100%",
+          "musicalFunction": "LFO modulation depth"
+        }
+      }
+    },
+    "49": {
+      "name": "Blackhole",
+      "category": "Reverb",
+      "description": "Infinite reverb and delay - otherworldly ambient textures",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Wet/dry balance",
+          "range": "0-100%",
+          "musicalFunction": "Ambient effect intensity"
+        },
+        "Gravity": {
+          "displayName": "Gravity",
+          "description": "Decay time control",
+          "range": "Short to Infinite",
+          "musicalFunction": "Reverb sustain and character"
+        },
+        "Size": {
+          "displayName": "Size",
+          "description": "Reverb space size",
+          "range": "Small to Massive",
+          "musicalFunction": "Spatial dimension"
+        },
+        "Pre Delay": {
+          "displayName": "Pre Delay",
+          "description": "Delay before reverb section",
+          "range": "0-2000ms",
+          "musicalFunction": "Initial echo before reverb"
+        },
+        "Low Level": {
+          "displayName": "Low Level",
+          "description": "Low frequency level in reverb tail",
+          "range": "Cut/Boost",
+          "musicalFunction": "Bass content in reverb"
+        },
+        "High Level": {
+          "displayName": "High Level",
+          "description": "High frequency level in reverb tail",
+          "range": "Cut/Boost",
+          "musicalFunction": "Treble content in reverb"
+        }
+      }
+    },
+    "63": {
+      "name": "HotSawz",
+      "category": "Synth",
+      "description": "Classic subtractive synthesis using saw waves with 6 oscillators",
+      "parameters": {
+        "Mix": {
+          "displayName": "Mix",
+          "description": "Four ranges mixing dry signal with oscillator combinations",
+          "range": "Sub/S+R/All/R+U",
+          "musicalFunction": "Mix control with oscillator selection"
+        },
+        "Sub Mix": {
+          "displayName": "Sub Mix",
+          "description": "Lower octave oscillators only",
+          "range": "0-100%",
+          "musicalFunction": "Sub-octave synthesis"
+        },
+        "Filter Cutoff": {
+          "displayName": "Filter Cutoff",
+          "description": "Low-pass filter frequency",
+          "range": "20Hz-20kHz",
+          "musicalFunction": "Brightness and tone shaping"
+        },
+        "Resonance": {
+          "displayName": "Resonance",
+          "description": "Filter resonance amount",
+          "range": "0-100%",
+          "musicalFunction": "Filter character and emphasis"
+        },
+        "LFO Rate": {
+          "displayName": "LFO Rate",
+          "description": "Modulation speed",
+          "range": "0.1-20Hz",
+          "musicalFunction": "Vibrato and movement"
+        },
+        "Envelope Amount": {
+          "displayName": "Envelope Amount",
+          "description": "Envelope depth to destinations",
+          "range": "-100 to +100%",
+          "musicalFunction": "Dynamic response to playing"
+        }
+      }
+    }
+  }
+}

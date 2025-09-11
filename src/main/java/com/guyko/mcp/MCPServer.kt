@@ -783,9 +783,10 @@ class MCPServer(
             val programBytes = EventideH90PresetGenerator.generatePreset(program)
             val base64Data = java.util.Base64.getEncoder().encodeToString(programBytes)
             
-            // Create actual file
+            // Create actual file in Documents directory
             val fileName = "${name.replace(" ", "_").replace("[^A-Za-z0-9_-]".toRegex(), "")}.pgm90"
-            val file = java.io.File(fileName)
+            val documentsDir = java.io.File(System.getProperty("user.home"), "Documents")
+            val file = java.io.File(documentsDir, fileName)
             file.writeBytes(programBytes)
             
             // Get algorithm info for response
@@ -802,10 +803,10 @@ class MCPServer(
                         appendLine("Algorithm B: ${algorithmBInfo?.name ?: "Unknown"} (${algorithmBInfo?.category ?: "N/A"})")
                         appendLine("Routing: ${routing.mode}")
                         appendLine("File Size: ${programBytes.size} bytes")
-                        appendLine("📁 File Created: $fileName")
+                        appendLine("📁 File Created: ${file.absolutePath}")
                         appendLine()
                         appendLine("✅ Ready to upload to your H90!")
-                        appendLine("The .pgm90 file has been saved in the current directory.")
+                        appendLine("The .pgm90 file has been saved to your Documents folder.")
                         appendLine()
                         appendLine("Base64 Data (for manual creation):")
                         appendLine(base64Data)
