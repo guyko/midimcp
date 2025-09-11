@@ -109,26 +109,180 @@ object EventideH90PresetGenerator {
      * Generates a pgm90 preset file by copying and modifying a working preset
      */
     fun generatePreset(preset: H90Preset): ByteArray {
-        // Use working template but fix algorithm IDs properly
-        return modifyWorkingPreset(preset)
+        return try {
+            // Translate generic parameter names to H9 Control format before generation
+            val translatedPreset = translateParameters(preset)
+            
+            // Use working template but fix algorithm IDs properly
+            modifyWorkingPreset(translatedPreset)
+        } catch (e: Exception) {
+            println("Error during preset generation: ${e.message}")
+            println("Falling back to minimal preset copy with name change only")
+            
+            // Fallback: just copy a working preset and change the name
+            createMinimalWorkingPreset(preset.name)
+        }
+    }
+    
+    /**
+     * Fallback method: create a working preset by just copying a template and changing the name
+     */
+    private fun createMinimalWorkingPreset(presetName: String): ByteArray {
+        val presetsDir = java.io.File(System.getProperty("user.home") + "/Downloads/h90/presets")
+        val workingPreset = presetsDir.listFiles()?.firstOrNull { it.name.endsWith(".pgm90") }
+        
+        if (workingPreset == null) {
+            throw RuntimeException("No working H90 preset found for fallback. Please place a .pgm90 file in ~/Downloads/h90/presets/")
+        }
+        
+        println("Creating minimal preset from: ${workingPreset.name}")
+        val templateBytes = workingPreset.readBytes()
+        
+        // Only change the preset name, keep everything else intact
+        return replacePresetName(templateBytes, presetName)
+    }
+    
+    /**
+     * Translate generic parameter names to actual H9 Control parameter names
+     */
+    private fun translateParameters(preset: H90Preset): H90Preset {
+        return preset.copy(
+            algorithmA = translateAlgorithmParameters(preset.algorithmA),
+            algorithmB = translateAlgorithmParameters(preset.algorithmB)
+        )
+    }
+    
+    private fun translateAlgorithmParameters(algorithm: H90Algorithm): H90Algorithm {
+        val algorithmInfo = EventideH90AlgorithmMappings.getAlgorithmInfo(algorithm.algorithmNumber)
+        if (algorithmInfo == null) {
+            println("Warning: No algorithm info found for algorithm ${algorithm.algorithmNumber}")
+            return algorithm
+        }
+        
+        val translatedParams = mutableMapOf<String, Any>()
+        
+        // Get the expected H9 parameter names for this algorithm
+        val expectedParams = algorithmInfo.keyParameters.keys
+        
+        // Translate common generic parameter names to H9 Control names
+        algorithm.parameters.forEach { (genericName, value) ->
+            val h9ParamName = translateParameterName(genericName, expectedParams, algorithm.algorithmName)
+            if (h9ParamName != null) {
+                translatedParams[h9ParamName] = value
+                println("Translated parameter: $genericName -> $h9ParamName = $value")
+            } else {
+                println("Warning: Could not translate parameter '$genericName' for algorithm ${algorithm.algorithmName}")
+                // Keep the original name as fallback
+                translatedParams[genericName] = value
+            }
+        }
+        
+        return algorithm.copy(parameters = translatedParams)
+    }
+    
+    /**
+     * Translate generic parameter names to specific H9 Control parameter names
+     */
+    private fun translateParameterName(genericName: String, expectedParams: Set<String>, algorithmName: String): String? {
+        // Direct match first (case-insensitive)
+        val directMatch = expectedParams.find { it.equals(genericName, ignoreCase = true) }
+        if (directMatch != null) return directMatch
+        
+        // Common parameter name translations
+        val commonTranslations = mapOf(
+            "mix" to listOf("Mix"),
+            "feedback" to listOf("Feedback", "Feedback A", "Fdbk", "Fdbk A"),
+            "delay" to listOf("Delay A", "Time", "Delay", "Delay Time"),
+            "time" to listOf("Time", "Delay A", "Delay", "Delay Time"),
+            "tone" to listOf("Tone", "Filter", "High Cut", "Low Cut"),
+            "depth" to listOf("Depth", "Intensity", "Mod Depth", "Modulation Depth"),
+            "rate" to listOf("Rate", "Speed", "LFO Rate", "Modulation Rate"),
+            "speed" to listOf("Speed", "Rate", "LFO Rate"),
+            "pitch" to listOf("Pitch", "Shift", "Pitch Shift", "Coarse", "Fine"),
+            "steps" to listOf("Steps", "Taps", "Divisions"),
+            "swing" to listOf("Swing", "Rhythm", "Pattern"),
+            "pattern" to listOf("Pattern", "Sequence", "Steps")
+        )
+        
+        // Algorithm-specific translations
+        val algorithmSpecificTranslations = when (algorithmName) {
+            "Vintage Delay" -> mapOf(
+                "delay" to "Delay A",
+                "feedback" to "Feedback A", 
+                "tone" to "Filter A",
+                "mix" to "Mix"
+            )
+            "TremoloPan" -> mapOf(
+                "rate" to "Speed",
+                "depth" to "Intensity",
+                "speed" to "Speed",
+                "mix" to "Mix"
+            )
+            else -> emptyMap()
+        }
+        
+        // Try algorithm-specific translation first
+        algorithmSpecificTranslations[genericName.lowercase()]?.let { specificParam ->
+            if (expectedParams.contains(specificParam)) {
+                return specificParam
+            }
+        }
+        
+        // Try common translations
+        commonTranslations[genericName.lowercase()]?.forEach { possibleMatch ->
+            if (expectedParams.contains(possibleMatch)) {
+                return possibleMatch
+            }
+        }
+        
+        // Try fuzzy matching (contains)
+        expectedParams.forEach { expectedParam ->
+            if (expectedParam.contains(genericName, ignoreCase = true) ||
+                genericName.contains(expectedParam, ignoreCase = true)) {
+                return expectedParam
+            }
+        }
+        
+        return null
     }
     
     private fun modifyWorkingPreset(preset: H90Preset): ByteArray {
-        // Use the working dft.pgm90 file as template (has correct Crystals + TremoloPan algorithms)
-        val templatePath = System.getProperty("user.home") + "/Documents/dft.pgm90"
-        val templateFile = java.io.File(templatePath)
+        // Use a simple, single-algorithm preset as template for more reliable modification
+        val presetsDir = java.io.File(System.getProperty("user.home") + "/Downloads/h90/presets")
         
-        if (!templateFile.exists()) {
-            // Fallback to any working preset if dft.pgm90 not found
-            val presetsDir = java.io.File(System.getProperty("user.home") + "/Downloads/h90/presets")
-            val workingPreset = presetsDir.listFiles()?.firstOrNull { it.name.endsWith(".pgm90") }
-            if (workingPreset == null) {
-                throw RuntimeException("No working H90 preset found to use as template. Please ensure dft.pgm90 exists in Documents folder.")
+        // Prefer single-algorithm presets for simpler modification
+        val preferredTemplates = listOf(
+            "TDrive Delay.pgm90",      // Single Digital Delay algorithm
+            "Autowah.pgm90",           // Single Q-Wah algorithm  
+            "Clean Ambient.pgm90",     // Single Digital Delay algorithm
+            "Teacher Preacher.pgm90"   // Single MicroPitch algorithm
+        )
+        
+        var workingPreset: java.io.File? = null
+        
+        // Try preferred templates first
+        for (templateName in preferredTemplates) {
+            val candidate = java.io.File(presetsDir, templateName)
+            if (candidate.exists()) {
+                workingPreset = candidate
+                break
             }
-            return modifyPresetFile(workingPreset.readBytes(), preset)
         }
         
-        return modifyPresetFile(templateFile.readBytes(), preset)
+        // Fallback to any .pgm90 file
+        if (workingPreset == null) {
+            workingPreset = presetsDir.listFiles()?.firstOrNull { it.name.endsWith(".pgm90") }
+        }
+        
+        if (workingPreset == null) {
+            throw RuntimeException("No working H90 preset found to use as template. Please place a .pgm90 file in ~/Downloads/h90/presets/")
+        }
+        
+        println("Using template: ${workingPreset.name}")
+        val templateBytes = workingPreset.readBytes()
+        println("Template size: ${templateBytes.size} bytes")
+        
+        return modifyPresetFile(templateBytes, preset)
     }
     
     private fun modifyPresetFile(templateBytes: ByteArray, preset: H90Preset): ByteArray {
@@ -141,26 +295,100 @@ object EventideH90PresetGenerator {
     }
     
     private fun replaceBase64AtOffsets(templateBytes: ByteArray, algAJson: String, algBJson: String, presetName: String): ByteArray {
-        val result = templateBytes.copyOf()
+        // Try conservative approach - only modify JSON contents, not binary structure
+        return replaceJsonContentsOnly(templateBytes, algAJson, algBJson, presetName)
+    }
+    
+    /**
+     * Conservative approach: decode existing base64, modify JSON, re-encode
+     */
+    private fun replaceJsonContentsOnly(bytes: ByteArray, algAJson: String, algBJson: String, presetName: String): ByteArray {
+        val result = bytes.copyOf()
         
-        // Known base64 offsets from dft.pgm90 analysis:
-        // Algorithm A (Crystals): starts at offset 0x122 (290 decimal)
-        // Algorithm B (TremoloPan): starts at offset 0x882 (2178 decimal)
+        println("Using conservative JSON replacement approach")
         
+        // If we can't modify safely, return the template with just name change
         try {
-            // Replace Algorithm A base64 data
-            replaceBase64AtOffset(result, 0x122, algAJson)
+            // Find base64 blocks and decode them to modify only the JSON content
+            val base64Pattern = "eyJ".toByteArray()
+            var searchStart = 0
+            var algorithmsModified = 0
+            var anySuccessfulReplacement = false
             
-            // Replace Algorithm B base64 data  
-            replaceBase64AtOffset(result, 0x882, algBJson)
+            while (searchStart < result.size - 3 && algorithmsModified < 2) {
+                val matchIndex = findBase64JsonPattern(result, base64Pattern, searchStart)
+                if (matchIndex == -1) break
+                
+                val blockEnd = findBase64BlockEnd(result, matchIndex)
+                if (blockEnd == -1) {
+                    searchStart = matchIndex + 3
+                    continue
+                }
+                
+                try {
+                    // Extract and decode the existing base64
+                    val existingBase64 = String(result.sliceArray(matchIndex until blockEnd))
+                    val existingJson = String(Base64.getDecoder().decode(existingBase64))
+                    
+                    println("Found existing algorithm JSON: ${existingJson.take(100)}...")
+                    
+                    // Parse existing JSON and modify only specific fields
+                    val gson = Gson()
+                    val existingData = gson.fromJson(existingJson, Map::class.java) as MutableMap<String, Any>
+                    
+                    // Choose which algorithm data to apply
+                    val newAlgorithmJson = if (algorithmsModified == 0) algAJson else algBJson
+                    val newAlgorithmData = gson.fromJson(String(Base64.getDecoder().decode(newAlgorithmJson)), Map::class.java) as Map<String, Any>
+                    
+                    // Update only key fields, preserve the structure
+                    newAlgorithmData["algorithm_name"]?.let { existingData["algorithm_name"] = it }
+                    newAlgorithmData["product_id"]?.let { existingData["product_id"] = it }
+                    newAlgorithmData["preset_name"]?.let { existingData["preset_name"] = it }
+                    
+                    // Update parameters while preserving structure - be more conservative
+                    newAlgorithmData.forEach { (key, value) ->
+                        if (key !in listOf("algorithm_name", "product_id", "preset_name", "version") && 
+                            existingData.containsKey(key)) {
+                            // Only update parameters that already exist in the template
+                            existingData[key] = value
+                        }
+                    }
+                    
+                    // Re-encode to base64
+                    val modifiedJson = gson.toJson(existingData) + "\n"
+                    val modifiedBase64 = Base64.getEncoder().encodeToString(modifiedJson.toByteArray())
+                    
+                    println("Modified algorithm ${algorithmsModified + 1}: ${existingData["algorithm_name"]}")
+                    
+                    // Replace only if the size matches (to avoid corrupting binary structure)
+                    if (modifiedBase64.length == existingBase64.length) {
+                        System.arraycopy(modifiedBase64.toByteArray(), 0, result, matchIndex, modifiedBase64.length)
+                        println("Successfully replaced algorithm JSON (same size)")
+                        anySuccessfulReplacement = true
+                    } else {
+                        println("Size mismatch (${modifiedBase64.length} vs ${existingBase64.length}), skipping this algorithm")
+                    }
+                    
+                    algorithmsModified++
+                    searchStart = blockEnd
+                    
+                } catch (e: Exception) {
+                    println("Error modifying algorithm JSON: ${e.message}")
+                    searchStart = matchIndex + 3
+                }
+            }
             
-            // Replace preset name
-            return replacePresetName(result, presetName)
+            if (!anySuccessfulReplacement) {
+                println("Warning: No algorithms were successfully modified, returning template with name change only")
+            }
             
         } catch (e: Exception) {
-            // If offset replacement fails, return original with just name change
-            return replacePresetName(templateBytes, presetName)
+            println("Error during JSON replacement: ${e.message}")
+            println("Falling back to template with name change only")
         }
+        
+        // Always try to replace preset name, even if algorithm modification failed
+        return replacePresetName(result, presetName)
     }
     
     private fun replaceBase64AtOffset(bytes: ByteArray, offset: Int, newBase64: String) {
@@ -191,49 +419,104 @@ object EventideH90PresetGenerator {
     
     
     private fun replaceAlgorithmDataBinary(bytes: ByteArray, algAJson: String, algBJson: String, presetName: String): ByteArray {
-        // Find and replace base64 algorithm data at the byte level to avoid encoding issues
-        val result = bytes.copyOf()
+        // Find and replace base64 algorithm data using improved pattern matching
+        var result = bytes.copyOf()
         
-        // Look for the base64 patterns in the binary data
         val algABytes = algAJson.toByteArray()
         val algBBytes = algBJson.toByteArray()
         
-        // Find the first base64 encoded JSON block and replace with Algorithm A
-        val eyJPattern = "eyJ".toByteArray()
+        println("Replacing algorithm data in binary:")
+        println("  Algorithm A JSON size: ${algABytes.size}")
+        println("  Algorithm B JSON size: ${algBBytes.size}")
+        println("  Template binary size: ${bytes.size}")
         
-        for (i in 0 until result.size - 3) {
-            // Look for "eyJ" pattern
-            if (result[i] == eyJPattern[0] && 
-                result[i + 1] == eyJPattern[1] && 
-                result[i + 2] == eyJPattern[2]) {
-                
-                // Find the end of this base64 block (look for padding or next non-base64 char)
-                var j = i + 3
-                while (j < result.size) {
-                    val char = result[j].toInt().toChar()
-                    if (char !in 'A'..'Z' && char !in 'a'..'z' && char !in '0'..'9' && char != '+' && char != '/' && char != '=') {
-                        break
-                    }
-                    j++
-                }
-                
-                // Replace this base64 block with Algorithm A
-                val newResult = ByteArray(result.size - (j - i) + algABytes.size)
-                
-                // Copy before the match
-                System.arraycopy(result, 0, newResult, 0, i)
-                // Copy replacement
-                System.arraycopy(algABytes, 0, newResult, i, algABytes.size)
-                // Copy after the match
-                System.arraycopy(result, j, newResult, i + algABytes.size, result.size - j)
-                
-                // Now find and replace the second base64 block with Algorithm B
-                return replaceSecondAlgorithm(newResult, algBBytes, presetName)
+        // Look for base64 patterns that start JSON objects (typically "eyJ")
+        val base64JsonPattern = "eyJ".toByteArray()
+        var replacements = 0
+        
+        var searchStart = 0
+        while (searchStart < result.size - 3 && replacements < 2) {
+            val matchIndex = findBase64JsonPattern(result, base64JsonPattern, searchStart)
+            if (matchIndex == -1) {
+                println("  No more base64 patterns found after position $searchStart")
+                break
             }
+            
+            // Find the complete base64 block
+            val blockEnd = findBase64BlockEnd(result, matchIndex)
+            if (blockEnd == -1) {
+                println("  Invalid base64 block at position $matchIndex")
+                searchStart = matchIndex + 3
+                continue
+            }
+            
+            val originalBlockSize = blockEnd - matchIndex
+            println("  Found base64 block at position $matchIndex, size: $originalBlockSize")
+            
+            // Choose which algorithm to use for replacement
+            val replacementBytes = if (replacements == 0) algABytes else algBBytes
+            val algorithmLabel = if (replacements == 0) "A" else "B"
+            
+            println("  Replacing with Algorithm $algorithmLabel (${replacementBytes.size} bytes)")
+            
+            // Perform the replacement
+            result = replaceAtOffset(result, matchIndex, blockEnd, replacementBytes)
+            
+            // Update search position for next algorithm
+            searchStart = matchIndex + replacementBytes.size
+            replacements++
+            
+            println("  Successfully replaced algorithm $algorithmLabel, new binary size: ${result.size}")
         }
         
-        // If no base64 blocks found, return original with name replacement
+        println("Total algorithm replacements: $replacements")
+        
+        // Replace preset name in the final result
         return replacePresetName(result, presetName)
+    }
+    
+    private fun findBase64JsonPattern(bytes: ByteArray, pattern: ByteArray, startIndex: Int): Int {
+        for (i in startIndex until bytes.size - pattern.size + 1) {
+            var match = true
+            for (j in pattern.indices) {
+                if (bytes[i + j] != pattern[j]) {
+                    match = false
+                    break
+                }
+            }
+            if (match) return i
+        }
+        return -1
+    }
+    
+    private fun findBase64BlockEnd(bytes: ByteArray, startIndex: Int): Int {
+        var i = startIndex
+        while (i < bytes.size) {
+            val char = bytes[i].toInt().toChar()
+            // Valid base64 characters plus padding
+            if (char !in 'A'..'Z' && char !in 'a'..'z' && char !in '0'..'9' && 
+                char != '+' && char != '/' && char != '=') {
+                return i
+            }
+            i++
+        }
+        return bytes.size
+    }
+    
+    private fun replaceAtOffset(bytes: ByteArray, start: Int, end: Int, replacement: ByteArray): ByteArray {
+        val newSize = bytes.size - (end - start) + replacement.size
+        val result = ByteArray(newSize)
+        
+        // Copy data before replacement
+        System.arraycopy(bytes, 0, result, 0, start)
+        
+        // Copy replacement data
+        System.arraycopy(replacement, 0, result, start, replacement.size)
+        
+        // Copy data after replacement
+        System.arraycopy(bytes, end, result, start + replacement.size, bytes.size - end)
+        
+        return result
     }
     
     private fun replaceSecondAlgorithm(bytes: ByteArray, algBBytes: ByteArray, presetName: String): ByteArray {
@@ -276,20 +559,101 @@ object EventideH90PresetGenerator {
     }
     
     private fun replacePresetName(bytes: ByteArray, presetName: String): ByteArray {
-        val result = bytes.copyOf()
+        var result = bytes.copyOf()
         
-        // Replace the preset name "dft" with our preset name (truncated to fit)
-        val dftBytes = "dft".toByteArray()
-        val nameBytes = presetName.take(3).toByteArray()
+        // Find and replace all instances of the old preset name with the new one
+        // This handles the main preset name that appears in the binary structure
         
-        for (i in 0..result.size - dftBytes.size) {
-            if (result.sliceArray(i until i + dftBytes.size).contentEquals(dftBytes)) {
-                System.arraycopy(nameBytes, 0, result, i, minOf(nameBytes.size, dftBytes.size))
-                break
-            }
+        // Look for string length patterns followed by names
+        val searchPatterns = listOf(
+            "dft",           // Default template name
+            "Autowah",       // Example names from sample presets
+            "Awaken",
+            "Entanglements",
+            "Test Preset",   // Our test preset name
+            "Crystals",      // Common algorithm preset names
+            "TremoloVerb",
+            "VINTAGE WAH",
+            "FauxVerb",
+            "SPLITTER VERB",
+            "ULTRASWELL"
+        )
+        
+        // Replace any occurrence of these patterns with our preset name (truncated if needed)
+        for (pattern in searchPatterns) {
+            result = replaceStringInBinary(result, pattern, presetName)
         }
         
         return result
+    }
+    
+    private fun replaceStringInBinary(bytes: ByteArray, oldString: String, newString: String): ByteArray {
+        val oldBytes = oldString.toByteArray()
+        val newBytes = newString.toByteArray()
+        var result = bytes
+        
+        // Find all occurrences of the old string and replace with new string
+        var searchStart = 0
+        while (searchStart <= result.size - oldBytes.size) {
+            val matchIndex = findStringInBytes(result, oldBytes, searchStart)
+            if (matchIndex == -1) break
+            
+            // Check if this looks like a string field (preceded by length or in a string context)
+            if (isStringContext(result, matchIndex)) {
+                // Replace with new string, truncated to fit the same space
+                val replacementBytes = if (newBytes.size <= oldBytes.size) {
+                    newBytes + ByteArray(oldBytes.size - newBytes.size) { 0 }
+                } else {
+                    newBytes.sliceArray(0 until oldBytes.size)
+                }
+                
+                System.arraycopy(replacementBytes, 0, result, matchIndex, oldBytes.size)
+            }
+            
+            searchStart = matchIndex + oldBytes.size
+        }
+        
+        return result
+    }
+    
+    private fun findStringInBytes(bytes: ByteArray, pattern: ByteArray, startIndex: Int): Int {
+        for (i in startIndex until bytes.size - pattern.size + 1) {
+            var match = true
+            for (j in pattern.indices) {
+                if (bytes[i + j] != pattern[j]) {
+                    match = false
+                    break
+                }
+            }
+            if (match) return i
+        }
+        return -1
+    }
+    
+    private fun isStringContext(bytes: ByteArray, stringIndex: Int): Boolean {
+        // Check if this looks like a string in the H90 format:
+        // - Preceded by a reasonable length value (4 bytes before)
+        // - Or surrounded by reasonable ASCII/null bytes
+        
+        if (stringIndex < 4) return true
+        
+        // Check for length prefix pattern (little-endian length)
+        val possibleLength = (bytes[stringIndex - 4].toInt() and 0xFF) or
+                            ((bytes[stringIndex - 3].toInt() and 0xFF) shl 8) or
+                            ((bytes[stringIndex - 2].toInt() and 0xFF) shl 16) or
+                            ((bytes[stringIndex - 1].toInt() and 0xFF) shl 24)
+                            
+        // If the length makes sense for this string, it's probably a string field
+        if (possibleLength >= 3 && possibleLength <= 100) {
+            return true
+        }
+        
+        // Also check for null-terminated string pattern
+        if (stringIndex > 0 && bytes[stringIndex - 1] == 0.toByte()) {
+            return true
+        }
+        
+        return false
     }
     
     private fun buildCompletePresetStructure(preset: H90Preset, algAJson: String, algBJson: String): ByteArray {
@@ -398,35 +762,58 @@ object EventideH90PresetGenerator {
     private fun generateAlgorithmJson(algorithm: H90Algorithm, global: H90GlobalParameters): String {
         val jsonMap = mutableMapOf<String, Any>()
         
-        // Required fields
+        // Core algorithm identification - MUST match H9 Control exactly
         jsonMap["algorithm_name"] = algorithm.algorithmName
         jsonMap["product_id"] = algorithm.productId
         jsonMap["preset_name"] = algorithm.presetName
         jsonMap["version"] = "3"
         
-        // Global parameters
+        // Debug output to verify algorithm mapping
+        println("Generating algorithm JSON:")
+        println("  Algorithm Name: ${algorithm.algorithmName}")
+        println("  Product ID: ${algorithm.productId}")
+        println("  Preset Name: ${algorithm.presetName}")
+        println("  Algorithm Number: ${algorithm.algorithmNumber}")
+        
+        // Global parameters using exact H9 parameter names
         jsonMap["tmpv"] = global.tempo
         jsonMap["tsyn"] = global.tempoSync
         jsonMap["killdry"] = if (global.killDry) 1.0 else 0.0
         jsonMap["preset_mix"] = global.presetMix
         jsonMap["expression_pedal"] = global.expressionPedal
         
-        // Algorithm-specific parameters
-        jsonMap.putAll(algorithm.parameters)
+        // Standard I/O sensitivity (always present in real presets)
+        jsonMap["in1_sens"] = 1.0
+        jsonMap["in2_sens"] = 1.0
+        jsonMap["out1_sens"] = 1.0  
+        jsonMap["out2_sens"] = 1.0
         
-        // Bypass settings
+        // Bypass configuration using H9 Control naming
         jsonMap["bypa_normal"] = if (algorithm.bypass) 0.0 else algorithm.mix
         jsonMap["bypt_normal"] = if (algorithm.bypass) 1.0 else 0.0
         
-        // Input/output sensitivity (standard values)
-        jsonMap["in1_sens"] = 1.0
-        jsonMap["in2_sens"] = 1.0
-        jsonMap["out1_sens"] = 1.0
-        jsonMap["out2_sens"] = 1.0
+        // Slow mode flag (present in all algorithms)
+        jsonMap["slow_mode"] = false
         
-        // Convert to JSON and encode as base64
+        // Additional common parameters found in real presets
+        jsonMap["pedal"] = 0.0  // Physical pedal input
+        
+        // Algorithm-specific parameters - preserve exact types and precision
+        algorithm.parameters.forEach { (key, value) ->
+            jsonMap[key] = when (value) {
+                is Float -> value.toDouble()  // Ensure double precision
+                is Int -> value.toDouble()    // Convert ints to doubles for consistency
+                is Boolean -> value
+                is String -> value
+                else -> value.toString()
+            }
+        }
+        
+        // Convert to JSON with exact formatting (compact, no extra whitespace)
         val gson = Gson()
         val jsonString = gson.toJson(jsonMap)
+        
+        // Encode as base64 with trailing newline (matches H9 Control format)
         return Base64.getEncoder().encodeToString((jsonString + "\n").toByteArray())
     }
     
@@ -661,5 +1048,71 @@ object EventideH90PresetGenerator {
     
     fun getProductIdForAlgorithm(algorithmName: String): String {
         return ALGORITHM_PRODUCT_IDS[algorithmName] ?: "com.eventide.h9.unknown"
+    }
+    
+    /**
+     * Test function to verify H90 preset generation with real H90 Control parameter sets
+     */
+    fun createTestPreset(): ByteArray {
+        // Create a test preset using real H9 parameter names from analyzed presets
+        val qWahParams = mapOf(
+            "base" to 50.0,
+            "dpth" to 80.0,
+            "itsy" to 60.0,
+            "sped" to 40.0,
+            "shpe" to 7.0,
+            "type" to 0.0,
+            "mrat" to 0.5,
+            "msrc" to 1.0,
+            "brake" to 0.0,
+            "dmod" to 0.0,
+            "smod" to 0.0
+        )
+        
+        val tremoloParams = mapOf(
+            "mmix" to 50.0,
+            "dcay" to 5.0,
+            "size" to 60.0,
+            "dpth" to 200.0,
+            "sped" to 10.0,
+            "shap" to 0.9,
+            "pdly" to 240.0,
+            "hifq" to 6000.0,
+            "hilv" to 100.0,
+            "lolv" to 10.0
+        )
+        
+        val algorithmA = H90Algorithm.fromAlgorithmName(
+            algorithmName = "Q-Wah",
+            presetName = "Test Wah",
+            parameters = qWahParams,
+            mix = 0.7,
+            bypass = false
+        ) ?: throw IllegalArgumentException("Q-Wah algorithm not found")
+        
+        val algorithmB = H90Algorithm.fromAlgorithmName(
+            algorithmName = "TremoloVerb", 
+            presetName = "Test Tremolo",
+            parameters = tremoloParams,
+            mix = 0.8,
+            bypass = false
+        ) ?: throw IllegalArgumentException("TremoloVerb algorithm not found")
+        
+        val global = H90GlobalParameters(
+            tempo = 120.0,
+            tempoSync = false,
+            killDry = false,
+            presetMix = 0.75,
+            expressionPedal = 0.0
+        )
+        
+        val preset = H90Preset(
+            name = "Test Preset",
+            algorithmA = algorithmA,
+            algorithmB = algorithmB,
+            globalParameters = global
+        )
+        
+        return generatePreset(preset)
     }
 }

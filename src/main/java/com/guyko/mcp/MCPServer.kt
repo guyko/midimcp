@@ -11,7 +11,12 @@ import com.guyko.models.MidiSysex
 import com.guyko.persistence.PedalRepository
 import com.guyko.midi.MidiExecutor
 import com.guyko.midi.HardwareMidiExecutor
-import com.guyko.pedals.*
+import com.guyko.pedals.EventideH90AlgorithmMappings
+import com.guyko.pedals.EventideH90PresetGenerator
+import com.guyko.pedals.H90Preset
+import com.guyko.pedals.H90Routing
+import com.guyko.pedals.H90GlobalParameters
+import com.guyko.pedals.RoutingMode
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -264,6 +269,71 @@ class MCPServer(
         sendResponse("tools/list", mapOf("tools" to tools), id)
     }
     
+    /**
+     * Translate generic parameter names/descriptions to specific pedal CC mappings
+     */
+    private fun translateParameterForPedal(pedal: PedalModel, description: String, value: Int): Pair<Int, Int>? {
+        // For Enzo X specifically, handle common synth parameter translations
+        if (pedal.modelName == "Enzo X") {
+            return translateEnzoXParameter(description, value)
+        }
+        
+        // For other pedals, try to find by parameter name
+        val parameter = pedal.parameters.find { param ->
+            param.name.contains(description, ignoreCase = true) ||
+            param.description?.contains(description, ignoreCase = true) == true
+        }
+        
+        return parameter?.let { it.ccNumber to value }
+    }
+    
+    /**
+     * Specific parameter translation for Enzo X synthesizer
+     */
+    private fun translateEnzoXParameter(description: String, value: Int): Pair<Int, Int>? {
+        val lowerDesc = description.lowercase()
+        
+        return when {
+            // Synthesis mode
+            lowerDesc.contains("poly") && lowerDesc.contains("synth") -> 22 to 51  // Poly Synth mode (CC22 = 26-51)
+            lowerDesc.contains("mono") && lowerDesc.contains("synth") -> 22 to 25  // Mono Synth mode (CC22 = 0-25)
+            lowerDesc.contains("synth") && lowerDesc.contains("mode") -> 22 to value
+            
+            // Oscillator wave shapes
+            lowerDesc.contains("osc") && lowerDesc.contains("1") && lowerDesc.contains("triangle") -> 24 to 64  // OSC1 Triangle (CC24 = 43-85)
+            lowerDesc.contains("osc") && lowerDesc.contains("1") && lowerDesc.contains("sawtooth") -> 24 to 21   // OSC1 Sawtooth (CC24 = 0-42)
+            lowerDesc.contains("osc") && lowerDesc.contains("1") && lowerDesc.contains("square") -> 24 to 106   // OSC1 Square (CC24 = 86-127)
+            lowerDesc.contains("osc") && lowerDesc.contains("2") && lowerDesc.contains("triangle") -> 25 to 64  // OSC2 Triangle (CC25 = 43-85)
+            lowerDesc.contains("osc") && lowerDesc.contains("2") && lowerDesc.contains("sawtooth") -> 25 to 21   // OSC2 Sawtooth (CC25 = 0-42)
+            lowerDesc.contains("osc") && lowerDesc.contains("2") && lowerDesc.contains("square") -> 25 to 106   // OSC2 Square (CC25 = 86-127)
+            
+            // Oscillator pitch
+            lowerDesc.contains("osc") && lowerDesc.contains("2") && lowerDesc.contains("octave") -> 26 to (value * 12) // OSC2 Pitch Offset in semitones
+            lowerDesc.contains("osc") && lowerDesc.contains("2") && lowerDesc.contains("pitch") -> 26 to value
+            
+            // Ambience (reverb)
+            lowerDesc.contains("ambience") && lowerDesc.contains("large") -> 10 to 115  // Large Prism (CC10 = 103-127)
+            lowerDesc.contains("ambience") && lowerDesc.contains("medium") -> 10 to 89  // Medium Prism (CC10 = 77-102)
+            lowerDesc.contains("ambience") && lowerDesc.contains("small") -> 10 to 64   // Small Prism (CC10 = 52-76)
+            lowerDesc.contains("ambience") && lowerDesc.contains("echo") -> 10 to 38    // Echo (CC10 = 26-51)
+            lowerDesc.contains("ambience") && lowerDesc.contains("off") -> 10 to 12     // Off (CC10 = 0-25)
+            lowerDesc.contains("reverb") || lowerDesc.contains("hall") -> 10 to 115     // Default to Large Prism
+            
+            // Filter
+            lowerDesc.contains("filter") && lowerDesc.contains("freq") -> 39 to value  // Filter Frequency (CC39)
+            lowerDesc.contains("filter") && lowerDesc.contains("res") -> 41 to value   // Filter Resonance (CC41)
+            
+            // Envelope
+            lowerDesc.contains("attack") -> 55 to value  // Amp Attack (CC55)
+            lowerDesc.contains("slow") && lowerDesc.contains("attack") -> 55 to 80  // Slow attack value
+            
+            // Mix controls
+            lowerDesc.contains("mix") -> 1 to value  // Mix (CC1)
+            
+            else -> null
+        }
+    }
+    
     private fun handleToolCall(id: Int?, params: JsonObject?) {
         if (params == null) {
             logger.error { "MCP tool call failed: Missing parameters (id=$id)" }
@@ -374,8 +444,17 @@ class MCPServer(
     private fun handleListPedals(id: Int?) {
         try {
             val pedals = pedalRepository.listAll()
-            val pedalSummaries = pedals.map { pedal ->
-                "${pedal.id}: ${pedal.manufacturer} ${pedal.modelName} (${pedal.parameters.size} parameters)"
+            logger.debug { "Found ${pedals.size} pedals" }
+            
+            val pedalSummaries = pedals.mapNotNull { pedal ->
+                try {
+                    // Add null safety and better error handling
+                    val paramCount = pedal.parameters?.size ?: 0
+                    "${pedal.id}: ${pedal.manufacturer} ${pedal.modelName} ($paramCount parameters)"
+                } catch (e: Exception) {
+                    logger.error { "Error processing pedal ${pedal.id}: ${e.message}" }
+                    null
+                }
             }
             
             sendResponse("tools/call", mapOf(
@@ -472,9 +551,23 @@ class MCPServer(
             
             val midiCommands = commandsArray.map { cmdObj ->
                 val cmd = cmdObj.asJsonObject
-                val ccNumber = cmd.get("ccNumber").asInt
-                val value = cmd.get("value").asInt
+                var ccNumber = cmd.get("ccNumber")?.asInt
+                var value = cmd.get("value")?.asInt
                 val description = cmd.get("description")?.asString
+                
+                // If description is provided and no ccNumber, try to translate
+                if (ccNumber == null && !description.isNullOrBlank()) {
+                    val translated = translateParameterForPedal(pedal, description, value ?: 64)
+                    if (translated != null) {
+                        ccNumber = translated.first
+                        value = translated.second
+                        logger.info { "Translated '$description' to CC$ccNumber = $value for ${pedal.modelName}" }
+                    }
+                }
+                
+                if (ccNumber == null || value == null) {
+                    throw Exception("Invalid command format: missing ccNumber or value for command: $description")
+                }
                 
                 val parameter = pedal.getParameterByCC(ccNumber)
                 val parameterName = parameter?.name ?: "CC $ccNumber"

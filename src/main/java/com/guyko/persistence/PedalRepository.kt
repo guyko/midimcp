@@ -10,38 +10,53 @@ import java.nio.file.Paths
 
 class PedalRepository(private val dataDir: String = "data/pedals") {
     private val gson = GsonBuilder().setPrettyPrinting().create()
+    private val pedals = mutableMapOf<String, PedalModel>()
     
     init {
         Files.createDirectories(Paths.get(dataDir))
+        loadAllPedals()
+    }
+    
+    /**
+     * Load all JSON files from the data directory on startup
+     */
+    private fun loadAllPedals() {
+        val dir = File(dataDir)
+        dir.listFiles { file -> 
+            file.extension == "json" && 
+            !file.name.startsWith("h90_algorithms") // Skip algorithm mapping files
+        }?.forEach { file ->
+            try {
+                val pedal = gson.fromJson(file.readText(), PedalModel::class.java)
+                pedals[pedal.id] = pedal
+                println("Loaded pedal: ${pedal.manufacturer} ${pedal.modelName} (${pedal.parameters.size} parameters)")
+            } catch (e: Exception) {
+                println("Failed to load pedal from ${file.name}: ${e.message}")
+            }
+        }
     }
     
     fun save(pedal: PedalModel) {
         val file = File(dataDir, "${pedal.id}.json")
         file.writeText(gson.toJson(pedal))
+        // Update in-memory cache
+        pedals[pedal.id] = pedal
     }
     
     fun load(pedalId: String): PedalModel? {
-        val file = File(dataDir, "$pedalId.json")
-        if (!file.exists()) return null
-        
-        return try {
-            gson.fromJson(file.readText(), PedalModel::class.java)
-        } catch (e: Exception) {
-            null
-        }
+        return pedals[pedalId]
     }
     
     fun listAll(): List<PedalModel> {
-        val dir = File(dataDir)
-        return dir.listFiles { file -> file.extension == "json" }
-            ?.mapNotNull { file -> 
-                val pedalId = file.nameWithoutExtension
-                load(pedalId)
-            } ?: emptyList()
+        return pedals.values.toList()
     }
     
     fun delete(pedalId: String): Boolean {
         val file = File(dataDir, "$pedalId.json")
-        return file.delete()
+        val deleted = file.delete()
+        if (deleted) {
+            pedals.remove(pedalId)
+        }
+        return deleted
     }
 }

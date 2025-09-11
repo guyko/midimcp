@@ -2,7 +2,7 @@
   "id": "meris_enzo_x",
   "manufacturer": "Meris",
   "modelName": "Enzo X",
-  "midiChannel": 3,
+  "midiChannel": 10,
   "parameters": [
     {
       "name": "Mix",
