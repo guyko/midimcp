@@ -725,6 +725,14 @@ class MCPServer(
                 return
             }
             
+            // Validate algorithm exists
+            val availableAlgorithms = EventideH90AlgorithmMappings.getAllAlgorithms()
+            if (!availableAlgorithms.containsKey(algorithmANumber)) {
+                val availableIds = availableAlgorithms.keys.sorted().joinToString(", ")
+                sendError(id, "Invalid algorithm number for Algorithm A: $algorithmANumber. Available algorithms: $availableIds")
+                return
+            }
+            
             val algorithmAParams = algorithmAObj.get("parameters")?.asJsonObject?.entrySet()?.associate { 
                 it.key to it.value.asString 
             } ?: emptyMap()
@@ -741,6 +749,13 @@ class MCPServer(
             val algorithmBNumber = algorithmBObj.get("algorithmNumber")?.asInt
             if (algorithmBNumber == null) {
                 sendError(id, "Missing algorithmB.algorithmNumber")
+                return
+            }
+            
+            // Validate algorithm exists
+            if (!availableAlgorithms.containsKey(algorithmBNumber)) {
+                val availableIds = availableAlgorithms.keys.sorted().joinToString(", ")
+                sendError(id, "Invalid algorithm number for Algorithm B: $algorithmBNumber. Available algorithms: $availableIds")
                 return
             }
             
@@ -790,8 +805,10 @@ class MCPServer(
             file.writeBytes(programBytes)
             
             // Get algorithm info for response
+            logger.info { "Looking up algorithms: A=$algorithmANumber, B=$algorithmBNumber" }
             val algorithmAInfo = EventideH90AlgorithmMappings.getAlgorithmInfo(algorithmANumber)
             val algorithmBInfo = EventideH90AlgorithmMappings.getAlgorithmInfo(algorithmBNumber)
+            logger.info { "Algorithm A info: ${algorithmAInfo?.name}, Algorithm B info: ${algorithmBInfo?.name}" }
             
             sendResponse("tools/call", mapOf(
                 "content" to listOf(mapOf(

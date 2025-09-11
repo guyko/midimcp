@@ -214,5 +214,5 @@
       "category": "Global"
     }
   ],
-  "description": "Eventide H90 Harmonizer - Dual-algorithm harmonizer with 70+ algorithms across 9 categories. Supports complex routing (series, parallel), real-time algorithm switching, and expression pedal control. Features legendary Eventide pitch shifting, delays, reverbs, modulation, and unique multi-effects. Each program runs two algorithms simultaneously with independent parameter control. Algorithm Categories: Delay (5 algorithms), Distortion (0 algorithms), EQ (0 algorithms), Harmonizer (1 algorithms), Looper (0 algorithms), Modulation (1 algorithms), Multi (0 algorithms), Reverb (0 algorithms), Synth (0 algorithms), Utility (0 algorithms)"
+  "description": "Eventide H90 Harmonizer - Dual-algorithm harmonizer with 70+ algorithms across 9 categories. Supports complex routing (series, parallel), real-time algorithm switching, and expression pedal control. Features legendary Eventide pitch shifting, delays, reverbs, modulation, and unique multi-effects. Each program runs two algorithms simultaneously with independent parameter control. Algorithm Categories: Delay (23 algorithms), Distortion (1 algorithms), EQ (0 algorithms), Harmonizer (19 algorithms), Looper (0 algorithms), Modulation (5 algorithms), Multi (0 algorithms), Reverb (1 algorithms), Synth (1 algorithms), Utility (0 algorithms)"
 }
