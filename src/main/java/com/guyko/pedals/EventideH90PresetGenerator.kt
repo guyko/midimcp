@@ -132,68 +132,112 @@ object EventideH90PresetGenerator {
     }
     
     private fun modifyPresetFile(templateBytes: ByteArray, preset: H90Preset): ByteArray {
-        val modifiedBytes = templateBytes.copyOf()
-        
         // Generate new algorithm JSON
         val algorithmAJson = generateAlgorithmJson(preset.algorithmA, preset.globalParameters)
         val algorithmBJson = generateAlgorithmJson(preset.algorithmB, preset.globalParameters)
         
-        // Find and replace the base64 algorithm data in the template
-        val templateString = String(templateBytes)
-        val base64Pattern = "eyJ[A-Za-z0-9+/]+=*".toRegex()
-        val matches = base64Pattern.findAll(templateString).toList()
-        
-        if (matches.size >= 2) {
-            // Replace first algorithm (A) and second algorithm (B)
-            var modifiedString = templateString
-            modifiedString = modifiedString.replaceFirst(matches[0].value, algorithmAJson)
-            if (matches.size > 1) {
-                modifiedString = modifiedString.replaceFirst(matches[1].value, algorithmBJson)
-            }
-            
-            // Update preset names in JSON to match the requested preset name
-            val namePattern = "\"preset_name\":\"[^\"]*\"".toRegex()
-            modifiedString = namePattern.replace(modifiedString) { 
-                "\"preset_name\":\"${preset.name}\""
-            }
-            
-            // Also update any standalone preset name strings in the binary
-            val standaloneNamePattern = "dft".toRegex()
-            modifiedString = modifiedString.replace(standaloneNamePattern, preset.name.take(20))
-            
-            return modifiedString.toByteArray()
-        }
-        
-        // If regex replacement fails, do byte-level replacement
-        return replaceAlgorithmDataBinary(modifiedBytes, algorithmAJson, algorithmBJson, preset.name)
+        // Use binary-safe replacement to avoid UTF-8 corruption
+        return replaceAlgorithmDataBinary(templateBytes, algorithmAJson, algorithmBJson, preset.name)
     }
     
     
     private fun replaceAlgorithmDataBinary(bytes: ByteArray, algAJson: String, algBJson: String, presetName: String): ByteArray {
-        // Find base64 algorithm data in binary and replace them without corrupting structure
-        var result = bytes
+        // Find and replace base64 algorithm data at the byte level to avoid encoding issues
+        val result = bytes.copyOf()
         
-        // Look for base64 JSON patterns (starting with "eyJ")
-        val base64Pattern = "eyJ[A-Za-z0-9+/]*=*".toRegex()
-        val fileString = String(bytes, Charsets.ISO_8859_1) // Preserve binary data
-        val matches = base64Pattern.findAll(fileString).toList()
+        // Look for the base64 patterns in the binary data
+        val algABytes = algAJson.toByteArray()
+        val algBBytes = algBJson.toByteArray()
         
-        if (matches.size >= 2) {
-            var modifiedString = fileString
-            
-            // Replace algorithm A data
-            modifiedString = modifiedString.replaceFirst(matches[0].value, algAJson)
-            
-            // Replace algorithm B data  
-            modifiedString = modifiedString.replaceFirst(matches[1].value, algBJson)
-            
-            // Update preset name if found in readable text
-            val namePattern = "\"preset_name\":\"[^\"]*\"".toRegex()
-            modifiedString = namePattern.replace(modifiedString) { 
-                "\"preset_name\":\"$presetName\""
+        // Find the first base64 encoded JSON block and replace with Algorithm A
+        val eyJPattern = "eyJ".toByteArray()
+        
+        for (i in 0 until result.size - 3) {
+            // Look for "eyJ" pattern
+            if (result[i] == eyJPattern[0] && 
+                result[i + 1] == eyJPattern[1] && 
+                result[i + 2] == eyJPattern[2]) {
+                
+                // Find the end of this base64 block (look for padding or next non-base64 char)
+                var j = i + 3
+                while (j < result.size) {
+                    val char = result[j].toInt().toChar()
+                    if (char !in 'A'..'Z' && char !in 'a'..'z' && char !in '0'..'9' && char != '+' && char != '/' && char != '=') {
+                        break
+                    }
+                    j++
+                }
+                
+                // Replace this base64 block with Algorithm A
+                val newResult = ByteArray(result.size - (j - i) + algABytes.size)
+                
+                // Copy before the match
+                System.arraycopy(result, 0, newResult, 0, i)
+                // Copy replacement
+                System.arraycopy(algABytes, 0, newResult, i, algABytes.size)
+                // Copy after the match
+                System.arraycopy(result, j, newResult, i + algABytes.size, result.size - j)
+                
+                // Now find and replace the second base64 block with Algorithm B
+                return replaceSecondAlgorithm(newResult, algBBytes, presetName)
             }
-            
-            result = modifiedString.toByteArray(Charsets.ISO_8859_1)
+        }
+        
+        // If no base64 blocks found, return original with name replacement
+        return replacePresetName(result, presetName)
+    }
+    
+    private fun replaceSecondAlgorithm(bytes: ByteArray, algBBytes: ByteArray, presetName: String): ByteArray {
+        val result = bytes.copyOf()
+        val eyJPattern = "eyJ".toByteArray()
+        
+        // Find the second base64 encoded JSON block
+        for (i in 0 until result.size - 3) {
+            if (result[i] == eyJPattern[0] && 
+                result[i + 1] == eyJPattern[1] && 
+                result[i + 2] == eyJPattern[2]) {
+                
+                // Find the end of this base64 block
+                var j = i + 3
+                while (j < result.size) {
+                    val char = result[j].toInt().toChar()
+                    if (char !in 'A'..'Z' && char !in 'a'..'z' && char !in '0'..'9' && char != '+' && char != '/' && char != '=') {
+                        break
+                    }
+                    j++
+                }
+                
+                // Replace this base64 block with Algorithm B
+                val newResult = ByteArray(result.size - (j - i) + algBBytes.size)
+                
+                // Copy before the match
+                System.arraycopy(result, 0, newResult, 0, i)
+                // Copy replacement
+                System.arraycopy(algBBytes, 0, newResult, i, algBBytes.size)
+                // Copy after the match
+                System.arraycopy(result, j, newResult, i + algBBytes.size, result.size - j)
+                
+                // Replace preset name
+                return replacePresetName(newResult, presetName)
+            }
+        }
+        
+        // If no second algorithm found, just replace preset name
+        return replacePresetName(result, presetName)
+    }
+    
+    private fun replacePresetName(bytes: ByteArray, presetName: String): ByteArray {
+        val result = bytes.copyOf()
+        
+        // Replace the preset name "dft" with our preset name (truncated to fit)
+        val dftBytes = "dft".toByteArray()
+        val nameBytes = presetName.take(3).toByteArray()
+        
+        for (i in 0..result.size - dftBytes.size) {
+            if (result.sliceArray(i until i + dftBytes.size).contentEquals(dftBytes)) {
+                System.arraycopy(nameBytes, 0, result, i, minOf(nameBytes.size, dftBytes.size))
+                break
+            }
         }
         
         return result
