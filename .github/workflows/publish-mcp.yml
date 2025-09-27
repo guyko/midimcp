@@ -1,0 +1,92 @@
+name: Publish to MCP Registry
+
+on:
+  push:
+    tags: ["v*"]  # Triggers on version tags like v1.0.0
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC authentication
+      contents: write  # Required for creating releases
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run tests
+        run: mvn test
+
+      - name: Build project
+        run: mvn clean compile package
+
+      - name: Create MCPB package
+        run: |
+          # Extract version from tag (e.g., v1.0.0 -> 1.0.0)
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Version: $VERSION"
+          
+          # Create MCPB package using the standalone JAR
+          cp target/midimcp-${VERSION}-standalone.jar midimcp-${VERSION}.mcpb
+          
+          # Calculate SHA256 hash
+          SHA256=$(shasum -a 256 midimcp-${VERSION}.mcpb | cut -d' ' -f1)
+          echo "SHA256: $SHA256"
+          
+          # Update server.json with actual version and hash
+          jq --arg v "$VERSION" --arg sha "$SHA256" '.version = $v | .packages[0].version = $v | .packages[0].fileSha256 = $sha | .packages[0].identifier = "https://github.com/guyko/midimcp/releases/download/v" + $v + "/midimcp-" + $v + ".mcpb"' server.json > server-updated.json
+          mv server-updated.json server.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            midimcp-*.mcpb
+            server.json
+          body: |
+            MCP Server for MIDI Guitar Pedal Management v${{ github.ref_name }}
+            
+            This release includes:
+            - MCPB package for local installation
+            - Updated server.json configuration
+            
+            ## Installation
+            
+            Download the `.mcpb` file and install it using your MCP client, or use the MCP registry:
+            
+            ```bash
+            # Registry installation (once published)
+            mcp install io.github.guyko/midimcp
+            ```
+            
+            ## Features
+            
+            - Persistent knowledge of guitar pedal MIDI CC mappings
+            - Execute MIDI commands for Meris LVX, Mercury X, Enzo X, and Neural DSP Quad Cortex
+            - Create custom presets through natural language interaction
+            - Real-time MIDI device management and status monitoring
+
+      - name: Install MCP Publisher
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.1.0/mcp-publisher_1.1.0_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+
+      - name: Login to MCP Registry
+        run: ./mcp-publisher login github-oidc
+
+      - name: Publish to MCP Registry
+        run: ./mcp-publisher publish
